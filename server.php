@@ -23,44 +23,65 @@ $app->get("/students/new", function($req,$res){
 $app->get("/students", function($req,$res){
     global $db;
     global $alerts;
-    $data = $db->con->find([]);
-    $alert = $alerts->con->find([]);
-
-    $res->json(["alerts" => end($alert) ?? '',"data" => $data]);
-    $res->status(200);
-    $alerts->con->deleteMany([]);
+    try {
+        $data = $db->con->find([]);
+        $alert = $alerts->con->find([]);
+        $res->json(["alerts" => end($alert) ?? '',"data" => $data]);
+        $res->status(200);
+        $alerts->con->deleteMany([]);
+    }   
+    catch(Exception $e) {
+        $alerts->con->create(["alert" => ["type" => 'danger','message' => 'ERROR: could not get students']]);
+        $res->status(500);
+    }
 
 });
 $app->get("/students/:id", function($req,$res){
     global $db;
-    $data = $db->con->findById($req->params()['id']);
-    $res->json($data);
-    $res->status(200);
-      
+    global $alerts;
+    try {
+  
+        $data = $db->con->findById($req->params()['id']);
+        $res->json($data);
+        $res->status(200);
+    }
+    catch(Exception $e) {
+        $alerts->con->create(["alert" => ["type" => 'danger','message' => 'ERROR: could not get student with id ' . $req->params()['id']]]);
+        $res->status(500);
+    }
 });
 
 $app->put("/students/:id", function($req,$res){
     global $db;
     global $alerts;
-    $data = $db->con->updateById($req->params()['id'],$req->body());
-    $alerts->con->create(["alert" => ["type" => 'success','message' => 'Succesfully updated student with id ' . $req->params()['id']]]);
-
-    $res->json($data);
-    $res->status(200);
-      
+    try {
+        $data = $db->con->updateById($req->params()['id'],$req->body());
+        $alerts->con->create(["alert" => ["type" => 'success','message' => 'Succesfully updated student with id ' . $req->params()['id']]]);
+        $res->json($data);
+        $res->status(200);
+    }
+    catch(Exception $e) {
+        $alerts->con->create(["alert" => ["type" => 'danger','message' => 'ERROR: could not update student']]);
+        $res->status(500);
+    }
 });
 
 $app->delete("/students/:id", function($req,$res){
     global $db;
     global $alerts;
-    $data = $db->con->deleteById($req->params()['id']);
-    $alerts->con->create(["alert" => ["type" => 'success','message' => 'Succesfully deleted student with id ' . $req->params()['id']]]);
-    $res->json($data);
-    $res->status(200);
+    try {
+        $data = $db->con->deleteById($req->params()['id']);
+        $alerts->con->create(["alert" => ["type" => 'success','message' => 'Succesfully deleted student with id ' . $req->params()['id']]]);
+        $res->json($data);
+        $res->status(200);
+    }
+    catch(Exception $e) {
+        $alerts->con->create(["alert" => ["type" => 'danger','message' => 'ERROR: could not delete student']]);
+        $res->status(500);
+    }
       
 });
 $app->get("/students/edit/:id", function($req,$res){
-
     $res->render(__DIR__ . "/src/edit.html");
     $res->status(200);    
 });
@@ -78,7 +99,7 @@ $app->post("/students", function($req,$res){
 
     catch(Exception $e) {
         $alerts->con->create(["alert" => ["type" => 'danger','message' => 'ERROR: could not create student']]);
-
+        $res->status(500);
     }
 
       
