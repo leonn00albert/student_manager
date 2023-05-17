@@ -5,6 +5,10 @@ use Artemis\Core\Router\Router;
 
 $app = Router::getInstance();
 $db = new DB("JSON","students");
+$alerts = new DB("JSON","alerts");
+
+
+
 $app->get("/", function($req,$res){
     $res->render(__DIR__ . "/src/index.html");
     $res->status(200);
@@ -18,16 +22,17 @@ $app->get("/students/new", function($req,$res){
 });
 $app->get("/students", function($req,$res){
     global $db;
+    global $alerts;
     $data = $db->con->find([]);
-    $res->json($data);
+    $alert = $alerts->con->find([]);
+
+    $res->json(["alerts" => end($alert) ?? '',"data" => $data]);
     $res->status(200);
-    
+    $alerts->con->deleteMany([]);
 
 });
 $app->get("/students/:id", function($req,$res){
     global $db;
-
-
     $data = $db->con->findById($req->params()['id']);
     $res->json($data);
     $res->status(200);
@@ -36,7 +41,10 @@ $app->get("/students/:id", function($req,$res){
 
 $app->put("/students/:id", function($req,$res){
     global $db;
+    global $alerts;
     $data = $db->con->updateById($req->params()['id'],$req->body());
+    $alerts->con->create(["alert" => ["type" => 'success','message' => 'Succesfully updated student with id ' . $req->params()['id']]]);
+
     $res->json($data);
     $res->status(200);
       
@@ -44,7 +52,9 @@ $app->put("/students/:id", function($req,$res){
 
 $app->delete("/students/:id", function($req,$res){
     global $db;
+    global $alerts;
     $data = $db->con->deleteById($req->params()['id']);
+    $alerts->con->create(["alert" => ["type" => 'success','message' => 'Succesfully deleted student with id ' . $req->params()['id']]]);
     $res->json($data);
     $res->status(200);
       
@@ -57,10 +67,20 @@ $app->get("/students/edit/:id", function($req,$res){
 
 $app->post("/students", function($req,$res){
     global $db;
-    $data = $req->body();
-    $db->con->create($data);
-    $res->json($data);
-    $res->status(200);
+    global $alerts;
+    try {
+        $data = $req->body();
+        $db->con->create($data);
+        $alerts->con->create(["alert" => ["type" => 'success','message' => 'Succesfully created student']]);
+        $res->json($data);
+        $res->status(200);
+    }
+
+    catch(Exception $e) {
+        $alerts->con->create(["alert" => ["type" => 'danger','message' => 'ERROR: could not create student']]);
+
+    }
+
       
 });
 

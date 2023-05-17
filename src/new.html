@@ -17,9 +17,6 @@
             <div class="card-body">
                 <h4 class="card-title"></h4>
                 <p class="card-text">
-
-            
-                
                         <div class="form-group">
                           <label for="name">Name</label>
                           <input type="text" class="form-control" id="name" placeholder="Enter name">
@@ -79,7 +76,12 @@ function handle_add() {
                    if (!response.ok) {
                        throw new Error('Network response was not ok');
                    }
+                
                    return response.json();
+               }).then(data => {
+               
+                    window.location = '/';
+               
                })
                .catch(error => {
                    console.error('There was a problem with the fetch operation:', error);

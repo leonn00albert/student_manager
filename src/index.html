@@ -14,13 +14,14 @@
 
 
     <div class="container">
+
+
         <div class="card text-white bg-secondary m-3">
-            <div class="card-header">Header</div>
-            <div class="card-body">
-                <h4 class="card-title">Secondary card title</h4>
+            <div class="card-header"></div>
+            <div class="card-body" id="cardBody">
+
+                <h4 class="card-title">Students</h4>
                 <p class="card-text">
-
-
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -33,7 +34,7 @@
                     </thead>
                     <tbody id="studentsTable">
 
-              
+
 
                     </tbody>
                 </table>
@@ -45,13 +46,25 @@
     </div>
 
     <script>
-        window.onload = function() {
+        window.onload = function () {
             fetch('/students')
                 .then(response => response.json())
-                .then(data => {
-                    console.log(data);
+                .then(res => {
                     const dataList = document.getElementById('studentsTable');
-                    data.forEach(item => {
+                    if (res.alerts.alert) {
+                        const cardBody = document.getElementById('cardBody');
+                        let html = `
+                            <div class="alert alert-dismissible alert-${res.alerts.alert.type}">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            <h4 class="alert-heading">${res.alerts.alert.type.toUpperCase()}!</h4>
+                            <p class="mb-0">${res.alerts.alert.message}</p>
+                            </div>
+                        `
+                        cardBody.insertAdjacentHTML('afterbegin', html);
+
+                    }
+
+                    res.data.forEach(item => {
                         const listItem = document.createElement('tr');
                         listItem.innerHTML = `
                  
@@ -64,8 +77,6 @@
                                 </a>
                                     <button onclick="handleDeleteById('${item.id}')" type="button" class="btn btn-danger btn-sm mx-2"><i class="fa fa-trash"
                                             aria-hidden="true"></i></button> </td>
-
-                     
                         
                         `;
                         dataList.appendChild(listItem);
@@ -76,30 +87,24 @@
         };
 
         function handleDeleteById(id) {
-       
-       fetch('/students/' + id,{
-              method: 'DELETE',
-        
-          })
-          .then(response => {
-              if (!response.ok) {
-                  throw new Error('Network response was not ok');
-              }
-              return response.json();
-          })
-          .then(data => {
-              const dataList = document.getElementById('todo_list');
-              dataList.innerHTML = "";    
-              data.forEach(item => {
-                  const listItem = document.createElement('p');
-                  listItem.innerHTML = item;
-                  dataList.appendChild(listItem);
-              });
-          })
-          .catch(error => {
-              console.error('There was a problem with the fetch operation:', error);
-          });
-  };
+
+            fetch('/students/' + id, {
+                method: 'DELETE',
+
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    window.location = '/';
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        };
 
     </script>
 </body>
