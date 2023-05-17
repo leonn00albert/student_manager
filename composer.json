@@ -1,0 +1,17 @@
+{
+    "name": "leon/student_manager",
+    "autoload": {
+        "psr-4": {
+            "Leon\\StudentManager\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "leon",
+            "email": "leon00albert@gmail.com"
+        }
+    ],
+    "require": {
+        "wdlndfx/artemis": "dev-master"
+    }
+}

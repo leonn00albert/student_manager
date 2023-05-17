@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Document</title>
+</head>
+
+<body>
+
+
+    <div class="container">
+        <div class="card text-white bg-secondary m-3">
+            <div class="card-header">Header</div>
+            <div class="card-body">
+                <h4 class="card-title">Secondary card title</h4>
+                <p class="card-text">
+
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Registration number</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Grade</th>
+                            <th scope="col">Classroom </th>
+                            <th scope="col"> </th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTable">
+
+              
+
+                    </tbody>
+                </table>
+
+                <a href="students/new" class="btn btn-primary">Add Student</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            fetch('/students')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    const dataList = document.getElementById('studentsTable');
+                    data.forEach(item => {
+                        const listItem = document.createElement('tr');
+                        listItem.innerHTML = `
+                 
+                                <td>${item.id}</td>
+                                <td>${item.name}</td>
+                                <td>${item.grade}</td>
+                                <td>${item.class}</td>
+                                <td><a href="/students/edit/${item.id}" class="btn btn-info btn-sm "><i class="fa fa-pencil"
+                                            aria-hidden="true"></i>
+                                </a>
+                                    <button onclick="handleDeleteById('${item.id}')" type="button" class="btn btn-danger btn-sm mx-2"><i class="fa fa-trash"
+                                            aria-hidden="true"></i></button> </td>
+
+                     
+                        
+                        `;
+                        dataList.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error(error));
+
+        };
+
+        function handleDeleteById(id) {
+       
+       fetch('/students/' + id,{
+              method: 'DELETE',
+        
+          })
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error('Network response was not ok');
+              }
+              return response.json();
+          })
+          .then(data => {
+              const dataList = document.getElementById('todo_list');
+              dataList.innerHTML = "";    
+              data.forEach(item => {
+                  const listItem = document.createElement('p');
+                  listItem.innerHTML = item;
+                  dataList.appendChild(listItem);
+              });
+          })
+          .catch(error => {
+              console.error('There was a problem with the fetch operation:', error);
+          });
+  };
+
+    </script>
+</body>
+
+</html>
