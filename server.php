@@ -41,6 +41,14 @@ $app->put("/students/:id", function($req,$res){
     $res->status(200);
       
 });
+
+$app->delete("/students/:id", function($req,$res){
+    global $db;
+    $data = $db->con->deleteById($req->params()['id']);
+    $res->json($data);
+    $res->status(200);
+      
+});
 $app->get("/students/edit/:id", function($req,$res){
 
     $res->render(__DIR__ . "/src/edit.html");

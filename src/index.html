@@ -62,7 +62,7 @@
                                 <td><a href="/students/edit/${item.id}" class="btn btn-info btn-sm "><i class="fa fa-pencil"
                                             aria-hidden="true"></i>
                                 </a>
-                                    <button type="button" class="btn btn-danger btn-sm mx-2"><i class="fa fa-trash"
+                                    <button onclick="handleDeleteById('${item.id}')" type="button" class="btn btn-danger btn-sm mx-2"><i class="fa fa-trash"
                                             aria-hidden="true"></i></button> </td>
 
                      
@@ -74,6 +74,32 @@
                 .catch(error => console.error(error));
 
         };
+
+        function handleDeleteById(id) {
+       
+       fetch('/students/' + id,{
+              method: 'DELETE',
+        
+          })
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error('Network response was not ok');
+              }
+              return response.json();
+          })
+          .then(data => {
+              const dataList = document.getElementById('todo_list');
+              dataList.innerHTML = "";    
+              data.forEach(item => {
+                  const listItem = document.createElement('p');
+                  listItem.innerHTML = item;
+                  dataList.appendChild(listItem);
+              });
+          })
+          .catch(error => {
+              console.error('There was a problem with the fetch operation:', error);
+          });
+  };
 
     </script>
 </body>
