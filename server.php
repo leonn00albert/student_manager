@@ -21,8 +21,32 @@ $app->get("/students", function($req,$res){
     $data = $db->con->find([]);
     $res->json($data);
     $res->status(200);
+    
+
+});
+$app->get("/students/:id", function($req,$res){
+    global $db;
+
+
+    $data = $db->con->findById($req->params()['id']);
+    $res->json($data);
+    $res->status(200);
       
 });
+
+$app->put("/students/:id", function($req,$res){
+    global $db;
+    $data = $db->con->updateById($req->params()['id'],$req->body());
+    $res->json($data);
+    $res->status(200);
+      
+});
+$app->get("/students/edit/:id", function($req,$res){
+
+    $res->render(__DIR__ . "/src/edit.html");
+    $res->status(200);    
+});
+
 $app->post("/students", function($req,$res){
     global $db;
     $data = $req->body();
