@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>New Student</title>
+    <title>Update Student</title>
 </head>
 
 <body>
@@ -62,10 +62,17 @@
                 .then(response => response.json())
                 .then(data => {
                     data.forEach(item => {
+                        let select = document.getElementById("selectGrade");
+                        let options = Array.from(select.children);
+                        options.forEach(e => {
+                            if (e.value == item.grade) {
+                                e.selected = true;
+                            }
+                        })
                         document.getElementById('name').value = item.name
                         document.getElementById('selectGrade').value = item.grade;
                         document.getElementById('classroom').value = item.class;
-          
+
                     });
                 })
                 .catch(error => console.error(error));
@@ -93,6 +100,10 @@
                         throw new Error('Network response was not ok');
                     }
                     return response.json();
+                }).then(data => {
+
+                    window.location = '/';
+
                 })
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error);

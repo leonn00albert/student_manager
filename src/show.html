@@ -7,19 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-        crossorigin="anonymous"></script>
-    <title>Students</title>
-
-    <style>
-        table tr td {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 400px;
-        }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <title>Document</title>
 </head>
 
 <body>
@@ -32,7 +21,7 @@
             <div class="card-header"></div>
             <div class="card-body" id="cardBody">
 
-                <h4 class="card-title">Students</h4>
+                <h4 class="card-title" id="studentName">Student</h4>
                 <p class="card-text">
                 <table class="table table-hover">
                     <thead>
@@ -45,6 +34,9 @@
                         </tr>
                     </thead>
                     <tbody id="studentsTable">
+
+
+
                     </tbody>
                 </table>
 
@@ -56,24 +48,15 @@
 
     <script>
         window.onload = function () {
-            fetch('/students')
+            var currentPath = window.location.pathname;
+            var id = currentPath.split("/")[3];
+            fetch('/students/' + id)
                 .then(response => response.json())
                 .then(res => {
                     const dataList = document.getElementById('studentsTable');
-                    if (res.alerts.alert) {
-                        const cardBody = document.getElementById('cardBody');
-                        let html = `
-                            <div class="alert alert-dismissible alert-${res.alerts.alert.type}">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            <h4 class="alert-heading">${res.alerts.alert.type.toUpperCase()}!</h4>
-                            <p class="mb-0">${res.alerts.alert.message}</p>
-                            </div>
-                        `
-                        cardBody.insertAdjacentHTML('afterbegin', html);
-
-                    }
-
+        
                     res.data.forEach(item => {
+                        document.getElementById("studentName").textContent = item.name;
                         const listItem = document.createElement('tr');
                         listItem.innerHTML = `
                  
@@ -81,10 +64,11 @@
                                 <td>${item.name}</td>
                                 <td>${item.grade}</td>
                                 <td>${item.class}</td>
-                                <td>
-                                    <a href="/students/edit/${item.id}" class="btn btn-info btn-sm "><i class="fa fa-pencil" aria-hidden="true"></i> </a>
-                                    <button onclick="handleDeleteById('${item.id}')" type="button" class="btn btn-danger btn-sm mx-2"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                                </td>
+                                <td><a href="/students/edit/${item.id}" class="btn btn-info btn-sm "><i class="fa fa-pencil"
+                                            aria-hidden="true"></i>
+                                </a>
+                                    <button onclick="handleDeleteById('${item.id}')" type="button" class="btn btn-danger btn-sm mx-2"><i class="fa fa-trash"
+                                            aria-hidden="true"></i></button> </td>
                         
                         `;
                         dataList.appendChild(listItem);

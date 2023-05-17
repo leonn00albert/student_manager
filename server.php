@@ -2,12 +2,12 @@
 require_once __DIR__.'/vendor/autoload.php';
 use Artemis\Core\DataBases\DB;
 use Artemis\Core\Router\Router;
-
+use Artemis\Core\Forms\Forms;
 $app = Router::getInstance();
 $db = new DB("JSON","students");
 $alerts = new DB("JSON","alerts");
 
-
+$form = new Forms();
 
 $app->get("/", function($req,$res){
     $res->render(__DIR__ . "/src/index.html");
@@ -20,7 +20,7 @@ $app->get("/students/new", function($req,$res){
     $res->status(200);
       
 });
-$app->get("/students", function($req,$res){
+$app->get("/students",function($req,$res){
     global $db;
     global $alerts;
     try {
@@ -86,7 +86,7 @@ $app->get("/students/edit/:id", function($req,$res){
     $res->status(200);    
 });
 
-$app->post("/students", function($req,$res){
+$app->post("/students",$form->sanatize,function($req,$res){
     global $db;
     global $alerts;
     try {
