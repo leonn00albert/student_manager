@@ -10,6 +10,13 @@ $app->get("/", function($req,$res){
       
 });
 
+$app->get("/students/new", function($req,$res){
+    $res->render(__DIR__ . "/src/new.html");
+    $res->status(200);
+      
+});
+
+
 $app->get("/public/:file", function($req,$res){
     $path_to_file = explode("/",$req->path())[2];
     header("Content-type:" . $res->getContentType($path_to_file));
