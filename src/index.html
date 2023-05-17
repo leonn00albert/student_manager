@@ -49,23 +49,23 @@
             fetch('/students')
                 .then(response => response.json())
                 .then(data => {
+                    console.log(data);
                     const dataList = document.getElementById('studentsTable');
                     data.forEach(item => {
-                        const listItem = document.createElement('p');
+                        const listItem = document.createElement('tr');
                         listItem.innerHTML = `
-                            <tr>
-                             
+                 
                                 <td>${item.id}</td>
                                 <td>${item.name}</td>
                                 <td>${item.grade}</td>
                                 <td>${item.class}</td>
-                                <td><a  class="btn btn-info btn-sm "><i class="fa fa-pencil"
+                                <td><a href="/student/${item.id}/edit" class="btn btn-info btn-sm "><i class="fa fa-pencil"
                                             aria-hidden="true"></i>
                                 </a>
                                     <button type="button" class="btn btn-danger btn-sm mx-2"><i class="fa fa-trash"
                                             aria-hidden="true"></i></button> </td>
 
-                            </tr>
+                     
                         
                         `;
                         dataList.appendChild(listItem);

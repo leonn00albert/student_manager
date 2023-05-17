@@ -16,7 +16,13 @@ $app->get("/students/new", function($req,$res){
     $res->status(200);
       
 });
-
+$app->get("/students", function($req,$res){
+    global $db;
+    $data = $db->con->find([]);
+    $res->json($data);
+    $res->status(200);
+      
+});
 $app->post("/students", function($req,$res){
     global $db;
     $data = $req->body();
