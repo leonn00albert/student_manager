@@ -13,3 +13,6 @@ table th i {
     margin-left: 1.5em;
 
 }
+table th i:hover{
+    cursor: pointer;
+}

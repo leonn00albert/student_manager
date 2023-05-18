@@ -103,7 +103,7 @@
 
         };
 
-        function handleDeleteById(method) {
+        function handleDeleteById(id) {
 
             fetch('/students/' + id, {
                 method: 'DELETE',
@@ -128,8 +128,10 @@
             let desc = lastClickedSortMethod === method ;
             if(desc === true) {
                 lastClickedSortMethod = "";
+            }else{
+                lastClickedSortMethod = method;
             }
-            lastClickedSortMethod = method;
+         
             fetch('/students?sortby=' + method + '&desc=' + desc)
                 .then(response => response.json())
                 .then(res => {
@@ -147,7 +149,9 @@
                         cardBody.insertAdjacentHTML('afterbegin', html);
 
                     }
-
+                    if(desc === true ){
+                        res.data = res.data.reverse();
+                    }
                     res.data.forEach(item => {
                         const listItem = document.createElement('tr');
                         listItem.innerHTML = renderTable(item);
