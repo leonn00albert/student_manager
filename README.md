@@ -22,6 +22,8 @@ everything is pure javascript
 I used a special bootstrap theme found one https://bootswatch.com/ 
 
 
+## Install
+
 start server
 
 ```bash 
@@ -29,6 +31,21 @@ composer install
  php -S localhost:8000 .\server.php
 
 ```
+
+## Usage
+
+Features 
+
+Create 
+ - Student -> create new student entry 
+ - Classroom -> create a new classroom entry 
+Tools 
+ - Create PDF -> get a pdf file with student data
+ - Logs -> go logs of activity 
+ - Seed data -> create data 0 - 10 entries
+ - clear data -> clear all student and class room data
+
+
 
 result : <br>
 ![screenshot](https://github.com/leonn00albert/student_manager/blob/main/student-manager.gif)
