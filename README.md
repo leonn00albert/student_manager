@@ -25,6 +25,7 @@ I used a special bootstrap theme found one https://bootswatch.com/
 start server
 
 ```bash 
+composer install
  php -S localhost:8000 .\server.php
 
 ```
