@@ -31,4 +31,4 @@ start server
 
 result :
 
-[![m1project.png](https://i.postimg.cc/1zyvc3P1/m1project.png)](https://postimg.cc/QFngjsHf)
+[![student-manager.gif](https://i.postimg.cc/KjmJcy7x/student-manager.gif)](https://postimg.cc/bDFQLWFB)
