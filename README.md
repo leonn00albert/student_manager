@@ -30,5 +30,4 @@ start server
 ```
 
 result :
-
-[![student-manager.gif](https://i.postimg.cc/KjmJcy7x/student-manager.gif)](https://postimg.cc/bDFQLWFB)
+![Screenshot](https://i.postimg.cc/KjmJcy7x/student-manager.gif)
