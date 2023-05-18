@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__."/vendor/autoload.php";
+require_once __DIR__."/create-pdf.php";
 use Artemis\Core\DataBases\DB;
 use Artemis\Core\Router\Router;
 use Artemis\Core\Forms\Forms;
@@ -164,5 +165,28 @@ $app->get("/api/logs",function ($req, $res) {
     }
 });
 
+
+$app->get("/api/report",function ($req, $res) {
+    global $logs;
+
+    try {
+        $pdf = new PDF();
+        $header = array("id", "Name", "Grade", "Class");
+        $data = $pdf->LoadData("countries.txt");
+        $pdf->SetFont("Arial","",14);
+        $pdf->AddPage();
+        $pdf->BasicTable($header,$data);   
+        $pdf->Output("D","students" . time(). ".pdf"); 
+ 
+        $logs->con->create(["level" => "info" , "source" => "GET /api/report", "date" => date("D M j G:i:s T Y"),"message" => "create pdf file" ] );
+
+        
+    }   
+    catch(Exception $e) {
+        $logs->con->create(["level" => "danger" , "source" => "GET /api/report", "date" => date("D M j G:i:s T Y"),"message" => "ERROR: could not create pdf file" ] );
+
+        $res->status(500);
+    }
+});
 $app->listen("/", function(){
 });
