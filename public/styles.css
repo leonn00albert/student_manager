@@ -16,3 +16,8 @@ table th i {
 table th i:hover{
     cursor: pointer;
 }
+
+.center {
+    margin: 0 auto;
+    width: 100px;
+}

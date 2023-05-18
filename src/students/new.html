@@ -72,6 +72,29 @@
     </div>
 
     <script>
+     window.onload = function () {
+               fetch('/api/classrooms')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    return response.json();
+                }).then(data => {
+                    let classSelect = document.getElementById("classroom");
+                    data.forEach((e) => {
+                        var option = document.createElement("option");
+                        option.value = e.name;
+                        option.text = e.name;
+                        classSelect.appendChild(option);
+                    })
+                    
+
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        };
         function handle_add() {
 
             const input = {
@@ -93,7 +116,7 @@
                 nameInput.classList.remove("is-invalid");
 
             }
-          
+     
             fetch('/students', {
                 method: 'POST',
                 headers: {
