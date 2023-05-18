@@ -30,4 +30,4 @@ start server
 ```
 
 result : <br>
-<img src="https://i.ibb.co/DGScGv3/student-manager.gif" >
+![screenshot](https://github.com/leonn00albert/student_manager/blob/main/student-manager.gif)
