@@ -57,6 +57,24 @@
     </div>
 
     <script>
+
+
+        function renderTable(item) {
+            return (
+                `
+                 
+                                <td>${item.id}</td>
+                                <td>${item.name}</td>
+                                <td>${item.grade}</td>
+                                <td>${item.class}</td>
+                                <td>
+                                    <a href="/students/edit/${item.id}" class="btn btn-info btn-sm "><i class="fa fa-pencil" aria-hidden="true"></i> </a>
+                                    <button onclick="handleDeleteById('${item.id}')" type="button" class="btn btn-danger btn-sm mx-2"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                </td>
+                        
+                        ` 
+            )
+        }
         window.onload = function () {
             fetch('/students')
                 .then(response => response.json())
@@ -77,18 +95,7 @@
 
                     res.data.forEach(item => {
                         const listItem = document.createElement('tr');
-                        listItem.innerHTML = `
-                 
-                                <td>${item.id}</td>
-                                <td>${item.name}</td>
-                                <td>${item.grade}</td>
-                                <td>${item.class}</td>
-                                <td>
-                                    <a href="/students/edit/${item.id}" class="btn btn-info btn-sm "><i class="fa fa-pencil" aria-hidden="true"></i> </a>
-                                    <button onclick="handleDeleteById('${item.id}')" type="button" class="btn btn-danger btn-sm mx-2"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                                </td>
-                        
-                        `;
+                        listItem.innerHTML = renderTable(item);
                         dataList.appendChild(listItem);
                     });
                 })
@@ -116,25 +123,39 @@
                 });
         };
 
+        let lastClickedSortMethod = "";
+        function handleSort(method) {
+            let desc = lastClickedSortMethod === method ;
+            if(desc === true) {
+                lastClickedSortMethod = "";
+            }
+            lastClickedSortMethod = method;
+            fetch('/students?sortby=' + method + '&desc=' + desc)
+                .then(response => response.json())
+                .then(res => {
+                    const dataList = document.getElementById('studentsTable');
+                    dataList.innerHTML = "";
+                    if (res.alerts.alert) {
+                        const cardBody = document.getElementById('cardBody');
+                        let html = `
+                            <div class="alert alert-dismissible alert-${res.alerts.alert.type}">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            <h4 class="alert-heading">${res.alerts.alert.type.toUpperCase()}!</h4>
+                            <p class="mb-0">${res.alerts.alert.message}</p>
+                            </div>
+                        `
+                        cardBody.insertAdjacentHTML('afterbegin', html);
 
-        function handleSort(id) {
-
-            fetch('/students/' + id, {
-                method: 'DELETE',
-
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
                     }
-                    return response.json();
+
+                    res.data.forEach(item => {
+                        const listItem = document.createElement('tr');
+                        listItem.innerHTML = renderTable(item);
+                        dataList.appendChild(listItem);
+                    });
                 })
-                .then(data => {
-                    window.location = '/';
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
-                });
+                .catch(error => console.error(error));
+
         };
 
     </script>
