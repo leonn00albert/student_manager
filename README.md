@@ -24,11 +24,12 @@ I used a special bootstrap theme found one https://bootswatch.com/
 
 ## Install
 
-start server
 
 ```bash 
+git clone https://github.com/leonn00albert/student_manager.git
+cd student_manager
 composer install
- php -S localhost:8000 .\server.php
+php -S localhost:8000 .\server.php
 
 ```
 
