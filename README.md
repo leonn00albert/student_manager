@@ -29,5 +29,5 @@ start server
 
 ```
 
-result :
-![Screenshot](https://i.postimg.cc/KjmJcy7x/student-manager.gif)
+result : <br>
+<img src="https://i.ibb.co/DGScGv3/student-manager.gif" >
