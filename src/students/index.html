@@ -13,15 +13,6 @@
 
     <link rel="stylesheet" href="/public/styles.css">
     <title>Students</title>
-
-    <style>
-        table tr td {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 400px;
-        }
-    </style>
 </head>
 
 <body>
@@ -34,7 +25,7 @@
             <div class="card-header"></div>
             <div class="card-body" id="cardBody">
 
-                <h4 class="card-title">Students</h4>
+                <h4 class="card-title">Students<span class="badge bg-primary m-1" id="studentCount" ></span></h4>
                 <p class="card-text">
                 <table class="table table-hover">
                     <thead>
@@ -49,11 +40,26 @@
                     <tbody id="studentsTable">
                     </tbody>
                 </table>
-
-                <a href="students/new" class="btn btn-primary">Add Student</a>
-                <a href="api/report" class="btn btn-secondary">Create PDF file</a>
-
-                <a href="logs" class="btn btn-secondary">Logs</a>
+                
+                <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                    <div class="btn-group" role="group">
+                      <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Create</button>
+                      <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                        <a href="students/new"  class="dropdown-item" >Student</a>
+                        <a class="dropdown-item" href="classroom/new">Classroom</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                    <div class="btn-group" role="group">
+                      <button id="btnGroupDrop2" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tools</button>
+                      <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                        <a href="api/report"  class="dropdown-item" >Create PDF file</a>
+                        <a href="logs"  class="dropdown-item" href="#">Logs</a>
+                      </div>
+                    </div>
+                  </div>
+       
                 </p>
             </div>
         </div>
@@ -63,6 +69,7 @@
 
 
         function renderTable(item) {
+          
             return (
                 `
                  
@@ -95,7 +102,7 @@
                         cardBody.insertAdjacentHTML('afterbegin', html);
 
                     }
-
+                    document.getElementById("studentCount").innerHTML = res.data.length;
                     res.data.forEach(item => {
                         const listItem = document.createElement('tr');
                         listItem.innerHTML = renderTable(item);

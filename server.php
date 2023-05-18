@@ -8,7 +8,7 @@ $app = Router::getInstance();
 $db = new DB("JSON","students");
 $logs = new DB("JSON","logs");
 $alerts = new DB("JSON","alerts");
-
+$classrooms = new DB("JSON","classrooms");
 $form = new Forms();
 
 function sortByKey(array $arr,string $key, bool $desc= false)
@@ -144,6 +144,49 @@ $app->get("/public/:file", function($req,$res){
     readfile($file);
   
 });
+
+$app->get("/classroom/new",function ($req, $res) {
+    $res->render(__DIR__ . "/src/classroom/new.html");
+    $res->status(200);
+});
+
+$app->post("/api/classrooms",function ($req, $res) {
+    global $classrooms;
+    global $alerts;
+    global $logs;
+    try {
+        $data = $classrooms->con->create($req->body());
+        $res->json($data);
+        $res->status(200);
+        $alerts->con->create(["alert" => ["type" => "success","message" => "Succesfully created classroom"]]);
+        $logs->con->create(["level" => "info" , "source" => "POST /students", "date" => date("D M j G:i:s T Y"),"message" => "created classroom" ] );
+
+    } catch(Exception $e){
+        $logs->con->create(["level" => "danger" , "source" => "POST /students", "date" => date("D M j G:i:s T Y"),"message" => "ERROR: could not create classroom" ] );
+        $alerts->con->create(["alert" => ["type" => "danger","message" => "ERROR: could not create classroom"]]);
+    }
+
+ 
+});
+
+$app->get("/api/classrooms",function ($req, $res) {
+    global $classrooms;
+    global $alerts;
+    global $logs;
+    try {
+        $data = $classrooms->con->find([]);
+        $res->json($data);
+        $res->status(200);
+    }
+    catch(Exception $e){
+        $logs->con->create(["level" => "danger" , "source" => "GET /api/classrooms", "date" => date("D M j G:i:s T Y"),"message" => "ERROR: could not get classroom" ] );
+        $alerts->con->create(["alert" => ["type" => "danger","message" => "ERROR: could not get classroom"]]);
+    }
+
+ 
+});
+
+
 
 $app->get("/logs",function ($req, $res) {
     $res->render(__DIR__ . "/src/logs/index.html");
