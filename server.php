@@ -9,6 +9,18 @@ $alerts = new DB("JSON","alerts");
 
 $form = new Forms();
 
+function sortByKey(array $arr,string $key, bool $desc= false)
+{
+
+    $tmp = [...$arr];
+    usort($tmp, function ($a, $b) use ($key) {
+        $a = (array) $a;
+        $b = (array) $b;
+        return $a[$key] <=> $b[$key];
+    });
+    return $tmp;
+ 
+}
 $app->get("/", function($req,$res){
     $res->render(__DIR__ . "/src/index.html");
     $res->status(200);
@@ -26,6 +38,11 @@ $app->get("/students",function($req,$res){
     try {
         $data = $db->con->find([]);
         $alert = $alerts->con->find([]);
+       
+        if(isset($req->query()["sortby"])) {
+            $desc = (bool) $req->query()["desc"];
+            $data = sortByKey($data,$req->query()["sortby"],$desc);
+        }
         $res->json(["alerts" => end($alert) ?? '',"data" => $data]);
         $res->status(200);
         $alerts->con->deleteMany([]);
