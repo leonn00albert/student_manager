@@ -45,7 +45,7 @@
                     <div class="btn-group" role="group">
                         <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Create</button>
-                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" >
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                             <a href="students/new" class="dropdown-item">Student</a>
                             <a class="dropdown-item" href="classroom/new">Classroom</a>
                         </div>
@@ -58,61 +58,80 @@
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
                             <a href="api/report" class="dropdown-item">Create PDF file</a>
                             <a href="logs" class="dropdown-item" href="#">Logs</a>
-                            <a class="dropdown-item" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal">
+                            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 Seed Data
-                        </a>
+                            </a>
+                            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#DeleteModal">
+                                Delete All Data
+                            </a>
                         </div>
                     </div>
                 </div>
-
                 </p>
-                
- 
-  
             </div>
 
 
 
 
+        </div>
     </div>
-    </div>
-    <div class="modal " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">                <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Seed data</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"></span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Select how many students to create.</p>
-                <div class="form-group">
-                    <label for="grade">Students</label>
-                    <select required class="form-select" id="seedData">
-                        <option>0</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                        <option>7</option>
-                        <option>8</option>
-                        <option>9</option>
-                        <option>10</option>
-                    </select>
-    
+    <div class="modal " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Seed data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
                 </div>
-            </div>
- 
-            <div class="modal-footer">
-                <button type="button" onclick="handleSeedData()"class="btn btn-primary">Create</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <div class="modal-body">
+                    <p>Select how many students to create.</p>
+                    <div class="form-group">
+                        <label for="grade">Students</label>
+                        <select required class="form-select" id="seedData">
+                            <option>0</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                        </select>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" onclick="handleSeedData()" class="btn btn-primary">Create</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <div class="modal " id="DeleteModal" tabindex="-1" aria-labelledby="DeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete all data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to clear all the data</p>
+
+                    <div class="modal-footer">
+                        <button type="button" onclick="handleDeleteData()" class="btn btn-primary">Yes</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
 
 
@@ -220,15 +239,25 @@
 
         };
 
-        function handleSeedData(){
+        function handleSeedData() {
             let count = document.getElementById("seedData").value;
-            fetch('/api/seed?count=' +  count)
+            fetch('/api/seed?count=' + count)
                 .then(response => response.json())
                 .then(res => {
                     window.location = '/';
                 })
                 .catch(error => console.error(error));
-        }   
+        }
+
+        function handleDeleteData() {
+            fetch('/api/delete')
+                .then(response => response.json())
+                .then(res => {
+                    window.location = '/';
+                })
+                .catch(error => console.error(error));
+        }
+
 
     </script>
 </body>
