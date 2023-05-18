@@ -18,11 +18,8 @@ function sortByKey(array $arr,string $key, bool $desc= false)
         $b = (array) $b;
         return $a[$key] <=> $b[$key];
     });
-    if($desc === true) {
-        $tmp = array_reverse($tmp);
-    }
-    
     return $tmp;
+ 
 }
 $app->get("/", function($req,$res){
     $res->render(__DIR__ . "/src/index.html");
@@ -41,8 +38,10 @@ $app->get("/students",function($req,$res){
     try {
         $data = $db->con->find([]);
         $alert = $alerts->con->find([]);
+       
         if(isset($req->query()["sortby"])) {
-            $data = sortByKey($data,$req->query()["sortby"]);
+            $desc = (bool) $req->query()["desc"];
+            $data = sortByKey($data,$req->query()["sortby"],$desc);
         }
         $res->json(["alerts" => end($alert) ?? '',"data" => $data]);
         $res->status(200);
