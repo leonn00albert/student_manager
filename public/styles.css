@@ -8,3 +8,8 @@ table tr td {
     text-overflow: ellipsis;
     max-width: 400px;
 }
+
+table th i {
+    margin-left: 1.5em;
+
+}

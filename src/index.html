@@ -11,7 +11,7 @@
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
 
-        <link rel="stylesheet" href="/public/styles.css">
+    <link rel="stylesheet" href="/public/styles.css">
     <title>Students</title>
 
     <style>
@@ -40,9 +40,9 @@
                     <thead>
                         <tr>
                             <th scope="col">Registration number</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Grade</th>
-                            <th scope="col">Classroom </th>
+                            <th scope="col">Name<i onclick="handleSort('name')" class="fa fa-sort"></i></th>
+                            <th scope="col">Grade<i onclick="handleSort('grade')" class="fa fa-sort"></i></th>
+                            <th scope="col">Classroom <i onclick="handleSort('class')" class="fa fa-sort"></i></th>
                             <th scope="col"> </th>
                         </tr>
                     </thead>
@@ -96,7 +96,28 @@
 
         };
 
-        function handleDeleteById(id) {
+        function handleDeleteById(method) {
+
+            fetch('/students/' + id, {
+                method: 'DELETE',
+
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    window.location = '/';
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        };
+
+
+        function handleSort(id) {
 
             fetch('/students/' + id, {
                 method: 'DELETE',
