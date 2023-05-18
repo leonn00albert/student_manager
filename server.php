@@ -5,6 +5,7 @@ use Artemis\Core\Router\Router;
 use Artemis\Core\Forms\Forms;
 $app = Router::getInstance();
 $db = new DB("JSON","students");
+$logs = new DB("JSON","logs");
 $alerts = new DB("JSON","alerts");
 
 $form = new Forms();
@@ -22,13 +23,13 @@ function sortByKey(array $arr,string $key, bool $desc= false)
  
 }
 $app->get("/", function($req,$res){
-    $res->render(__DIR__ . "/src/index.html");
+    $res->render(__DIR__ . "/src/students/index.html");
     $res->status(200);
       
 });
 
 $app->get("/students/new", function($req,$res){
-    $res->render(__DIR__ . "/src/new.html");
+    $res->render(__DIR__ . "/src/students/new.html");
     $res->status(200);
       
 });
@@ -99,22 +100,25 @@ $app->delete("/students/:id", function($req,$res){
       
 });
 $app->get("/students/edit/:id", function($req,$res){
-    $res->render(__DIR__ . "/src/edit.html");
+    $res->render(__DIR__ . "/src/students/edit.html");
     $res->status(200);    
 });
 
 $app->post("/students",$form->sanatize,function($req,$res){
     global $db;
     global $alerts;
+    global $logs;
     try {
         $data = $req->body();
         $db->con->create($data);
         $alerts->con->create(["alert" => ["type" => 'success','message' => 'Succesfully created student']]);
+        $logs->con->create(["level" => "info" , "source" => 'POST /students', 'date' => date("D M j G:i:s T Y"),'message' => 'Succesfully created student' ] );
         $res->json($data);
         $res->status(200);
     }
 
     catch(Exception $e) {
+        $logs->con->create(["level" => "danger" , "source" => 'POST /students', 'date' => date("D M j G:i:s T Y"),'message' => 'ERROR: could not create student' ] );
         $alerts->con->create(["alert" => ["type" => 'danger','message' => 'ERROR: could not create student']]);
         $res->status(500);
     }
@@ -129,6 +133,26 @@ $app->get("/public/:file", function($req,$res){
     $file = "public/$path_to_file";
     readfile($file);
   
+});
+
+$app->get("/logs",function ($req, $res) {
+    $res->render(__DIR__ . "/src/logs/index.html");
+    $res->status(200);
+});
+
+$app->get("/api/logs",function ($req, $res) {
+    global $logs;
+    global $alerts; 
+    try {
+        $data = $logs->con->find([]);
+        $alert = $alerts->con->find([]);
+        $res->json(["alerts" => end($alert) ?? '',"data" => $data]);
+        $res->status(200);
+        $alerts->con->deleteMany([]);
+    }   
+    catch(Exception $e) {
+        $res->status(500);
+    }
 });
 
 $app->listen("/", function(){
