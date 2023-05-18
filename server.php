@@ -33,18 +33,30 @@ $app->get("/students/new", function ($req, $res) {
     $res->render(__DIR__ . "/src/students/new.html");
     $res->status(200);
 });
+
 $app->get("/students", function ($req, $res) {
     global $db;
     global $alerts;
     try {
         $data = $db->con->find([]);
         $alert = $alerts->con->find([]);
-
+        $perPage = 10; 
+        $totalRecords = count($data); 
+        $totalPages = ceil($totalRecords / $perPage); 
+        if (isset($req->query()["page"]) && is_numeric($req->query()["page"])) {
+            $currentPage = $req->query()["page"];
+        }
+        else {
+            $currentPage = 1;
+        }
+        $startIndex = ($currentPage - 1) * $perPage;
+        $records = array_slice($data, $startIndex, $perPage);
+        
         if (isset($req->query()["sortby"])) {
             $desc = (bool) $req->query()["desc"];
-            $data = sortByKey($data, $req->query()["sortby"], $desc);
+            $records = sortByKey($records, $req->query()["sortby"], $desc);
         }
-        $res->json(["alerts" => end($alert) ?? "", "data" => $data]);
+        $res->json(["alerts" => end($alert) ?? "", "data" => $records ,"total_pages" => $totalPages, "current_page" => $currentPage, "total_records" => $totalRecords]);
         $res->status(200);
         $alerts->con->deleteMany([]);
     } catch (Exception $e) {
