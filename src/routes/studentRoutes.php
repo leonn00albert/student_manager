@@ -82,7 +82,8 @@ $app->delete("/students/:id", function ($req, $res) {
     } catch (Exception $e) {
         $logs->con->create(["level" => "danger", "source" => "DELETE /students/" . $req->params()["id"], "date" => date("D M j G:i:s T Y"), "message" => "ERROR: could not delete student"]);
         $alerts->con->create(["alert" => ["type" => "danger", "message" => "ERROR: could not delete student"]]);
-        $res->status(500);
+        $res->json(["error" =>  $e->getMessage()]);
+        $res->status(400);
     }
 });
 $app->get("/students/edit/:id", function ($req, $res) {
@@ -100,10 +101,11 @@ $app->post("/students", $form->sanatize, function ($req, $res) {
         $alerts->con->create(["alert" => ["type" => "success", "message" => "Succesfully created student"]]);
         $logs->con->create(["level" => "info", "source" => "POST /students", "date" => date("D M j G:i:s T Y"), "message" => "created student"]);
         $res->json($data);
-        $res->status(200);
+        $res->status(201);
     } catch (Exception $e) {
         $logs->con->create(["level" => "danger", "source" => "POST /students", "date" => date("D M j G:i:s T Y"), "message" => "ERROR: could not create student"]);
         $alerts->con->create(["alert" => ["type" => "danger", "message" => "ERROR: could not create student"]]);
-        $res->status(500);
+        $res->json(["error" =>  $e->getMessage()]);
+        $res->status(400);
     }
 });
