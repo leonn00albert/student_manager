@@ -27,7 +27,8 @@
 
                 <h4 class="card-title">Students<span class="badge bg-primary m-1" id="studentCount"></span></h4>
                 <p class="card-text">
-                <table class="table table-hover">
+                    <div class="table-responsive-md">
+                <table class="table table-hover table-striped">
                     <thead>
                         <tr>
                             <th scope="col">Registration number</th>
@@ -40,7 +41,12 @@
                     <tbody id="studentsTable">
                     </tbody>
                 </table>
+            </div>
+                <div id="paginationContainer">
+                    <ul class="pagination" id="pagination">
 
+                    </ul>
+                </div>
                 <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                     <div class="btn-group" role="group">
                         <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle"
@@ -139,7 +145,6 @@
 
             return (
                 `
-                 
                                 <td>${item.id}</td>
                                 <td>${item.name}</td>
                                 <td>${item.grade}</td>
@@ -153,7 +158,8 @@
             )
         }
         window.onload = function () {
-            fetch('/students')
+            let path = window.location.href.split("?")[1];
+            fetch('/students?'+ path)
                 .then(response => response.json())
                 .then(res => {
                     const dataList = document.getElementById('studentsTable');
@@ -169,7 +175,9 @@
                         cardBody.insertAdjacentHTML('afterbegin', html);
 
                     }
-                    document.getElementById("studentCount").innerHTML = res.data.length;
+                    console.log(res.current_page); 
+                    handlePagination(res.total_pages, res.current_page);
+                    document.getElementById("studentCount").innerHTML = res.total_records;
                     res.data.forEach(item => {
                         const listItem = document.createElement('tr');
                         listItem.innerHTML = renderTable(item);
@@ -202,6 +210,8 @@
 
         let lastClickedSortMethod = "";
         function handleSort(method) {
+            let path = window.location.href.split("?")[1];
+
             let desc = lastClickedSortMethod === method;
             if (desc === true) {
                 lastClickedSortMethod = "";
@@ -209,11 +219,12 @@
                 lastClickedSortMethod = method;
             }
 
-            fetch('/students?sortby=' + method + '&desc=' + desc)
+            fetch('/students?sortby=' + method + '&desc=' + desc + "&" +path)
                 .then(response => response.json())
                 .then(res => {
                     const dataList = document.getElementById('studentsTable');
                     dataList.innerHTML = "";
+
                     if (res.alerts.alert) {
                         const cardBody = document.getElementById('cardBody');
                         let html = `
@@ -256,6 +267,41 @@
                     window.location = '/';
                 })
                 .catch(error => console.error(error));
+        }
+
+        function handlePagination(pages,current) {
+            let back = parseInt(current) - 1  > 0 ? parseInt(current) - 1 : 1;
+            let forward = parseInt(current) + 1  < pages ? parseInt(current) + 1 : pages;
+            let html = `
+            <li class="page-item">
+              <a class="page-link" href="/?page=${back}">&laquo;</a>
+            </li>
+            `;
+            let pagination = document.getElementById("pagination");
+            for (let i = 1; i <= pages; i++) {
+                if(i == current) {
+                    html += `
+                <li class="page-item active">
+                        <a class="page-link" href="/?page=${i}">${i}</a>
+                      </li>
+                `
+                } else {
+                    html += `
+                <li class="page-item ">
+                        <a class="page-link" href="/?page=${i}">${i}</a>
+                      </li>
+                ` 
+                }
+         
+            }
+
+            html += `
+
+            <li class="page-item">
+                 <a class="page-link" href="/?page=${forward}">&raquo;</a>
+             </li>
+            `
+            pagination.innerHTML = html;
         }
 
 

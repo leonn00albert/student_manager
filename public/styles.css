@@ -1,7 +1,7 @@
-
 body {
-    background-image: linear-gradient(90deg,#3e6471,#5e62b0,#7cb983);
+    background-image: linear-gradient(90deg, #3e6471, #5e62b0, #7cb983);
 }
+
 table tr td {
     white-space: nowrap;
     overflow: hidden;
@@ -13,11 +13,17 @@ table th i {
     margin-left: 1.5em;
 
 }
-table th i:hover{
+
+table th i:hover {
     cursor: pointer;
 }
 
 .center {
     margin: 0 auto;
     width: 100px;
+}
+
+#paginationContainer {
+    display: flex;
+    justify-content: center;
 }
