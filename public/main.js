@@ -19,7 +19,7 @@ window.onload = function () {
     if(path === undefined) {
         path = 'page=1';
     }
-    fetch('/students?' + path)
+    fetch('/api/students?' + path)
         .then(response => response.json())
         .then(res => {
             const dataList = document.getElementById('studentsTable');
@@ -50,7 +50,7 @@ window.onload = function () {
 
 function handleDeleteById(id) {
 
-    fetch('/students/' + id, {
+    fetch('/api/students/' + id, {
         method: 'DELETE',
 
     })
@@ -79,7 +79,7 @@ function handleSort(method) {
         lastClickedSortMethod = method;
     }
 
-    fetch('/students?sortby=' + method + '&desc=' + desc + "&" + path)
+    fetch('/api/students?sortby=' + method + '&desc=' + desc + "&" + path)
         .then(response => response.json())
         .then(res => {
             const dataList = document.getElementById('studentsTable');

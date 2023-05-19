@@ -5,7 +5,7 @@ $app->get("/students/new", function ($req, $res) {
     $res->status(200);
 });
 
-$app->get("/students", function ($req, $res) {
+$app->get("/api/students", function ($req, $res) {
     global $db;
     global $alerts;
     try {
@@ -32,7 +32,7 @@ $app->get("/students", function ($req, $res) {
         $res->status(500);
     }
 });
-$app->get("/students/:id", function ($req, $res) {
+$app->get("/api/students/:id", function ($req, $res) {
     global $db;
     global $alerts;
     try {
@@ -46,7 +46,7 @@ $app->get("/students/:id", function ($req, $res) {
     }
 });
 
-$app->put("/students/:id", function ($req, $res) {
+$app->put("/api/students/:id", function ($req, $res) {
     global $db;
     global $alerts;
     global $logs;
@@ -65,7 +65,7 @@ $app->put("/students/:id", function ($req, $res) {
     }
 });
 
-$app->delete("/students/:id", function ($req, $res) {
+$app->delete("/api/students/:id", function ($req, $res) {
     global $db;
     global $alerts;
     global $logs;
@@ -83,12 +83,12 @@ $app->delete("/students/:id", function ($req, $res) {
         $res->status(400);
     }
 });
-$app->get("/students/edit/:id", function ($req, $res) {
+$app->get("/api/students/edit/:id", function ($req, $res) {
     $res->render("src/views/students/edit.php");
     $res->status(200);
 });
 
-$app->post("/students", $form->sanatize, function ($req, $res) {
+$app->post("/api/students", $form->sanatize, function ($req, $res) {
     global $db;
     global $alerts;
     global $logs;

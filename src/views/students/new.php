@@ -101,7 +101,7 @@
 
             }
      
-            fetch('/students', {
+            fetch('/api/students', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
