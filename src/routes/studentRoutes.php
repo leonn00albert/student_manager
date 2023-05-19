@@ -5,7 +5,22 @@ $app->get("/students/new", function ($req, $res) {
     $res->status(200);
 });
 
-$app->get("/students", function ($req, $res) {
+$app->get("/students/:id", function ($req, $res) {
+    $request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : null;
+    if( $request_uri !== '/students/new'){
+    $res->render("src/views/students/show.php");
+    $res->status(200);
+    }
+});
+
+$app->get("/students/edit/:id", function ($req, $res) {
+    $res->render("src/views/students/edit.php");
+    $res->status(200);
+});
+
+//api routes
+
+$app->get("/api/students", function ($req, $res) {
     global $db;
     global $alerts;
     try {
@@ -32,7 +47,7 @@ $app->get("/students", function ($req, $res) {
         $res->status(500);
     }
 });
-$app->get("/students/:id", function ($req, $res) {
+$app->get("/api/students/:id", function ($req, $res) {
     global $db;
     global $alerts;
     try {
@@ -46,7 +61,7 @@ $app->get("/students/:id", function ($req, $res) {
     }
 });
 
-$app->put("/students/:id", function ($req, $res) {
+$app->put("/api/students/:id", function ($req, $res) {
     global $db;
     global $alerts;
     global $logs;
@@ -65,7 +80,7 @@ $app->put("/students/:id", function ($req, $res) {
     }
 });
 
-$app->delete("/students/:id", function ($req, $res) {
+$app->delete("/api/students/:id", function ($req, $res) {
     global $db;
     global $alerts;
     global $logs;
@@ -83,17 +98,22 @@ $app->delete("/students/:id", function ($req, $res) {
         $res->status(400);
     }
 });
-$app->get("/students/edit/:id", function ($req, $res) {
-    $res->render("src/views/students/edit.php");
-    $res->status(200);
-});
 
-$app->post("/students", $form->sanatize, function ($req, $res) {
+
+$app->post("/api/students", $form->sanatize, function ($req, $res) {
     global $db;
     global $alerts;
     global $logs;
     try {
+      
         $data = $req->body();
+        $data['avatar'] = "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png";
+        $data['country'] = "eu";
+        $data['age'] = rand(18,60);
+        $data['email'] = "placeholder@email.com";
+        $data['gender'] = "";
+        
+
         $db->con->create($data);
         $alerts->con->create(["alert" => ["type" => "success", "message" => "Succesfully created student"]]);
         $logs->con->create(["level" => "info", "source" => "POST /students", "date" => date("D M j G:i:s T Y"), "message" => "created student"]);

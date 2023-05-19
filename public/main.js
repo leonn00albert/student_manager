@@ -1,15 +1,17 @@
 function renderTable(item) {
 
     return (
-        `
-                        <td>${item.id}</td>
+        `               <td><img src=${item.avatar} class="avatar" ></td>
+                         <td><span class="fi fi-${item.country.toLowerCase()} fi"></span></td>    
+                        <td>${item.id}</td> 
                         <td>${item.name}</td>
                         <td>${item.grade}</td>
                         <td>${item.class}</td>
                         <td>
                             <a href="/students/edit/${item.id}" class="btn btn-info btn-sm "><i class="fa fa-pencil" aria-hidden="true"></i> </a>
                             <button onclick="handleDeleteById('${item.id}')" type="button" class="btn btn-danger btn-sm mx-2"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                        </td>
+                            <a href="/students/${item.id}" class="btn btn-secondary btn-sm "><i class="fa fa-eye" aria-hidden="true"></i> </a>
+                            </td>
                 
                 `
     )
@@ -19,7 +21,7 @@ window.onload = function () {
     if(path === undefined) {
         path = 'page=1';
     }
-    fetch('/students?' + path)
+    fetch('/api/students?' + path)
         .then(response => response.json())
         .then(res => {
             const dataList = document.getElementById('studentsTable');
@@ -39,6 +41,7 @@ window.onload = function () {
             handlePagination(res.total_pages, res.current_page);
             document.getElementById("studentCount").innerHTML = res.total_records;
             res.data.forEach(item => {
+                console.log(item)
                 const listItem = document.createElement('tr');
                 listItem.innerHTML = renderTable(item);
                 dataList.appendChild(listItem);
@@ -50,7 +53,7 @@ window.onload = function () {
 
 function handleDeleteById(id) {
 
-    fetch('/students/' + id, {
+    fetch('/api/students/' + id, {
         method: 'DELETE',
 
     })
@@ -72,6 +75,10 @@ let lastClickedSortMethod = "";
 function handleSort(method) {
     let path = window.location.href.split("?")[1];
 
+    if(path === undefined) {
+        path = 'page=1';
+    }
+
     let desc = lastClickedSortMethod === method;
     if (desc === true) {
         lastClickedSortMethod = "";
@@ -79,7 +86,7 @@ function handleSort(method) {
         lastClickedSortMethod = method;
     }
 
-    fetch('/students?sortby=' + method + '&desc=' + desc + "&" + path)
+    fetch('/api/students?sortby=' + method + '&desc=' + desc + "&" + path)
         .then(response => response.json())
         .then(res => {
             const dataList = document.getElementById('studentsTable');

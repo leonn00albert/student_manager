@@ -7,7 +7,13 @@ class PDF extends FPDF
 function LoadData($file)
 {   
     $json = file_get_contents("students/.json");
-    return json_decode($json,true);
+    if($json === false) {
+        return [];
+      
+    } else {
+        return json_decode($json,true);
+    }
+ 
 }
 
 function BasicTable($header, $data)
