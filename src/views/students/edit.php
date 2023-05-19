@@ -28,7 +28,7 @@
             </div>
             <div class="form-group">
                 <label for="classroom">Classroom</label>
-                <select class="form-control" id="classroom">
+                <select class="form-select" id="classroom">
                     <option value="A">Class A</option>
                     <option value="B">Class B</option>
                     <option value="C">Class C</option>
@@ -47,7 +47,7 @@
     window.onload = function() {
         var currentPath = window.location.pathname;
         var id = currentPath.split("/")[3];
-        fetch('/students/' + id)
+        fetch('/api/students/' + id)
             .then(response => response.json())
             .then(data => {
                 data.forEach(item => {
@@ -102,7 +102,7 @@
             class: document.getElementById('classroom').value,
 
         }
-        fetch('/students/' + id, {
+        fetch('/api/students/' + id, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
