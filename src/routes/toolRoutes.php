@@ -45,7 +45,7 @@ $app->get("/api/seed", function ($req, $res) {
             $logs->con->create(["level" => "info", "source" => "GET /api/seed", "date" => date("D M j G:i:s T Y"), "message" => "Created $count students"]);
             $alerts->con->create(["alert" => ["type" => "success", "message" => "Created $count students"]]);
 
-            $res->status(200);
+            $res->status(201);
             $res->json($results);
         } catch (Exception $e) {
             $logs->con->create(["level" => "danger", "source" => "GET /api/seed", "date" => date("D M j G:i:s T Y"), "message" => "ERROR: could not create students"]);

@@ -29,6 +29,8 @@ $app->get("/", function ($req, $res) {
     $res->status(200);
 });
 
+
+
 require_once __DIR__ . "/src/routes/studentRoutes.php";  //student routes 
 require_once __DIR__ . "/src/routes/classroomRoutes.php";  //classroom routes 
 require_once __DIR__ . "/src/routes/toolRoutes.php";  //tool routes 
@@ -41,7 +43,13 @@ $app->get("/public/:file", function ($req, $res) {
     $file = "public/$path_to_file";
     readfile($file);
 });
+//wildcard route
+$app->get("*", function ($req, $res) {
+    $res->send("404");
+    $res->status(404);
 
+   
+});
 
 $app->listen("/", function () {
 });
