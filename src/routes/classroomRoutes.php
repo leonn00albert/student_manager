@@ -6,6 +6,16 @@ $app->get("/classroom/new", function ($req, $res) {
     $res->status(200);
 });
 
+$app->get("/classroom/:id", function ($req, $res) {
+    $request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : null;
+    if( $request_uri !== '/classroom/new'){
+        $res->render("src/views/classroom/show.php");
+        $res->status(200);
+    }
+
+});
+
+
 $app->post("/api/classrooms", function ($req, $res) {
     global $classrooms;
     global $alerts;
