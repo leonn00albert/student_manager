@@ -9,7 +9,8 @@ function renderTable(item) {
                         <td>
                             <a href="/students/edit/${item.id}" class="btn btn-info btn-sm "><i class="fa fa-pencil" aria-hidden="true"></i> </a>
                             <button onclick="handleDeleteById('${item.id}')" type="button" class="btn btn-danger btn-sm mx-2"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                        </td>
+                            <a href="/students/${item.id}" class="btn btn-secondary btn-sm "><i class="fa fa-eye" aria-hidden="true"></i> </a>
+                            </td>
                 
                 `
     )

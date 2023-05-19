@@ -5,6 +5,21 @@ $app->get("/students/new", function ($req, $res) {
     $res->status(200);
 });
 
+$app->get("/students/:id", function ($req, $res) {
+    $request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : null;
+    if( $request_uri !== '/students/new'){
+    $res->render("src/views/students/show.php");
+    $res->status(200);
+    }
+});
+
+$app->get("/students/edit/:id", function ($req, $res) {
+    $res->render("src/views/students/edit.php");
+    $res->status(200);
+});
+
+//api routes
+
 $app->get("/api/students", function ($req, $res) {
     global $db;
     global $alerts;
@@ -83,10 +98,7 @@ $app->delete("/api/students/:id", function ($req, $res) {
         $res->status(400);
     }
 });
-$app->get("/api/students/edit/:id", function ($req, $res) {
-    $res->render("src/views/students/edit.php");
-    $res->status(200);
-});
+
 
 $app->post("/api/students", $form->sanatize, function ($req, $res) {
     global $db;
