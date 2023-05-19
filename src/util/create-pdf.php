@@ -1,6 +1,6 @@
 
 <?php
-require('fpdf185/fpdf.php');
+require('src/util/fpdf185/fpdf.php');
 
 class PDF extends FPDF
 {
@@ -22,6 +22,5 @@ function BasicTable($header, $data)
         $this->Ln();
     }
 }
-
 
 }

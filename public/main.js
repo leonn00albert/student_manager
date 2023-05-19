@@ -16,6 +16,9 @@ function renderTable(item) {
 }
 window.onload = function () {
     let path = window.location.href.split("?")[1];
+    if(path === undefined) {
+        path = 'page=1';
+    }
     fetch('/students?' + path)
         .then(response => response.json())
         .then(res => {
