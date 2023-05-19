@@ -27,7 +27,8 @@
 
                 <h4 class="card-title">Students<span class="badge bg-primary m-1" id="studentCount"></span></h4>
                 <p class="card-text">
-                <table class="table table-hover">
+                    <div class="table-responsive-md">
+                <table class="table table-hover table-striped">
                     <thead>
                         <tr>
                             <th scope="col">Registration number</th>
@@ -40,7 +41,8 @@
                     <tbody id="studentsTable">
                     </tbody>
                 </table>
-                <div>
+            </div>
+                <div id="paginationContainer">
                     <ul class="pagination" id="pagination">
 
                     </ul>
@@ -143,7 +145,6 @@
 
             return (
                 `
-                 
                                 <td>${item.id}</td>
                                 <td>${item.name}</td>
                                 <td>${item.grade}</td>
@@ -209,6 +210,8 @@
 
         let lastClickedSortMethod = "";
         function handleSort(method) {
+            let path = window.location.href.split("?")[1];
+
             let desc = lastClickedSortMethod === method;
             if (desc === true) {
                 lastClickedSortMethod = "";
@@ -216,7 +219,7 @@
                 lastClickedSortMethod = method;
             }
 
-            fetch('/students?sortby=' + method + '&desc=' + desc)
+            fetch('/students?sortby=' + method + '&desc=' + desc + "&" +path)
                 .then(response => response.json())
                 .then(res => {
                     const dataList = document.getElementById('studentsTable');
