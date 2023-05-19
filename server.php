@@ -29,8 +29,6 @@ $app->get("/", function ($req, $res) {
     $res->status(200);
 });
 
-
-
 require_once __DIR__ . "/src/routes/studentRoutes.php";  //student routes 
 require_once __DIR__ . "/src/routes/classroomRoutes.php";  //classroom routes 
 require_once __DIR__ . "/src/routes/toolRoutes.php";  //tool routes 
