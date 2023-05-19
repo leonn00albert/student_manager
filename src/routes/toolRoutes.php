@@ -26,7 +26,7 @@ $app->get("/api/seed", function ($req, $res) {
     if (isset($req->query()["count"])) {
         $count = $req->query()["count"];
         try {
-            $url = "https://randomuser.me/api/?results=$count&nat=us";
+            $url = "https://randomuser.me/api/?results=$count&nat=us,uk,fr,ua,in,fi,de,dk,no,nl,es";
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $response = curl_exec($ch);
@@ -35,9 +35,19 @@ $app->get("/api/seed", function ($req, $res) {
 
             $results = [];
 
-            foreach ($data['results'] as $item) {
+            foreach ($data["results"] as $item) {
+             
+                $input = [
+                    "name" => $item["name"]["first"] . " " . $item["name"]["last"],
+                    "grade" => rand(0, 10),
+                    "class" => "test",
+                    "email" => $item["email"],
+                    "avatar" => str_replace("\/",'/',$item["picture"]["thumbnail"]),
+                    "age" => $item["dob"]["age"],  
+                    "country" => $item["nat"],
+                    "gender" => $item["gender"],
 
-                $input = ["name" => $item['name']['first'] . " " . $item['name']['last'], 'grade' => rand(0, 10), 'class' => "test"];
+                ];
                 $db->con->create($input);
                 array_push($results, $input);
             }
