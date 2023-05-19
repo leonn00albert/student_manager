@@ -11,10 +11,16 @@
                 <table class="table table-hover table-striped">
                     <thead>
                         <tr>
+                            <th scope="col"></th>
+
                             <th scope="col">Registration number</th>
-                            <th scope="col">Name<i onclick="handleSort('name')" class="fa fa-sort"></i></th>
-                            <th scope="col">Grade<i onclick="handleSort('grade')" class="fa fa-sort"></i></th>
-                            <th scope="col">Classroom <i onclick="handleSort('class')" class="fa fa-sort"></i></th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Gender</th>
+                            <th scope="col">Age</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Country</th>
+                            <th scope="col">Grade</th>
+                            <th scope="col">Classroom</th>
                             <th scope="col"> </th>
                         </tr>
                     </thead>
@@ -33,9 +39,13 @@
     function renderTable(item) {
 
         return (
-            `
+            `       <td><img src=${item.avatar} class="avatar" ></td>
                     <td>${item.id}</td>
                     <td>${item.name}</td>
+                    <td>${item.gender}</td>
+                    <td>${item.age}</td>
+                    <td>${item.email}</td>
+                    <td>${item.country} <span class="fi fi-${item.country.toLowerCase()} fis"></span></td>
                     <td>${item.grade}</td>
                     <td>${item.class}</td>
                     <td>
@@ -64,8 +74,6 @@
             .catch(error => console.error(error));
 
     };
-
-
 </script>
 </body>
 

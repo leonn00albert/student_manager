@@ -1,8 +1,9 @@
 function renderTable(item) {
 
     return (
-        `
-                        <td>${item.id}</td>
+        `               <td><img src=${item.avatar} class="avatar" ></td>
+                         <td><span class="fi fi-${item.country.toLowerCase()} fi"></span></td>    
+                        <td>${item.id}</td> 
                         <td>${item.name}</td>
                         <td>${item.grade}</td>
                         <td>${item.class}</td>
@@ -40,6 +41,7 @@ window.onload = function () {
             handlePagination(res.total_pages, res.current_page);
             document.getElementById("studentCount").innerHTML = res.total_records;
             res.data.forEach(item => {
+                console.log(item)
                 const listItem = document.createElement('tr');
                 listItem.innerHTML = renderTable(item);
                 dataList.appendChild(listItem);
@@ -72,6 +74,10 @@ function handleDeleteById(id) {
 let lastClickedSortMethod = "";
 function handleSort(method) {
     let path = window.location.href.split("?")[1];
+
+    if(path === undefined) {
+        path = 'page=1';
+    }
 
     let desc = lastClickedSortMethod === method;
     if (desc === true) {

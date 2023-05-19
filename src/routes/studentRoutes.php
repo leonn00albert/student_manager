@@ -105,7 +105,15 @@ $app->post("/api/students", $form->sanatize, function ($req, $res) {
     global $alerts;
     global $logs;
     try {
+      
         $data = $req->body();
+        $data['avatar'] = "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png";
+        $data['country'] = "eu";
+        $data['age'] = rand(18,60);
+        $data['email'] = "placeholder@email.com";
+        $data['gender'] = "";
+        
+
         $db->con->create($data);
         $alerts->con->create(["alert" => ["type" => "success", "message" => "Succesfully created student"]]);
         $logs->con->create(["level" => "info", "source" => "POST /students", "date" => date("D M j G:i:s T Y"), "message" => "created student"]);

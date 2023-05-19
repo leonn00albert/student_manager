@@ -11,6 +11,8 @@
                     <table class="table table-hover table-striped">
                         <thead>
                             <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Country<i onclick="handleSort('country')" class="fa fa-sort"></i></th>
                                 <th scope="col">Registration number</th>
                                 <th scope="col">Name<i onclick="handleSort('name')" class="fa fa-sort"></i></th>
                                 <th scope="col">Grade<i onclick="handleSort('grade')" class="fa fa-sort"></i></th>
