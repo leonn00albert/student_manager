@@ -1,4 +1,4 @@
-<?php include "src/components/header.php"; ?>
+<?php include "src/views/components/header.php"; ?>
 
     <div class="container">
         <div class="card text-white bg-secondary m-3">

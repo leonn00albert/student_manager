@@ -1,4 +1,4 @@
-   <?php include "src/components/header.php"; ?>
+<?php include "src/views/components/header.php"; ?>
 
     <div class="container">
         <div class="card text-white bg-secondary m-3">
@@ -57,8 +57,8 @@
             </div>
         </div>
     </div>
-   <?php include "src/components/seedModal.php" ?>
-   <?php include "src/components/deleteModal.php" ?>
+   <?php include "src/views/components/seedModal.php" ?>
+   <?php include "src/views/components/deleteModal.php" ?>
 
 
-    <?php include "src/components/footer.php"; ?>
+    <?php include "src/views/components/footer.php"; ?>

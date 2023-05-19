@@ -1,7 +1,7 @@
 <?php
 
 $app->get("/students/new", function ($req, $res) {
-    $res->render(__DIR__ . "/src/students/new.php");
+    $res->render("src/views/students/new.php");
     $res->status(200);
 });
 
@@ -86,7 +86,7 @@ $app->delete("/students/:id", function ($req, $res) {
     }
 });
 $app->get("/students/edit/:id", function ($req, $res) {
-    $res->render(__DIR__ . "/src/students/edit.php");
+    $res->render("src/views/students/edit.php");
     $res->status(200);
 });
 
