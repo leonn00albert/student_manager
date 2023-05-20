@@ -16,7 +16,11 @@ function sortByKey(array $arr, string $key, bool $desc = false): array
 
 function pagination(array $data, string $current, int $perPage = 10): array
 {
-    $perPage = 10;
+    if($current === 'all') {
+        $current = 1;
+        $perPage = 100000000000000;
+    }
+ 
     $totalRecords = count($data);
     $totalPages = ceil($totalRecords / $perPage);
     if (isset($current) && is_numeric($current)) {

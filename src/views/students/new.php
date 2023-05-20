@@ -38,9 +38,7 @@
                 <div class="form-group">
                     <label for="classroom">Classroom</label>
                     <select required class="form-select" id="classroom">
-                        <option value="A">Class A</option>
-                        <option value="B">Class B</option>
-                        <option value="C">Class C</option>
+            
                     </select>
                     <div class="valid-feedback" id="ClassFeedbackValid">
                         Correct Input!

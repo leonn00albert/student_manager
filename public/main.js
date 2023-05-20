@@ -6,7 +6,7 @@ function renderTable(item) {
                         <td>${item.id}</td> 
                         <td>${item.name}</td>
                         <td>${item.grade}</td>
-                        <td>${item.class}</td>
+                        <td><a href="/classroom/${item.class}" >${item.class} </a></td>
                         <td>
                             <a href="/students/edit/${item.id}" class="btn btn-info btn-sm "><i class="fa fa-pencil" aria-hidden="true"></i> </a>
                             <button onclick="handleDeleteById('${item.id}')" type="button" class="btn btn-danger btn-sm mx-2"><i class="fa fa-trash" aria-hidden="true"></i></button>
