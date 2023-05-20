@@ -51,3 +51,16 @@ $app->get("/api/classrooms", function ($req, $res) {
 });
 
 
+$app->get("/api/classrooms/:id", function ($req, $res) {
+    global $classrooms;
+    global $alerts;
+    try {
+
+        $data = $classrooms->con->findOne(["name" => $req->params()["id"]]);
+        $res->json([(array)$data]);
+        $res->status(200);
+    } catch (Exception $e) {
+        $alerts->con->create(["alert" => ["type" => "danger", "message" => "ERROR: could not get student with id " . $req->params()["id"]]]);
+        $res->status(500);
+    }
+});

@@ -23,6 +23,7 @@ $app->get("/api/seed", function ($req, $res) {
     global $db;
     global $logs;
     global $alerts;
+    global $classrooms;
     if (isset($req->query()["count"])) {
         $count = $req->query()["count"];
         try {
@@ -32,15 +33,19 @@ $app->get("/api/seed", function ($req, $res) {
             $response = curl_exec($ch);
             curl_close($ch);
             $data = json_decode($response, true);
-
+            
             $results = [];
+          
+            $randomNumber = rand(0, 9);
+            $classroom_name =  chr(rand(65, 90)) . $randomNumber . chr(rand(65, 90)) .  chr(rand(65, 90)) ;
+            $classrooms->con->create(["name" => (string) $classroom_name]);
 
             foreach ($data["results"] as $item) {
              
                 $input = [
                     "name" => $item["name"]["first"] . " " . $item["name"]["last"],
                     "grade" => rand(0, 10),
-                    "class" => "test",
+                    "class" => $classroom_name,
                     "email" => $item["email"],
                     "avatar" => str_replace("\/",'/',$item["picture"]["thumbnail"]),
                     "age" => $item["dob"]["age"],  

@@ -45,7 +45,7 @@
                     <td>${item.gender}</td>
                     <td>${item.age}</td>
                     <td>${item.email}</td>
-                    <td>${item.country} <span class="fi fi-${item.country.toLowerCase()} fis"></span></td>
+                    <td>${item.country.toUpperCase()} <span class="fi fi-${item.country.toLowerCase()} fis"></span></td>
                     <td>${item.grade}</td>
                     <td>${item.class}</td>
                     <td>
