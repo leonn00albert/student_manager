@@ -49,4 +49,4 @@ Tools
 
 
 result : <br>
-![screenshot](https://github.com/leonn00albert/student_manager/blob/main/student-manager.gif)
+![screenshot](https://github.com/leonn00albert/student_manager/blob/main/public/student-manager.gif)
