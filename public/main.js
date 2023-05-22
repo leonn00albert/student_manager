@@ -37,11 +37,11 @@ window.onload = function () {
                 cardBody.insertAdjacentHTML('afterbegin', html);
 
             }
-            console.log(res.current_page);
+           
             handlePagination(res.total_pages, res.current_page);
             document.getElementById("studentCount").innerHTML = res.total_records;
             res.data.reverse().forEach(item => {
-                console.log(item)
+  
                 const listItem = document.createElement('tr');
                 listItem.innerHTML = renderTable(item);
                 dataList.appendChild(listItem);
