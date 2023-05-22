@@ -6,7 +6,7 @@ function renderTable(item) {
                         <td>${item.id}</td> 
                         <td>${item.name}</td>
                         <td>${item.grade}</td>
-                        <td>${item.class}</td>
+                        <td><a href="/classroom/${item.class}" >${item.class} </a></td>
                         <td>
                             <a href="/students/edit/${item.id}" class="btn btn-info btn-sm "><i class="fa fa-pencil" aria-hidden="true"></i> </a>
                             <button onclick="handleDeleteById('${item.id}')" type="button" class="btn btn-danger btn-sm mx-2"><i class="fa fa-trash" aria-hidden="true"></i></button>
@@ -40,7 +40,7 @@ window.onload = function () {
             console.log(res.current_page);
             handlePagination(res.total_pages, res.current_page);
             document.getElementById("studentCount").innerHTML = res.total_records;
-            res.data.forEach(item => {
+            res.data.reverse().forEach(item => {
                 console.log(item)
                 const listItem = document.createElement('tr');
                 listItem.innerHTML = renderTable(item);

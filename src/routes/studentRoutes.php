@@ -26,7 +26,7 @@ $app->get("/api/students", function ($req, $res) {
     try {
         $data = $db->con->find([]);
         $alert = $alerts->con->find([]);
-
+        
         $result = pagination($data,$req->query()["page"]);
         list(   
             $records,
