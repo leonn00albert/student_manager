@@ -40,7 +40,7 @@ window.onload = function () {
             console.log(res.current_page);
             handlePagination(res.total_pages, res.current_page);
             document.getElementById("studentCount").innerHTML = res.total_records;
-            res.data.forEach(item => {
+            res.data.reverse().forEach(item => {
                 console.log(item)
                 const listItem = document.createElement('tr');
                 listItem.innerHTML = renderTable(item);
