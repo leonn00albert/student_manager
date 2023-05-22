@@ -51,7 +51,6 @@ $app->get("/api/seed", function ($req, $res) {
                     "age" => $item["dob"]["age"],  
                     "country" => $item["nat"],
                     "gender" => $item["gender"],
-
                 ];
                 $db->con->create($input);
                 array_push($results, $input);
