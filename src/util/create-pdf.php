@@ -4,7 +4,7 @@ require('src/util/fpdf185/fpdf.php');
 
 class PDF extends FPDF
 {
-function LoadData($file)
+function LoadData(string $file):array
 {   
     $json = file_get_contents("students/.json");
     if($json === false) {
@@ -16,7 +16,7 @@ function LoadData($file)
  
 }
 
-function BasicTable($header, $data)
+function BasicTable(array $header, array $data)
 {
     foreach($header as $col)
         $this->Cell(40,7,$col,1);
