@@ -76,7 +76,7 @@ $app->get("/admin/cms", function ($req, $res) use ($db) {
     ];
     $data = [
         "template" => "cms.php",
-        "data" => $db->find($query)[0]
+         ...$db->find($query)[0]
     ];
 
     $res->render("admin/index", $data);
