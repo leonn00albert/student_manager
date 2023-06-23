@@ -11,10 +11,10 @@
 				</a>
 			</li>
 			<li class="nav-item">
-			<?php if (strpos($_SERVER['REQUEST_URI'], "index.php") !== false) : ?>
-					<a href="/views/admin/index.php" class="nav-link active " aria-current="page">
+			<?php if (strpos($_SERVER['REQUEST_URI'], "/dashboard") !== false) : ?>
+					<a href="/admin/dashboard" class="nav-link active " aria-current="page">
 					<?php else : ?>
-						<a href="/views/admin/index.php" class="nav-link " aria-current="page">
+						<a href="/admin/dashboard" class="nav-link " aria-current="page">
 						<?php endif; ?>
 					<i class="fa fa-tachometer" aria-hidden="true"></i>
 					Dashboard
@@ -22,13 +22,13 @@
 			</li>
 
 			<li class="nav-item">
-			<?php if (strpos($_SERVER['REQUEST_URI'], "metrics.php") !== false) : ?>
-					<a href="/views/admin/metrics.php" class="nav-link active " aria-current="page">
+			<?php if (strpos($_SERVER['REQUEST_URI'], "/students") !== false) : ?>
+					<a href="/admin/students" class="nav-link active " aria-current="page">
 					<?php else : ?>
-						<a href="/views/admin/metrics.php" class="nav-link " aria-current="page">
+						<a href="/admin/students" class="nav-link " aria-current="page">
 						<?php endif; ?>
 					<i class="fa fa-bar-chart" aria-hidden="true"></i>
-					Metrics
+					Students
 				</a>
 			</li>
 
@@ -39,7 +39,7 @@
 						<a href="/views/admin/locations.php" class="nav-link " aria-current="page">
 						<?php endif; ?>
 					<i class="fa  fa-map-marker" aria-hidden="true"></i>
-					Locations
+					Classrooms
 				</a>
 			</li>
 			<li>
@@ -50,7 +50,7 @@
 						<a href="/views/admin/carAdmin.php" class="nav-link " aria-current="page">
 						<?php endif; ?>
 					<i class="fa fa-car" aria-hidden="true"></i>
-					Cars
+					Teachers
 				</a>
 			</li>
 			
@@ -62,7 +62,7 @@
 						<a href="/views/admin/booking.php" class="nav-link" aria-current="page">
 						<?php endif; ?>
 						<i class="fa fa-calendar" aria-hidden="true"></i>
-						Bookings
+						Settings
 						</a>
 			</li>
 			<li>
@@ -73,7 +73,7 @@
 						<a href="/views/admin/reviewAdmin.php" class="nav-link" aria-current="page">
 						<?php endif; ?>
 						<i class="fa fa-star" aria-hidden="true"></i>
-						Reviews
+						CMS
 						</a>
 			</li>
 			<li>

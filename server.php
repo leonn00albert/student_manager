@@ -17,6 +17,7 @@ $form = new Forms();
 $db = DB::new("PDO", "student_manager","","mysql","localhost","root");
 // un auth 
 $app->get("/", function ($req, $res) {
+ 
     $res->render("home/index");
     $res->status(200);
 });
@@ -32,10 +33,27 @@ $app->get("/register", function ($req, $res) {
 //only auth 
 
 $app->get("/admin", function ($req, $res) {
-    $res->render("admin/index");
+    $data = [
+        "template" => "dashboard.php"
+    ];
+    $res->render("admin/index",$data);
+    $res->status(200);
+});
+$app->get("/admin/dashboard", function ($req, $res) {
+    $data = [
+        "template" => "dashboard.php"
+    ];
+    $res->render("admin/index",$data);
     $res->status(200);
 });
 
+$app->get("/admin/students", function ($req, $res) {
+    $data = [
+        "template" => "students.php"
+    ];
+    $res->render("admin/index",$data);
+    $res->status(200);
+});
 
 //only admin 
 
