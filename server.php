@@ -6,31 +6,43 @@ require_once __DIR__ . "/src/util/util.php";
 use Artemis\Core\DataBases\DB;
 use Artemis\Core\Router\Router;
 use Artemis\Core\Forms\Forms;
+use Artemis\Core\TemplateEngine\TemplateEngine;
+
 
 $app = Router::getInstance();
-$db = new DB("JSON", "students");
-$logs = new DB("JSON", "logs");
-$alerts = new DB("JSON", "alerts");
-$classrooms = new DB("JSON", "classrooms");
+$app->set("view_engine", new TemplateEngine(__DIR__ . "/views"));
+
 $form = new Forms();
 
+$db = DB::new("PDO", "student_manager","","mysql","localhost","root");
+// un auth 
 $app->get("/", function ($req, $res) {
-    $res->render(__DIR__ . "/src/views//students/index.php");
+    $res->render("home/index");
     $res->status(200);
 });
+$app->get("/login", function ($req, $res) {
+    $res->render("home/login");
+    $res->status(200);
+});
+
+$app->get("/register", function ($req, $res) {
+    $res->render("home/register");
+    $res->status(200);
+});
+//only auth 
+
+$app->get("/admin", function ($req, $res) {
+    $res->render("admin/index");
+    $res->status(200);
+});
+
+
+//only admin 
 
 require_once __DIR__ . "/src/routes/studentRoutes.php";  //student routes 
 require_once __DIR__ . "/src/routes/classroomRoutes.php";  //classroom routes 
 require_once __DIR__ . "/src/routes/toolRoutes.php";  //tool routes 
 
-//serve static files in public folder 
-
-$app->get("/public/:file", function ($req, $res) {
-    $path_to_file = explode("/", $req->path())[2];
-    header("Content-type:" . $res->getContentType($path_to_file));
-    $file = "public/$path_to_file";
-    readfile($file);
-});
 
 //wildcard route
 
