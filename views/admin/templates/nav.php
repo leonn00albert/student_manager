@@ -33,10 +33,10 @@
 			</li>
 
 			<li class="nav-item">
-			<?php if (strpos($_SERVER['REQUEST_URI'], "locations.php") !== false) : ?>
-					<a href="/views/admin/locations.php" class="nav-link active " aria-current="page">
+			<?php if (strpos($_SERVER['REQUEST_URI'], "classrooms") !== false) : ?>
+					<a href="/admin/classrooms" class="nav-link active " aria-current="page">
 					<?php else : ?>
-						<a href="/views/admin/locations.php" class="nav-link " aria-current="page">
+						<a href="/admin/classrooms" class="nav-link " aria-current="page">
 						<?php endif; ?>
 					<i class="fa  fa-map-marker" aria-hidden="true"></i>
 					Classrooms
@@ -67,10 +67,10 @@
 			</li>
 			<li>
 			<li>
-				<?php if (strpos($_SERVER['REQUEST_URI'], "reviewAdmin.php") !== false) : ?>
-					<a href="/views/admin/reviewAdmin.php" class="nav-link active" aria-current="page">
+				<?php if (strpos($_SERVER['REQUEST_URI'], "/admin/cms") !== false) : ?>
+					<a href="/admin/cms" class="nav-link active" aria-current="page">
 					<?php else : ?>
-						<a href="/views/admin/reviewAdmin.php" class="nav-link" aria-current="page">
+						<a href="/admin/cms" class="nav-link" aria-current="page">
 						<?php endif; ?>
 						<i class="fa fa-star" aria-hidden="true"></i>
 						CMS
