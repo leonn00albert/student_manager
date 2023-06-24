@@ -88,10 +88,10 @@
 				</a>
 			</li>
 			<li>
-			<?php if (strpos($_SERVER['REQUEST_URI'], "userAdmin.php") !== false) : ?>
-				<a href="/views/admin/userAdmin.php" class="nav-link active" aria-current="page">
+			<?php if (strpos($_SERVER['REQUEST_URI'], "/admin/users") !== false) : ?>
+				<a href="/admin/users" class="nav-link active" aria-current="page">
 					<?php else : ?>
-						<a href="/views/admin/userAdmin.php" class="nav-link" aria-current="page">
+						<a href="/admin/users" class="nav-link" aria-current="page">
 						<?php endif; ?>
 					<i class="fa fa-user" aria-hidden="true"></i>
 
