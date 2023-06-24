@@ -2,7 +2,9 @@
     "name": "leon/student_manager",
     "autoload": {
         "psr-4": {
-            "Leon\\StudentManager\\": "src/"
+            "Leon\\StudentManager\\": "src/",
+            "Controllers\\": "Controllers/",
+            "Routes\\": "Routes/"
         }
     },
     "authors": [

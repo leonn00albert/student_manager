@@ -1,5 +1,7 @@
 <?php
+
 require_once __DIR__ . "/vendor/autoload.php";
+require_once __DIR__ . "/config/db.config.php";
 require_once __DIR__ . "/src/util/create-pdf.php";
 require_once __DIR__ . "/src/util/util.php";
 
@@ -9,13 +11,19 @@ use Artemis\Core\Forms\Forms;
 use Artemis\Core\TemplateEngine\TemplateEngine;
 
 
+use Routes\Admin\UsersRoutes;
+use Routes\Admin\ClassroomsRoutes;
+
 $app = Router::getInstance();
 $app->set("view_engine", new TemplateEngine(__DIR__ . "/views"));
+$app->use("form" ,new Forms());
 
 
-$form = new Forms();
+//routes
+UsersRoutes::register($app,new Controllers\Admin\UsersController());
+ClassroomsRoutes::register($app,new Controllers\Admin\ClassroomsController());
 
-$db = DB::new("PDO", "student_manager", "", "mysql", "localhost", "root");
+$db = DB::new(DB_TYPE, DB_NAME, DB_PASSWORD, DB_DRIVER,DB_HOST, DB_USER);
 // un auth 
 $app->get("/", function ($req, $res) use ($db) {
     $query = [
@@ -36,7 +44,7 @@ $app->get("/register", function ($req, $res) {
     $res->status(200);
 });
 
-$app->post("/users",$form->sanitize,  function ($req, $res) use ($db) {
+$app->post("/users",$app->form->sanitize,  function ($req, $res) use ($db) {
     $query = "INSERT INTO Users (first_name, last_name, contact_email, contact_phone, address, city, country, password, type, last_login_ip)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -111,19 +119,7 @@ $app->get("/admin/students", function ($req, $res) use($db) {
 });
 
 
-$app->get("/admin/users", function ($req, $res) use ($db) {
-    //make admin only
-    $query = [
-        "sql" => "SELECT * FROM users;"
-    ];
-    
-    $data = [
-        "template" => "users.php",
-        "users" => $db->find($query)
-    ];
-    $res->render("admin/index", $data);
-    $res->status(200);
-});
+
 
 $app->get("/admin/teachers", function ($req, $res) use ($db) {
     $query = [
@@ -136,78 +132,8 @@ $app->get("/admin/teachers", function ($req, $res) use ($db) {
     $res->render("admin/index", $data);
     $res->status(200);
 });
-$app->get("/admin/users/:id/edit", function ($req, $res) use ($db) {
-     // --TODO MAKE ADMIN ONLY 
-    $id = $req->params()["id"];
-    $query = [
-        "sql" => "SELECT * FROM users where user_id = $id;"
-    ];
-    
-    $data = [
-        "template" => "users/edit.php",
-         ...$db->find($query)[0]
-    ];
-    $res->render("admin/index", $data);
-    $res->status(200);
-});
 
-$app->put("/users/:id", $form->sanitize, function ($req, $res) use ($db) {
 
-    $id = $req->params()["id"];
-    
-    $query = "UPDATE users SET 
-                first_name = ?,
-                last_name = ?,
-                contact_email = ?,
-                contact_phone = ?,
-                address = ?,
-                city = ?,
-                country = ?,
-                type = ?,
-                date_of_birth = ?,
-                gender = ?
-              WHERE user_id = ?";
-    
-    $userData = [
-        $req->sanitized["first_name"],
-        $req->sanitized["last_name"],
-        $req->sanitized["contact_email"],
-        $req->sanitized["contact_phone"],
-        $req->sanitized["address"],
-        $req->sanitized["city"],
-        $req->sanitized["country"],
-        $req->sanitized["type"],
-        $req->sanitized["date_of_birth"],
-        $req->sanitized["gender"],
-        $id 
-    ];
-    
-    $statement = $db->conn()->prepare($query);
-
-    foreach ($userData as $index => $value) {
-        $statement->bindValue($index + 1, $value);
-    }
-    
-    $statement->execute();
-
-    if ($statement->rowCount() > 0) {
-
-        if ($req->sanitized["type"] == "teacher") {
-            $query = "INSERT INTO Teachers (user_id) VALUES (:user_id)";
-            $statement = $db->conn()->prepare($query);
-            $statement->bindValue(":user_id", $id);
-            $statement->execute();
-        }
-        
-        $res->redirect("/admin/users");
-        $res->status(301);
-    } else {
-        $res->status(404);
-        $res->send("User not found");
-    }
-    
-    $db->close();
-});
 
 
 $app->get("/admin/courses", function ($req, $res) use ($db) {
@@ -222,7 +148,7 @@ $app->get("/admin/courses", function ($req, $res) use ($db) {
     $res->status(200);
 });
 
-$app->post("/courses",$form->sanitize, function ($req, $res) use($db) {
+$app->post("/courses",$app->form->sanitize, function ($req, $res) use($db) {
     $query = "INSERT INTO courses (course_name, teacher_id, course_description, course_image, start_date, end_date, course_status)
     VALUES (?, ?, ?, ?, ?, ?, ?)";
     
@@ -245,104 +171,7 @@ $app->post("/courses",$form->sanitize, function ($req, $res) use($db) {
     $res->redirect("/admin/courses");
 });
 
-$app->get("/admin/classrooms", function ($req, $res) use($db) {
-    $teachersQuery = [
-        "sql" => "SELECT * FROM teachers
-        INNER JOIN users ON teachers.user_id = users.user_id"
-        ];
-    $coursesQuery = [
-            "sql" => "SELECT * FROM courses"
-        ]; 
 
-    $classroomsQuery = [
-            "sql" => "SELECT * FROM classrooms" // inner join later   
-        ]; 
-    $data = [
-        "template" => "classrooms.php",
-        "courses" => $db->find($coursesQuery),
-        "teachers" => $db->find($teachersQuery),
-        "classrooms" => $db->find($classroomsQuery)
-    ];
-    $res->render("admin/index", $data);
-    $res->status(200);
-});
-
-
-$app->get("/admin/classrooms/:id/edit", function ($req, $res) use ($db) {
-    // --TODO MAKE ADMIN ONLY 
-   $id = $req->params()["id"];
-   $teachersQuery = [
-    "sql" => "SELECT * FROM teachers
-    INNER JOIN users ON teachers.user_id = users.user_id"
-    ];
-    $coursesQuery = [
-            "sql" => "SELECT * FROM courses"
-        ]; 
-
-    $classroomsQuery = [
-            "sql" => "SELECT * FROM classrooms WHERE classroom_id = $id " // inner join later   
-        ]; 
-    $data = [
-        "template" => "classrooms/edit.php",
-        "courses" => $db->find($coursesQuery),
-        "teachers" => $db->find($teachersQuery),
-        "classroom" => $db->find($classroomsQuery)[0]  
-    ];
-
-   $res->render("admin/index", $data);
-   $res->status(200);
-});
-$app->post("/classrooms", $form->sanitize, function ($req, $res) use ($db) {
-    $query = "INSERT INTO classrooms (classroom_name, teacher_id, course_id)
-              VALUES (?, ?, ?)";
-
-    $statement = $db->conn()->prepare($query);
-    $classroomData = [
-        $req->sanitized["classroom_name"],
-        $req->sanitized["teacher_id"],
-        $req->sanitized["course_id"],
-    ];
-    $statement->execute($classroomData);
-    $statement->closeCursor();
-    $db->close();
-    $res->status(301);
-    $res->redirect("/admin/classrooms");
-});
-
-$app->put("/classrooms/:id", $form->sanitize, function ($req, $res) use ($db) {
-    $id = $req->params()["id"];
-    
-    $query = "UPDATE classrooms SET 
-                classroom_name = ?,
-                course_id = ?,
-                teacher_id = ?
-              WHERE classroom_id = ?";
-    
-    $userData = [
-        $req->sanitized["classroom_name"],
-        $req->sanitized["course_id"],
-        $req->sanitized["teacher_id"],
-        $id 
-    ];
-    
-    $statement = $db->conn()->prepare($query);
-
-    foreach ($userData as $index => $value) {
-        $statement->bindValue($index + 1, $value);
-    }
-    
-    $statement->execute();
-
-    if ($statement->rowCount() > 0) {
-        $res->redirect("/admin/classrooms");
-        $res->status(301);
-    } else {
-        $res->status(404);
-        $res->send("Classroom not found");
-    }
-    
-    $db->close();
-});
 $app->get("/admin/cms", function ($req, $res) use ($db) {
     $query = [
         "sql" => "SELECT * FROM homepage_cms WHERE ID = 1",
@@ -388,11 +217,6 @@ $app->post("/admin/cms", function ($req, $res) use ($db) {
 });
 
 
-
-
-require_once __DIR__ . "/src/routes/studentRoutes.php";  //student routes 
-require_once __DIR__ . "/src/routes/classroomRoutes.php";  //classroom routes 
-require_once __DIR__ . "/src/routes/toolRoutes.php";  //tool routes 
 
 
 //wildcard route
