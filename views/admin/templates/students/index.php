@@ -8,16 +8,38 @@
             <table class="table table-hover table-striped">
                 <thead>
                     <tr>
-                        <th scope="col"></th>
-                        <th scope="col">Country<i onclick="handleSort('country')" class="fa fa-sort"></i></th>
                         <th scope="col">Registration number</th>
-                        <th scope="col">Name<i onclick="handleSort('name')" class="fa fa-sort"></i></th>
-                        <th scope="col">Grade<i onclick="handleSort('grade')" class="fa fa-sort"></i></th>
-                        <th scope="col">Classroom <i onclick="handleSort('class')" class="fa fa-sort"></i></th>
+                        <th scope="col">Country<i onclick="handleSort('country')" class="fa fa-sort"></i></th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone<i onclick="handleSort('name')" class="fa fa-sort"></i></th>
+                        <th scope="col">Name<i onclick="handleSort('grade')" class="fa fa-sort"></i></th>
+                        <th scope="col">type <i onclick="handleSort('class')" class="fa fa-sort"></i></th>
                         <th scope="col"> </th>
                     </tr>
                 </thead>
                 <tbody id="studentsTable">
+                    <?php foreach($students as $student): ?>
+                        <tr>
+                        <td>
+                            <?= $student["user_id"] ?>
+                        </td>
+                        <td>
+                            <?= $student["country"] ?>
+                        </td>
+                        <td>
+                            <?= $student["contact_email"] ?>  
+                        </td>
+                        <td>
+                            <?= $student["contact_phone"] ?> 
+                        </td>
+                        <td>
+                            <?= $student["first_name"] ?>   <?= $student["last_name"] ?>
+                        </td>
+                        <td>
+                            <?= $student["type"] ?>
+                        </td>
+                    </tr>
+                        <?php endforeach; ?>
                 </tbody>
             </table>
         </div>

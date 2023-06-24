@@ -1,50 +1,42 @@
 <div class="card m-3">
     <div class="card-header">Add new student</div>
     <div class="card-body">
-        <h4 class="card-title"></h4>
-        <p class="card-text ">
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" required class="form-control" id="name" placeholder="Enter name">
-            <div class="invalid-feedback" id="nameFeedbackInvalid">
-                Please provide a valid name
+        <form>
+            <div class="form-group">
+                <label for="first_name">First Name:</label>
+                <input type="text" class="form-control" id="first_name" name="first_name">
             </div>
-            <div class="valid-feedback" id="nameFeedbackValid">
-                Correct Input!
+            <div class="form-group">
+                <label for="last_name">Last Name:</label>
+                <input type="text" class="form-control" id="last_name" name="last_name">
             </div>
-        </div>
-        <div class="form-group">
-            <label for="grade">Grade</label>
-            <select required class="form-select" id="selectGrade">
-                <option>0</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>10</option>
-            </select>
-            <div class="valid-feedback" id="GradeFeedbackValid">
-                Correct Input!
+            <div class="form-group">
+                <label for="date_of_birth">Date of Birth:</label>
+                <input type="date" class="form-control" id="date_of_birth" name="date_of_birth">
             </div>
-        </div>
-        <div class="form-group">
-            <label for="classroom">Classroom</label>
-            <select required class="form-select" id="classroom">
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select class="form-control" id="gender" name="gender">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="contact_number">Contact Number:</label>
+                <input type="text" class="form-control" id="contact_number" name="contact_number">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" name="email">
+            </div>
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" class="form-control" id="address" name="address">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
 
-            </select>
-            <div class="valid-feedback" id="ClassFeedbackValid">
-                Correct Input!
-            </div>
-        </div>
-        <div class="mt-2">
-            <a onclick="handle_add()" class="btn btn-primary">Add Student</a>
-            <a href="/" class="btn btn-secondary">Back</a>
-        </div>
-        </p>
+
     </div>
 </div>

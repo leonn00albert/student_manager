@@ -12,6 +12,7 @@ use Artemis\Core\TemplateEngine\TemplateEngine;
 $app = Router::getInstance();
 $app->set("view_engine", new TemplateEngine(__DIR__ . "/views"));
 
+
 $form = new Forms();
 
 $db = DB::new("PDO", "student_manager", "", "mysql", "localhost", "root");
@@ -20,7 +21,7 @@ $app->get("/", function ($req, $res) use ($db) {
     $query = [
         "sql" => "SELECT * FROM homepage_cms WHERE ID = 1",
     ];
-    $data = array_map(fn ($e) => $e,$db->find($query)[0]);
+    $data = array_map(fn ($e) => $e, $db->find($query)[0]);
 
     $res->render("home/index", $data);
     $res->status(200);
@@ -33,6 +34,50 @@ $app->get("/login", function ($req, $res) {
 $app->get("/register", function ($req, $res) {
     $res->render("home/register");
     $res->status(200);
+});
+
+$app->post("/users",$form->sanitize,  function ($req, $res) use ($db) {
+    $query = "INSERT INTO Users (first_name, last_name, contact_email, contact_phone, address, city, country, password, type, last_login_ip)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    $statement = $db->conn()->prepare($query);
+    $type = "student";
+    $data = [
+        $req->sanitized["first_name"],
+        $req->sanitized["last_name"],
+        $req->sanitized["contact_email"],
+        $req->sanitized["contact_phone"],
+        $req->sanitized["address"],
+        $req->sanitized["city"],
+        $req->sanitized["country"],
+        password_hash($req->sanitized["password"],PASSWORD_BCRYPT),
+        $type ,
+        $req->ip()["ip"]
+    ];
+    
+    foreach ($data as $index => $value) {
+        $statement->bindValue($index + 1, $value);
+    }
+
+    $statement->execute();
+    $statement->closeCursor();
+
+    if($type == "student"){
+        $query= [
+            "sql" =>"SELECT * FROM users
+            ORDER BY user_id DESC
+            LIMIT 1;"
+        ];
+        $user = $db->find($query)[0];
+    
+        $query = "INSERT INTO Students (user_id) VALUES (:user_id)";
+        $statement = $db->conn()->prepare($query);
+        $statement->bindValue(":user_id", $user["user_id"]);
+        $statement->execute();
+    }
+    $db->close();
+    $res->status(301);
+    $res->redirect("/admin");
 });
 //only auth 
 
@@ -53,9 +98,22 @@ $app->get("/admin/dashboard", function ($req, $res) {
     $res->status(200);
 });
 
-$app->get("/admin/students", function ($req, $res) {
+$app->get("/admin/students", function ($req, $res) use($db) {
+    $query = [
+        "sql" => "SELECT * FROM students
+        INNER JOIN users ON students.user_id = users.user_id"];
     $data = [
-        "template" => "students.php"
+        "template" => "students.php",
+        "students" => $db->find($query)
+    ];
+    $res->render("admin/index", $data);
+    $res->status(200);
+});
+
+
+$app->get("/admin/users", function ($req, $res) {
+    $data = [
+        "template" => "users.php"
     ];
     $res->render("admin/index", $data);
     $res->status(200);
@@ -76,7 +134,7 @@ $app->get("/admin/cms", function ($req, $res) use ($db) {
     ];
     $data = [
         "template" => "cms.php",
-         ...$db->find($query)[0]
+        ...$db->find($query)[0]
     ];
 
     $res->render("admin/index", $data);
@@ -109,9 +167,6 @@ $app->post("/admin/cms", function ($req, $res) use ($db) {
     $stmt->bindValue(':cta_url', $clean["cta_url"]);
     $stmt->bindValue(':id', 1);
     $stmt->execute();
-    $data = [
-        "template" => "cms.php"
-    ];
     $db->close();
     $res->redirect("/admin/cms");
     $res->status(301);
