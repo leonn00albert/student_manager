@@ -77,14 +77,14 @@
 						</a>
 			</li>
 			<li>
-			<?php if (strpos($_SERVER['REQUEST_URI'], "slotAdmin.php") !== false) : ?>
-				<a href="/views/admin/slotAdmin.php" class="nav-link active" aria-current="page">
+			<?php if (strpos($_SERVER['REQUEST_URI'], "/admin/courses") !== false) : ?>
+				<a href="/admin/courses" class="nav-link active" aria-current="page">
 					<?php else : ?>
-						<a href="/views/admin/slotAdmin.php" class="nav-link" aria-current="page">
+						<a href="/admin/courses" class="nav-link" aria-current="page">
 						<?php endif; ?>
 					<i class="fa fa-bars" aria-hidden="true"></i>
 
-					Slots
+					Courses
 				</a>
 			</li>
 			<li>
