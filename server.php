@@ -11,8 +11,6 @@ use Artemis\Core\Forms\Forms;
 use Artemis\Core\TemplateEngine\TemplateEngine;
 
 
-use Routes\Admin\UsersRoutes;
-use Routes\Admin\ClassroomsRoutes;
 
 $app = Router::getInstance();
 $app->set("view_engine", new TemplateEngine(__DIR__ . "/views"));
@@ -20,8 +18,17 @@ $app->use("form" ,new Forms());
 
 
 //routes
-UsersRoutes::register($app,new Controllers\Admin\UsersController());
-ClassroomsRoutes::register($app,new Controllers\Admin\ClassroomsController());
+//AUTH ROUTES
+
+Routes\Auth\UsersRoutes::register($app,new Controllers\Auth\UsersController());
+
+//ADMIN ROUTES --TODO add auth for admin only
+Routes\Admin\UsersRoutes::register($app,new Controllers\Admin\UsersController());
+Routes\Admin\ClassroomsRoutes::register($app,new Controllers\Admin\ClassroomsController());
+Routes\Admin\CoursesRoutes::register($app,new Controllers\Admin\CoursesController());
+Routes\Admin\CMSRoutes::register($app,new Controllers\Admin\CMSController());
+Routes\Admin\StudentsRoutes::register($app,new Controllers\Admin\StudentsController());
+
 
 $db = DB::new(DB_TYPE, DB_NAME, DB_PASSWORD, DB_DRIVER,DB_HOST, DB_USER);
 // un auth 
@@ -44,49 +51,7 @@ $app->get("/register", function ($req, $res) {
     $res->status(200);
 });
 
-$app->post("/users",$app->form->sanitize,  function ($req, $res) use ($db) {
-    $query = "INSERT INTO Users (first_name, last_name, contact_email, contact_phone, address, city, country, password, type, last_login_ip)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    $statement = $db->conn()->prepare($query);
-    $type = "student";
-    $data = [
-        $req->sanitized["first_name"],
-        $req->sanitized["last_name"],
-        $req->sanitized["contact_email"],
-        $req->sanitized["contact_phone"],
-        $req->sanitized["address"],
-        $req->sanitized["city"],
-        $req->sanitized["country"],
-        password_hash($req->sanitized["password"],PASSWORD_BCRYPT),
-        $type ,
-        $req->ip()["ip"]
-    ];
-    
-    foreach ($data as $index => $value) {
-        $statement->bindValue($index + 1, $value);
-    }
-
-    $statement->execute();
-    $statement->closeCursor();
-
-    if($type == "student"){
-        $query= [
-            "sql" =>"SELECT * FROM users
-            ORDER BY user_id DESC
-            LIMIT 1;"
-        ];
-        $user = $db->find($query)[0];
-    
-        $query = "INSERT INTO Students (user_id) VALUES (:user_id)";
-        $statement = $db->conn()->prepare($query);
-        $statement->bindValue(":user_id", $user["user_id"]);
-        $statement->execute();
-    }
-    $db->close();
-    $res->status(301);
-    $res->redirect("/admin");
-});
 //only auth 
 
 
@@ -106,17 +71,7 @@ $app->get("/admin/dashboard", function ($req, $res) {
     $res->status(200);
 });
 
-$app->get("/admin/students", function ($req, $res) use($db) {
-    $query = [
-        "sql" => "SELECT * FROM students
-        INNER JOIN users ON students.user_id = users.user_id"];
-    $data = [
-        "template" => "students.php",
-        "students" => $db->find($query)
-    ];
-    $res->render("admin/index", $data);
-    $res->status(200);
-});
+
 
 
 
@@ -136,85 +91,9 @@ $app->get("/admin/teachers", function ($req, $res) use ($db) {
 
 
 
-$app->get("/admin/courses", function ($req, $res) use ($db) {
-    $query = [
-    "sql" => "SELECT * FROM courses
-    INNER JOIN teachers ON courses.teacher_id = teachers.teacher_id"];
-    $data = [
-        "template" => "courses.php",
-        "courses" => $db->find($query)
-    ];
-    $res->render("admin/index", $data);
-    $res->status(200);
-});
-
-$app->post("/courses",$app->form->sanitize, function ($req, $res) use($db) {
-    $query = "INSERT INTO courses (course_name, teacher_id, course_description, course_image, start_date, end_date, course_status)
-    VALUES (?, ?, ?, ?, ?, ?, ?)";
-    
-    $statement = $db->conn()->prepare($query);
-    
-    $courseData = [
-        $req->sanitized["course_name"],
-        $req->sanitized["teacher_id"],
-        $req->sanitized["course_description"],
-        $req->sanitized["course_image"],
-        $req->sanitized["start_date"],
-        $req->sanitized["end_date"],
-        $req->sanitized["course_status"]
-    ];
-
-    $statement->execute($courseData);
-    $statement->closeCursor();
-    $db->close();
-    $res->status(301);
-    $res->redirect("/admin/courses");
-});
 
 
-$app->get("/admin/cms", function ($req, $res) use ($db) {
-    $query = [
-        "sql" => "SELECT * FROM homepage_cms WHERE ID = 1",
-    ];
-    $data = [
-        "template" => "cms.php",
-        ...$db->find($query)[0]
-    ];
 
-    $res->render("admin/index", $data);
-    $res->status(200);
-});
-$app->post("/admin/cms", function ($req, $res) use ($db) {
-    $sql = "UPDATE homepage_cms
-    SET title = :title,
-        hero_image = :hero_image,
-        hero_title = :hero_title,
-        hero_text = :hero_text,
-        cta_text = :cta_text,
-        cta_url = :cta_url
-    WHERE id = :id";
-
-    $clean = [
-        "title" => htmlspecialchars($_POST["title"]),
-        "hero_image" => htmlspecialchars($_POST["hero_image"]),
-        "hero_title" => htmlspecialchars($_POST["hero_title"]),
-        "hero_text" => htmlspecialchars($_POST["hero_text"]),
-        "cta_text" => htmlspecialchars($_POST["cta_text"]),
-        "cta_url" => htmlspecialchars($_POST["cta_url"]),
-    ];
-    $stmt = $db->conn()->prepare($sql);
-    $stmt->bindValue(':title',   $clean["title"]);
-    $stmt->bindValue(':hero_image', $clean["hero_image"]);
-    $stmt->bindValue(':hero_title', $clean["hero_title"]);
-    $stmt->bindValue(':hero_text', $clean["hero_text"]);
-    $stmt->bindValue(':cta_text', $clean["cta_text"]);
-    $stmt->bindValue(':cta_url', $clean["cta_url"]);
-    $stmt->bindValue(':id', 1);
-    $stmt->execute();
-    $db->close();
-    $res->redirect("/admin/cms");
-    $res->status(301);
-});
 
 
 
