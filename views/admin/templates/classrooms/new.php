@@ -1,23 +1,34 @@
 <div class="card m-3">
     <div class="card-header">Add new Classroom</div>
     <div class="card-body">
-        <h4 class="card-title"></h4>
-        <p class="card-text ">
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" required class="form-control" id="name" placeholder="Enter name">
-            <div class="invalid-feedback" id="nameFeedbackInvalid">
-                Please provide a valid name
+        <form id="createClassroomForm" method="post" action="/classrooms">
+            <div class="form-group">
+                <label for="classroomName">Classroom Name</label>
+                <input type="text" class="form-control" id="classroomName" name="classroom_name" required>
             </div>
-            <div class="valid-feedback" id="nameFeedbackValid">
-                Correct Input!
+            <div class="form-group">
+                <label for="teacherID">Teacher</label>
+                <select class="form-control" id="teacherID" name="teacher_id" required>
+                    <?php foreach ($teachers as $teacher) : ?>
+                        <option value=<?=$teacher["teacher_id"] ?>>
+                        <?=$teacher["first_name"] ?> <?=$teacher["last_name"] ?>
+                        </option>
+                    <?php endforeach;?>
+                </select>
             </div>
-        </div>
+            <div class="form-group">
+                <label for="courseID">Course</label>
+                <select class="form-control" id="courseID" name="course_id" required>
+                       <?php foreach ($courses as $course) : ?>
+                        <option value=<?=$course["course_id"] ?>>
+                        <?=$course["course_name"] ?> 
+                        </option>
+                    <?php endforeach;?>
+                </select>
+            </div>
 
-        <div class="mt-2">
-            <a onclick="handle_add()" class="btn btn-primary">Add classroom</a>
-            <a href="/" class="btn btn-secondary">Back</a>
-        </div>
-        </p>
+            <button type="submit" class="btn btn-primary">Create Classroom</button>
+        </form>
+
     </div>
 </div>

@@ -15,7 +15,7 @@
                         <th scope="col">Teacher<i onclick="handleSort('grade')" class="fa fa-sort"></i></th>
                         <th scope="col">Status <i onclick="handleSort('class')" class="fa fa-sort"></i></th>
                         <th scope="col">Starting Date<i onclick="handleSort('grade')" class="fa fa-sort"></i></th>
-                        <th scope="col">End Date <i onclick="handleSort('class')" class="fa fa-sort"></i></th>
+                        <th scope="col">End Date <i onclick="handleSort('class')" class="fa fa-sort"></i></th> 
                         <th scope="col"> </th>
                     </tr>
                 </thead>
