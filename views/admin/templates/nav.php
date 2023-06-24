@@ -44,10 +44,10 @@
 			</li>
 			<li>
 			<li>
-				<?php if (strpos($_SERVER['REQUEST_URI'], "carAdmin.php") !== false) : ?>
-					<a href="/views/admin/carAdmin.php" class="nav-link active " aria-current="page">
+				<?php if (strpos($_SERVER['REQUEST_URI'], "/admin/teachers") !== false) : ?>
+					<a href="/admin/teachers" class="nav-link active " aria-current="page">
 					<?php else : ?>
-						<a href="/views/admin/carAdmin.php" class="nav-link " aria-current="page">
+						<a href="/admin/teachers" class="nav-link " aria-current="page">
 						<?php endif; ?>
 					<i class="fa fa-car" aria-hidden="true"></i>
 					Teachers

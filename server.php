@@ -124,6 +124,18 @@ $app->get("/admin/users", function ($req, $res) use ($db) {
     $res->render("admin/index", $data);
     $res->status(200);
 });
+
+$app->get("/admin/teachers", function ($req, $res) use ($db) {
+    $query = [
+        "sql" => "SELECT * FROM teachers
+        INNER JOIN users ON teachers.user_id = users.user_id"];
+    $data = [
+        "template" => "teachers.php",
+        "teachers" => $db->find($query)
+    ];
+    $res->render("admin/index", $data);
+    $res->status(200);
+});
 $app->get("/admin/users/:id/edit", function ($req, $res) use ($db) {
      // --TODO MAKE ADMIN ONLY 
     $id = $req->params()["id"];

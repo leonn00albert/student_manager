@@ -1,8 +1,8 @@
 <div class="card m-3">
-    <div class="card-header">Users</div>
+    <div class="card-header">teachers</div>
     <div class="card-body">
 
-        <h4 class="card-title"><span class="badge bg-primary m-1" id="userCount"></span></h4>
+        <h4 class="card-title"><span class="badge bg-primary m-1" id="teacherCount"></span></h4>
      
         <div class="table-responsive-md">
             <table class="table table-hover table-striped">
@@ -17,29 +17,29 @@
                         <th scope="col"> </th>
                     </tr>
                 </thead>
-                <tbody id="usersTable">
-                    <?php foreach($users as $user): ?>
+                <tbody id="teachersTable">
+                    <?php foreach($teachers as $teacher): ?>
                         <tr>
                         <td>
-                            <?= $user["user_id"] ?>
+                            <?= $teacher["teacher_id"] ?>
                         </td>
                         <td>
-                            <?= $user["country"] ?>
+                            <?= $teacher["country"] ?>
                         </td>
                         <td>
-                            <?= $user["contact_email"] ?>  
+                            <?= $teacher["contact_email"] ?>  
                         </td>
                         <td>
-                            <?= $user["contact_phone"] ?> 
+                            <?= $teacher["contact_phone"] ?> 
                         </td>
                         <td>
-                            <?= $user["first_name"] ?>   <?= $user["last_name"] ?>
+                            <?= $teacher["first_name"] ?>   <?= $teacher["last_name"] ?>
                         </td>
                         <td>
-                            <?= $user["type"] ?>
+                            <?= $teacher["type"] ?>
                         </td>
                         <td>
-                            <a href="/admin/users/<?=$user["user_id"]?>/edit" class="btn btn-info text-white">Update</a>
+                            <a href="/admin/teachers/<?=$teacher["teacher_id"]?>/edit" class="btn btn-info text-white">Update</a>
                         </td>
                     </tr>
                         <?php endforeach; ?>

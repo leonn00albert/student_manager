@@ -180,3 +180,8 @@ CREATE TABLE Users (
   FOREIGN KEY (admin_id) REFERENCES Admins(admin_id),
   FOREIGN KEY (student_id) REFERENCES Students(student_id)
 );
+
+
+ALTER TABLE Teachers
+ADD COLUMN user_id INT,
+ADD FOREIGN KEY (user_id) REFERENCES Users(user_id);
