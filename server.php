@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require_once __DIR__ . "/vendor/autoload.php";
 require_once __DIR__ . "/config/db.config.php";
 require_once __DIR__ . "/src/util/create-pdf.php";
@@ -9,8 +9,6 @@ use Artemis\Core\DataBases\DB;
 use Artemis\Core\Router\Router;
 use Artemis\Core\Forms\Forms;
 use Artemis\Core\TemplateEngine\TemplateEngine;
-
-
 
 $app = Router::getInstance();
 $app->set("view_engine", new TemplateEngine(__DIR__ . "/views"));
@@ -51,11 +49,22 @@ $app->get("/register", function ($req, $res) {
     $res->status(200);
 });
 
+// Students routes only for students and admin-root available
+$app->get("/login", function ($req, $res) {
+    $res->render("home/login");
+    $res->status(200);
+});
+
+// Teachers routes only for teachers and admin-root available
+$app->get("/teachers", function ($req, $res) {
+    $res->render("teachers/index");
+    $res->status(200);
+});
+
 
 //only auth 
 
-
-//only admin 
+//only admin *
 $app->get("/admin", function ($req, $res) {
     $data = [
         "template" => "dashboard.php"
@@ -72,10 +81,6 @@ $app->get("/admin/dashboard", function ($req, $res) {
 });
 
 
-
-
-
-
 $app->get("/admin/teachers", function ($req, $res) use ($db) {
     $query = [
         "sql" => "SELECT * FROM teachers
@@ -87,15 +92,6 @@ $app->get("/admin/teachers", function ($req, $res) use ($db) {
     $res->render("admin/index", $data);
     $res->status(200);
 });
-
-
-
-
-
-
-
-
-
 
 
 //wildcard route

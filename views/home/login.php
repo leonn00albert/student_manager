@@ -73,12 +73,12 @@
         Log-in to your account
       </div>
     </h2>
-    <form class="ui large form">
+    <form class="ui large form" action="/login" method="POST">
       <div class="ui stacked segment">
         <div class="field">
           <div class="ui left icon input">
             <i class="user icon"></i>
-            <input type="text" name="email" placeholder="E-mail address">
+            <input type="text" name="contact_email" placeholder="E-mail address">
           </div>
         </div>
         <div class="field">
@@ -87,7 +87,7 @@
             <input type="password" name="password" placeholder="Password">
           </div>
         </div>
-        <div class="ui fluid large teal submit button">Login</div>
+        <button class="ui fluid large teal submit button">Login</button>
       </div>
 
       <div class="ui error message"></div>
