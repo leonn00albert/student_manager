@@ -100,7 +100,7 @@ $app->delete("/api/students/:id", function ($req, $res) {
 });
 
 
-$app->post("/api/students", $form->sanatize, function ($req, $res) {
+$app->post("/api/students", $form->sanitize, function ($req, $res) {
     global $db;
     global $alerts;
     global $logs;
