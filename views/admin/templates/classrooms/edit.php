@@ -53,7 +53,7 @@
         .then(response => {
             if (response.ok) {
                 console.log('Classroom updated successfully');
-            } else {
+                } else {
                 console.error('Classroom update failed');
             }
         })
