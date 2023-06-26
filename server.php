@@ -89,6 +89,28 @@ if ($_SESSION["type"] === "student") {
         $res->status(200);
     });
 
+    $app->get("/students/classrooms/:id", function ($req, $res) use ($db) {
+        $id = $req->params()["id"];
+        $query = [
+            "sql" => "SELECT * FROM enrollments
+                      INNER JOIN classrooms ON enrollments.classroom_id = classrooms.classroom_id
+                      INNER JOIN courses ON classrooms.course_id = courses.course_id
+                      WHERE classrooms.classroom_id = " . $id
+        ];
+
+        $classroom = $db->find($query)[0];
+        $modulesQuery = [
+            "sql" => "SELECT * FROM modules WHERE course_id = " .  $classroom["course_id"]
+        ];
+        $data = [
+            "template" => "classrooms/show.php",
+            "classroom" => $classroom,
+            "modules" => $db->find($modulesQuery)
+        ];
+        $res->render("students/index", $data);
+        $res->status(200);
+    });
+
     $app->post("/enrollments", $app->form->sanitize, function ($req, $res) use ($db) {
 
         //todo add only one time per student
@@ -126,6 +148,85 @@ if ($_SESSION["type"] === "student") {
 
         $res->redirect("/students/classrooms");
     });
+
+
+    $app->get("/students/classrooms", function ($req, $res) use ($db) {
+        $studentQuery = [
+            "sql" => "SELECT student_id FROM students WHERE user_id = " . $_SESSION["user_id"]
+        ];
+
+        $student = $db->find($studentQuery)[0];
+        $query = [
+            "sql" => "SELECT * FROM enrollments
+                      INNER JOIN classrooms ON enrollments.classroom_id = classrooms.classroom_id
+                      WHERE student_id = " . $student["student_id"]
+        ];
+        $data = [
+            "template" => "classrooms.php",
+            "classrooms" => $db->find($query)
+        ];
+        $res->render("students/index", $data);
+        $res->status(200);
+    });
+
+
+    $app->get("/students/modules/:id", function ($req, $res) use ($db) {
+        $id = $req->params()["id"];
+        $query = [
+            "sql" => "SELECT * FROM modules WHERE module_id = " . $id ." LIMIT 1"
+        ];
+        $sections = [
+            "sql" => "SELECT * FROM sections WHERE module_id = " . $id
+        ];
+
+        $data = [
+            "template" => "modules/show.php",
+            "module" => $db->find($query)[0],
+            "sections" => $db->find($sections)
+        ];
+        $res->render("students/index", $data);
+        $res->status(200);
+    });
+
+    $app->get("/students/sections/:id", function ($req, $res) use ($db) {
+        $id = $req->params()["id"];
+        $sections = [
+            "sql" => "SELECT * FROM sections WHERE section_id = " . $id . " LIMIT 1"
+        ];
+
+        $data = [
+            "template" => "sections/show.php",
+            "section" => $db->find($sections)[0]
+        ];
+        $res->render("students/index", $data);
+        $res->status(200);
+    });
+
+    $app->post("/grades", $app->form->sanitize, function ($req, $res) use ($db) {
+        //todo add only one time per student 
+        //add error and alerts
+        $submit_date = date("Y-m-d");
+    
+        $studentQuery = [
+            "sql" => "SELECT student_id FROM students WHERE user_id = " . $_SESSION["user_id"] . " LIMIT 1"
+        ];
+    
+        $student = $db->find($studentQuery)[0];
+    
+        $insertQuery = "INSERT INTO grades (student_id, section_id, submit_date, assignment, grade_answer) VALUES (:student_id, :section_id, :submit_date, :assignment, :grade_answer)";
+        $stmt = $db->conn()->prepare($insertQuery);
+        $stmt->bindParam(':student_id', $student["student_id"]);
+        $stmt->bindParam(':section_id', $req->sanitized["section_id"]);
+        $stmt->bindParam(':submit_date', $submit_date);
+        $stmt->bindParam(':assignment', $req->sanitized["assignment"]);
+        $stmt->bindParam(':grade_answer', $req->sanitized["grade_answer"]);
+        $stmt->execute();
+    
+        $res->redirect("/students/modules/" . $req->sanitized["section_id"]);
+    });
+
+
+    
 }
 
 
