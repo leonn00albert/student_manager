@@ -1,35 +1,37 @@
-<div class="card text-white bg-secondary m-3">
-            <div class="card-header"></div>
-            <div class="card-body" id="cardBody">
+<div class="row">
+    <div class="col">
+        <div class="card m-3">
+            <div class="card-header">classroom: <?= $classroom["classroom_name"] ?></div>
+            <div class="card-body">
+            <ul class="list-group">  
+                    <?php foreach ($students as $student) : ?>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <?= $student["student_id"] ?>: <?= $student["first_name"] ?>  <?= $student["last_name"] ?>
+                   
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
 
-                <h4 class="card-title" id="classRoomName">Class </h4>
-                <p class="card-text">
-                <div class="table-responsive-md">
-                    <h4>Students</h4>
-                    <table class="table table-hover table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col"></th>
+             
 
-                                <th scope="col">Registration number</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Gender</th>
-                                <th scope="col">Age</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Country</th>
-                                <th scope="col">Grade</th>
-                                <th scope="col">Classroom</th>
-                                <th scope="col"> </th>
-                            </tr>
-                        </thead>
-                        <tbody id="studentsTable">
-                        </tbody>
-                    </table>
-                </div>
-        
-                <div class="mt-2">
-                    <a href="/" class="btn btn-secondary">Back</a>
-                </div>
-                </p>
             </div>
         </div>
+    </div>
+
+    
+    <div class="col">
+        <div class="card m-3">
+            <div class="card-header">Grades</div>
+            <div class="card-body">
+                <ul class="list-group">  
+                    <?php foreach ($grades as $grade) : ?>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <?= $grade["section_name"] ?>: <?= $grade["first_name"] ?>  <?= $grade["last_name"] ?>
+                        <a href="/students/grades/<?= $grade["grade_id"] ?>" class="btn btn-primary">Grade</a>  
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

@@ -41,9 +41,51 @@ if ($_SESSION["type"] === "teacher") {
         $res->status(200);
     });
 
-    $app->get("/teachers/classrooms", function ($req, $res) {
+    $app->get("/teachers/classrooms", function ($req, $res) use ($db) {
+
+        $teacherQuery = [
+            "sql" => "SELECT teacher_id FROM teachers WHERE user_id = " . $_SESSION["user_id"]
+        ];
+
+        $teacher = $db->find($teacherQuery)[0];
+
+        $query = [
+            "sql" => "SELECT * FROM courses
+            INNER JOIN classrooms ON courses.classroom_id = classrooms.classroom_id
+            WHERE courses.teacher_id = " . $teacher["teacher_id"]
+        ];
+
         $data = [
-            "template" => "classrooms.php"
+            "template" => "classrooms.php",
+            "classrooms" => $db->find($query)
+        ];
+        $res->render("teachers/index", $data);
+        $res->status(200);
+    });
+    $app->get("/teachers/classrooms/:id", function ($req, $res) use ($db) {
+        $id = $req->params()["id"];
+        $query = [
+            "sql" => "SELECT * FROM enrollments
+            INNER JOIN classrooms ON enrollments.classroom_id = classrooms.classroom_id
+            INNER JOIN students ON enrollments.student_id = students.student_id
+            INNER JOIN users ON students.user_id = users.user_id
+            WHERE classrooms.classroom_id = " .  $id
+        ];
+
+        $gradesQuery = [
+            "sql" => "SELECT * FROM grades
+                      INNER JOIN students ON grades.student_id = students.student_id
+                      INNER JOIN users ON students.user_id = users.user_id
+                      INNER JOIN sections ON grades.section_id = sections.section_id
+
+                      WHERE grades.classroom_id = " .  $id . " AND grades.grade_status = 'Pending'"
+        ];
+        $result = $db->find($query);
+        $data = [
+            "template" => "classrooms/show.php",
+            "classroom" =>   $result[0],
+            "students" =>   $result,
+            "grades" =>   $db->find($gradesQuery)
         ];
         $res->render("teachers/index", $data);
         $res->status(200);
@@ -115,14 +157,17 @@ if ($_SESSION["type"] === "student") {
 
         //todo add only one time per student
         $enrollment_date =  date("Y-m-d");
-        $query= [
-            "sql" => "SELECT classroom_id FROM enrollments WHERE course_id = " . $req->sanitized["course_id"]
-        ];
 
-        $classroom_id =$db->find($query)[0]["classroom_id"];
-        if (is_null($classroom_id)) {
-     
-            $classroom_name = "New Classroom for course_id: " . $req->sanitized["course_id"]; 
+        $sql = "SELECT classroom_id FROM enrollments WHERE course_id = :courseid";
+        $stmt = $db->conn()->prepare($sql);
+        $stmt->bindValue(':courseid', $req->sanitized['course_id']);
+        $stmt->execute();
+        $classroom_id = null;
+        if ($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $classroom_id = $row["classroom_id"];
+        } else {
+            $classroom_name = "New Classroom for course_id: " . $req->sanitized["course_id"];
             $insertQuery = "INSERT INTO classrooms (classroom_name, teacher_id, course_id) VALUES (:classroom_name, :teacher_id, :course_id)";
             $stmt = $db->conn()->prepare($insertQuery);
             $stmt->bindParam(':classroom_name', $classroom_name);
@@ -130,14 +175,20 @@ if ($_SESSION["type"] === "student") {
             $stmt->bindParam(':course_id',  $req->sanitized["course_id"]);
             $stmt->execute();
             $classroom_id = $db->conn()->lastInsertId();
-    
+            $updateCourseQuery = "UPDATE courses SET classroom_id = :classroom_id WHERE course_id = :course_id";
+            $stmt = $db->conn()->prepare($updateCourseQuery);
+            $stmt->bindParam(':classroom_id',  $classroom_id);
+            $stmt->bindParam(':course_id',  $req->sanitized["course_id"]);
+            $stmt->execute();
         }
+
+
         $studentQuery = [
             "sql" => "SELECT student_id FROM students WHERE user_id = " . $_SESSION["user_id"]
         ];
-     
+
         $student = $db->find($studentQuery)[0];
-    
+
         $insertQuery = "INSERT INTO enrollments (student_id, course_id, enrollment_date, classroom_id) VALUES (:student_id, :course_id, :enrollment_date, :classroom_id)";
         $stmt = $db->conn()->prepare($insertQuery);
         $stmt->bindParam(':student_id', $student["student_id"]);
@@ -173,7 +224,7 @@ if ($_SESSION["type"] === "student") {
     $app->get("/students/modules/:id", function ($req, $res) use ($db) {
         $id = $req->params()["id"];
         $query = [
-            "sql" => "SELECT * FROM modules WHERE module_id = " . $id ." LIMIT 1"
+            "sql" => "SELECT * FROM modules WHERE module_id = " . $id . " LIMIT 1"
         ];
         $sections = [
             "sql" => "SELECT * FROM sections WHERE module_id = " . $id
@@ -206,27 +257,28 @@ if ($_SESSION["type"] === "student") {
         //todo add only one time per student 
         //add error and alerts
         $submit_date = date("Y-m-d");
-    
+
         $studentQuery = [
-            "sql" => "SELECT student_id FROM students WHERE user_id = " . $_SESSION["user_id"] . " LIMIT 1"
+           "sql" => "SELECT students.student_id ,enrollments.classroom_id FROM students 
+        INNER JOIN enrollments ON students.student_id = enrollments.student_id 
+        WHERE students.user_id = " . $_SESSION["user_id"] . " LIMIT 1"
         ];
-    
+
         $student = $db->find($studentQuery)[0];
-    
-        $insertQuery = "INSERT INTO grades (student_id, section_id, submit_date, assignment, grade_answer) VALUES (:student_id, :section_id, :submit_date, :assignment, :grade_answer)";
+
+        $insertQuery = "INSERT INTO grades (student_id, section_id, classroom_id, submit_date, assignment, grade_answer) VALUES (:student_id, :section_id, :classroom_id,:submit_date, :assignment, :grade_answer)";
         $stmt = $db->conn()->prepare($insertQuery);
         $stmt->bindParam(':student_id', $student["student_id"]);
         $stmt->bindParam(':section_id', $req->sanitized["section_id"]);
+        $stmt->bindParam(':classroom_id',  $student["classroom_id"]);
         $stmt->bindParam(':submit_date', $submit_date);
         $stmt->bindParam(':assignment', $req->sanitized["assignment"]);
         $stmt->bindParam(':grade_answer', $req->sanitized["grade_answer"]);
         $stmt->execute();
-    
-        $res->redirect("/students/modules/" . $req->sanitized["section_id"]);
+        $res->redirect("/students/classrooms");
+
+      
     });
-
-
-    
 }
 
 
