@@ -22,7 +22,7 @@
 			</li>
 
 			<li class="nav-item">
-			<?php if (strpos($_SERVER['REQUEST_URI'], "/students") !== false) : ?>
+			<?php if (strpos($_SERVER['REQUEST_URI'], "/students/messages") !== false) : ?>
 					<a href="/students/students" class="nav-link active " aria-current="page">
 					<?php else : ?>
 						<a href="/students/students" class="nav-link " aria-current="page">

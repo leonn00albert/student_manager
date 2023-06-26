@@ -19,13 +19,12 @@ $db = DB::new(DB_TYPE, DB_NAME, DB_PASSWORD, DB_DRIVER, DB_HOST, DB_USER);
 
 Routes\Auth\UsersRoutes::register($app, new Controllers\Auth\UsersController());
 if ($_SESSION["type"] === "admin") {
-//ADMIN ROUTES --TODO add auth for admin only
-Routes\Admin\UsersRoutes::register($app, new Controllers\Admin\UsersController());
-Routes\Admin\ClassroomsRoutes::register($app, new Controllers\Admin\ClassroomsController());
-Routes\Admin\CoursesRoutes::register($app, new Controllers\Admin\CoursesController());
-Routes\Admin\CMSRoutes::register($app, new Controllers\Admin\CMSController());
-Routes\Admin\StudentsRoutes::register($app, new Controllers\Admin\StudentsController());
-
+    //ADMIN ROUTES --TODO add auth for admin only
+    Routes\Admin\UsersRoutes::register($app, new Controllers\Admin\UsersController());
+    Routes\Admin\ClassroomsRoutes::register($app, new Controllers\Admin\ClassroomsController());
+    Routes\Admin\CoursesRoutes::register($app, new Controllers\Admin\CoursesController());
+    Routes\Admin\CMSRoutes::register($app, new Controllers\Admin\CMSController());
+    Routes\Admin\StudentsRoutes::register($app, new Controllers\Admin\StudentsController());
 }
 
 if ($_SESSION["type"] === "teacher") {
@@ -76,10 +75,10 @@ if ($_SESSION["type"] === "student") {
     $app->get("/students/courses/:id", function ($req, $res) use ($db) {
         $id = $req->params()["id"];
         $query = [
-            "sql" => "SELECT * FROM courses WHERE course_id = " . $id 
+            "sql" => "SELECT * FROM courses WHERE course_id = " . $id
         ];
         $modulesQuery = [
-            "sql" => "SELECT * FROM modules WHERE course_id = " . $id 
+            "sql" => "SELECT * FROM modules WHERE course_id = " . $id
         ];
         $data = [
             "template" => "courses/show.php",
@@ -88,6 +87,44 @@ if ($_SESSION["type"] === "student") {
         ];
         $res->render("students/index", $data);
         $res->status(200);
+    });
+
+    $app->post("/enrollments", $app->form->sanitize, function ($req, $res) use ($db) {
+
+        //todo add only one time per student
+        $enrollment_date =  date("Y-m-d");
+        $query= [
+            "sql" => "SELECT classroom_id FROM enrollments WHERE course_id = " . $req->sanitized["course_id"]
+        ];
+
+        $classroom_id =$db->find($query)[0]["classroom_id"];
+        if (is_null($classroom_id)) {
+     
+            $classroom_name = "New Classroom for course_id: " . $req->sanitized["course_id"]; 
+            $insertQuery = "INSERT INTO classrooms (classroom_name, teacher_id, course_id) VALUES (:classroom_name, :teacher_id, :course_id)";
+            $stmt = $db->conn()->prepare($insertQuery);
+            $stmt->bindParam(':classroom_name', $classroom_name);
+            $stmt->bindParam(':teacher_id',  $req->sanitized["teacher_id"]);
+            $stmt->bindParam(':course_id',  $req->sanitized["course_id"]);
+            $stmt->execute();
+            $classroom_id = $db->conn()->lastInsertId();
+    
+        }
+        $studentQuery = [
+            "sql" => "SELECT student_id FROM students WHERE user_id = " . $_SESSION["user_id"]
+        ];
+     
+        $student = $db->find($studentQuery)[0];
+    
+        $insertQuery = "INSERT INTO enrollments (student_id, course_id, enrollment_date, classroom_id) VALUES (:student_id, :course_id, :enrollment_date, :classroom_id)";
+        $stmt = $db->conn()->prepare($insertQuery);
+        $stmt->bindParam(':student_id', $student["student_id"]);
+        $stmt->bindParam(':course_id', $req->sanitized["course_id"]);
+        $stmt->bindParam(':enrollment_date', $enrollment_date);
+        $stmt->bindParam(':classroom_id', $classroom_id);
+        $stmt->execute();
+
+        $res->redirect("/students/classrooms");
     });
 }
 
