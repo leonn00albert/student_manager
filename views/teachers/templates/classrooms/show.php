@@ -11,9 +11,6 @@
                     </li>
                     <?php endforeach; ?>
                 </ul>
-
-             
-
             </div>
         </div>
     </div>
@@ -27,7 +24,7 @@
                     <?php foreach ($grades as $grade) : ?>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <?= $grade["section_name"] ?>: <?= $grade["first_name"] ?>  <?= $grade["last_name"] ?>
-                        <a href="/students/grades/<?= $grade["grade_id"] ?>" class="btn btn-primary">Grade</a>  
+                        <a href="/teachers/grades/<?= $grade["grade_id"] ?>/show" class="btn btn-primary">Grade</a>  
                     </li>
                     <?php endforeach; ?>
                 </ul>
