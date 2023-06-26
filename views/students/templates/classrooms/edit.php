@@ -1,5 +1,5 @@
 <div class="card m-3">
-    <div class="card-header">Add new Classroom</div>
+    <div class="card-header">Classroom</div>
     <div class="card-body">
         <form id="updateClassroomForm">
             <div class="form-group">
@@ -29,7 +29,7 @@
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-primary">Update Classroom</button>
+          
         </form>
 
     </div>

@@ -10,7 +10,7 @@
                     <tr>
                         <th scope="col">Registration number</th>
                         <th scope="col">Name<i onclick="handleSort('country')" class="fa fa-sort"></i></th>
-                        <th scope="col">Description</th>
+                     
                         <th scope="col">Image<i onclick="handleSort('name')" class="fa fa-sort"></i></th>
                         <th scope="col">Teacher<i onclick="handleSort('grade')" class="fa fa-sort"></i></th>
                         <th scope="col">Status <i onclick="handleSort('class')" class="fa fa-sort"></i></th>
@@ -28,9 +28,7 @@
                             <td>
                                 <?= $course["course_name"] ?>
                             </td>
-                            <td>
-                                <?= $course["course_description"] ?>
-                            </td>
+                        
                             <td>
                                 <img src=<?= $course["course_image"] ?>  width="50="/>
                             </td>
@@ -45,6 +43,9 @@
                             </td>
                             <td>
                                 <?= $course["end_date"] ?>
+                            </td>
+                            <td>
+                              <a class="btn btn-info" href="/teachers/courses/<?=$course["course_id"]?>/edit">Edit</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

@@ -1,7 +1,5 @@
 <?php
-
 namespace Controllers\Admin;
-
 use Artemis\Core\DataBases\DB;
 
 class CMSController

@@ -12,9 +12,9 @@
 			</li>
 			<li class="nav-item">
 			<?php if (strpos($_SERVER['REQUEST_URI'], "/dashboard") !== false) : ?>
-					<a href="/teachers/dashboard" class="nav-link active " aria-current="page">
+					<a href="/students/dashboard" class="nav-link active " aria-current="page">
 					<?php else : ?>
-						<a href="/teachers/dashboard" class="nav-link " aria-current="page">
+						<a href="/students/dashboard" class="nav-link " aria-current="page">
 						<?php endif; ?>
 					<i class="fa fa-tachometer" aria-hidden="true"></i>
 					Dashboard
@@ -22,10 +22,10 @@
 			</li>
 
 			<li class="nav-item">
-			<?php if (strpos($_SERVER['REQUEST_URI'], "/students") !== false) : ?>
-					<a href="/teachers/students" class="nav-link active " aria-current="page">
+			<?php if (strpos($_SERVER['REQUEST_URI'], "/students/messages") !== false) : ?>
+					<a href="/students/students" class="nav-link active " aria-current="page">
 					<?php else : ?>
-						<a href="/teachers/students" class="nav-link " aria-current="page">
+						<a href="/students/students" class="nav-link " aria-current="page">
 						<?php endif; ?>
 					<i class="fa fa-bar-chart" aria-hidden="true"></i>
 					Messages 
@@ -34,9 +34,9 @@
 
 			<li class="nav-item">
 			<?php if (strpos($_SERVER['REQUEST_URI'], "classrooms") !== false) : ?>
-					<a href="/teachers/classrooms" class="nav-link active " aria-current="page">
+					<a href="/students/classrooms" class="nav-link active " aria-current="page">
 					<?php else : ?>
-						<a href="/teachers/classrooms" class="nav-link " aria-current="page">
+						<a href="/students/classrooms" class="nav-link " aria-current="page">
 						<?php endif; ?>
 					<i class="fa  fa-map-marker" aria-hidden="true"></i>
 					Classrooms
@@ -45,10 +45,10 @@
 		
 		
 			<li>
-			<?php if (strpos($_SERVER['REQUEST_URI'], "/teachers/courses") !== false) : ?>
-				<a href="/teachers/courses" class="nav-link active" aria-current="page">
+			<?php if (strpos($_SERVER['REQUEST_URI'], "/students/courses") !== false) : ?>
+				<a href="/students/courses" class="nav-link active" aria-current="page">
 					<?php else : ?>
-						<a href="/teachers/courses" class="nav-link" aria-current="page">
+						<a href="/students/courses" class="nav-link" aria-current="page">
 						<?php endif; ?>
 					<i class="fa fa-bars" aria-hidden="true"></i>
 

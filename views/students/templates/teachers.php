@@ -1,5 +1,5 @@
 <div class="row">
     <div class="col">
-        <?php include "courses/index.php"; ?>
+    <?php include "teachers/index.php" ?>
     </div>
 </div>
