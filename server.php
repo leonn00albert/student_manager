@@ -266,8 +266,11 @@ if ($_SESSION["type"] === "student") {
             "sql" => "SELECT * FROM modules WHERE module_id = " . $id . " LIMIT 1"
         ];
         $sections = [
-            "sql" => "SELECT * FROM sections WHERE module_id = " . $id
+            "sql" => "SELECT * FROM sections 
+                      LEFT JOIN grades ON sections.section_id = grades.section_id
+                      WHERE module_id = " . $id
         ];
+        
 
         $data = [
             "template" => "modules/show.php",

@@ -3,7 +3,7 @@
         <div class="card m-3">
             <div class="card-header">Module: <?= $module["module_name"] ?></div>
             <div class="card-body">
-    
+
             </div>
         </div>
     </div>
@@ -12,12 +12,31 @@
         <div class="card m-3">
             <div class="card-header">Topics</div>
             <div class="card-body">
-                <ul class="list-group">  
+                <ul class="list-group">
                     <?php foreach ($sections as $section) : ?>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <?= $section["section_id"] ?>: <?= $section["section_name"] ?>
-                        <a href="/students/sections/<?= $section["section_id"] ?>" class="btn btn-primary">Go to Section</a>  
-                    </li>
+
+                        <?php if ($section["grade_status"] === "Graded") { ?>
+                            <li class="list-group-item  d-flex justify-content-between align-items-center">
+                                <span>
+                                <i class="fa fa-solid fa-check-square-o "></i>
+                                <?= $section["section_id"] ?>: <?= $section["section_name"] ?>
+                                </span>
+                                <a href="/students/sections/<?= $section["section_id"] ?>" class="btn btn-primary">Go to Section</a>
+
+
+
+
+
+
+                            <?php  } else { ?>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                                <?= $section["section_id"] ?>: <?= $section["section_name"] ?>
+                                <a href="/students/sections/<?= $section["section_id"] ?>" class="btn btn-primary">Go to Section</a>
+
+                            </li>
+                        <?php  } ?>
+
                     <?php endforeach; ?>
                 </ul>
             </div>
