@@ -23,8 +23,8 @@ class ModulesController
                 "sql" => "SELECT * FROM modules WHERE module_id = " . $id . " LIMIT 1"
             ];
             $sections = [
-                "sql" => "SELECT *, sections.section_id FROM sections 
-                          LEFT JOIN grades ON sections.section_id = grades.section_id
+                "sql" => "SELECT *, sections.section_id FROM sections
+                          LEFT JOIN grades ON sections.section_id = grades.section_id AND grades.student_id = " . $_SESSION["student"]["student_id"] . "
                           WHERE module_id = " . $id
             ];
             

@@ -6,7 +6,7 @@ class GradesRoutes
     {
         
         $app->get("/teachers/grades/:id", $controller->show);
-        $app->put("/grades/:id",$app->form->sanitize, $controller->showIndex);
+        $app->put("/grades/:id",$app->form->sanitize, $controller->update);
 
     }
 }

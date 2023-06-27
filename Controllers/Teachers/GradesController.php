@@ -45,7 +45,6 @@ class GradesController
                 $query = $db->conn()->prepare("UPDATE grades SET 
                 score = :score
                 WHERE grade_id = :grade_id");
-        
                 $query->bindParam(':score', $req->sanitized['score']);
                 $query->bindParam(':grade_id', $id);
             

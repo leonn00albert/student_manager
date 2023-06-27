@@ -6,12 +6,14 @@
                 <h4>Students</h4>
                 <hr>
                 <ul class="list-group">
-                    <?php foreach ($students as $student) : ?>
+                <?php foreach ($students as $student) : ?>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <?= $student["student_id"] ?>: <?= $student["first_name"] ?> <?= $student["last_name"] ?>
-
+                            <?= $student["first_name"]?>  <?= $student["last_name"] ?>
+                            <a href="/students/messages" class="badge bg-primary rounded-pill"><i class='fa fa-comment'></i></a>
                         </li>
                     <?php endforeach; ?>
+
+                </ul>
                 </ul>
             </div>
         </div>
@@ -33,7 +35,52 @@
             </div>
         </div>
     </div>
+    <div class="col">
+        <div class="card m-3">
+            <div class="card-header">classroom: <?= $classroom["classroom_name"] ?></div>
+            <div class="card-body">
+                <h4>Students Progress</h4>
+                <hr>
+              
+                <ul class="list-group">
+                    <?php foreach ($progress as $student) : ?>
+                        <?php $percentage = 0;
+                        if (isset($student["graded_sections"]) &&  $student["graded_sections"]!= 0) {
+                            $percentage =  $student["graded_sections"] / $section_count * 100  ;
+                        }
+                        ?>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <?= $student["student_id"] ?>: <?= $student["first_name"] ?> <?= $student["last_name"] ?>
+                   
+                        </li>
+                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow=<?= $student["graded_sections"] ?> aria-valuemin="0" aria-valuemax=<?= $section_count?>>
+                    <div class="progress-bar" style="width: <?= (int) $percentage ?>%"><?= (int) $percentage ?>%</div>
+                </div>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+    </div>
+   
 
+    <div class="col">
+        <div class="card m-3">
+            <div class="card-header">Grades: Submitted and Graded</div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <?php foreach ($grades as $grade) : ?>
+                        <?php if ($grade["grade_status"] === "Graded") {?>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <?= $grade["section_name"] ?>: <?= $grade["first_name"] ?> <?= $grade["last_name"] ?>
+                            <a href="/teachers/grades/<?= $grade["grade_id"] ?>" class="btn btn-primary">Grade</a>
+                        </li>
+                        <?php } ?>
+
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div class="col">
         <div class="card m-3">
             <div class="card-header">Bulletin board</div>
@@ -80,24 +127,4 @@
             </div>
         </div>
     </div>
-
-    <div class="col">
-        <div class="card m-3">
-            <div class="card-header">Grades: Submitted and Graded</div>
-            <div class="card-body">
-                <ul class="list-group">
-                    <?php foreach ($grades as $grade) : ?>
-                        <?php if ($grade["grade_status"] === "Graded") {?>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <?= $grade["section_name"] ?>: <?= $grade["first_name"] ?> <?= $grade["last_name"] ?>
-                            <a href="/teachers/grades/<?= $grade["grade_id"] ?>" class="btn btn-primary">Grade</a>
-                        </li>
-                        <?php } ?>
-
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        </div>
-    </div>
-
 </div>

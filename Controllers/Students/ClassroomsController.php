@@ -20,11 +20,11 @@ class ClassroomsController
                 "sql" => "SELECT student_id FROM students WHERE user_id = " . $_SESSION["user_id"]  // move it to session?
             ];
 
-            $student = $db->find($studentQuery)[0];
+          
             $query = [
                 "sql" => "SELECT * FROM enrollments
                           INNER JOIN classrooms ON enrollments.classroom_id = classrooms.classroom_id
-                          WHERE student_id = " . $student["student_id"]
+                          WHERE enrollments.student_id = " . $_SESSION["student"]["student_id"]
             ];
             $data = [
                 "template" => "classrooms.php",
@@ -100,7 +100,12 @@ class ClassroomsController
             ];
             $section_count = $db->find($sectionsQuery)[0]["total_sections"];
             $graded_count = $db->find($gradedQuery)[0]["graded_sections"];
-            $percentage =  (int) ($section_count  / $graded_count  * 10);
+            $percentage = 0;  
+
+            if ($graded_count != 0) {
+                $percentage = (int)(($section_count / $graded_count) * 100); 
+            }
+            
 
             $data = [
                 "template" => "classrooms/show.php",

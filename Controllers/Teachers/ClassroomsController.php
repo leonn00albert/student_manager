@@ -59,13 +59,53 @@ class ClassroomsController
                 "sql" => "SELECT * FROM bulletins
                           WHERE bulletins.classroom_id = " .  $id
             ];
+
+
+            $progressQuery = [
+                "sql" => "
+                    SELECT 
+                        *,
+                        COUNT(g.grade_id) AS graded_sections
+                    FROM 
+                        Sections s
+                    LEFT JOIN 
+                        Grades g ON s.section_id = g.section_id
+                    LEFT JOIN 
+                        users u ON u.user_id = g.student_id
+                    WHERE 
+                        g.grade_status = 'Graded'
+                    AND
+                        g.classroom_id = " . $id . "
+                    GROUP BY 
+                        g.student_id
+                "
+            ];
+
+            $sectionsQuery = [
+                "sql" => "
+                    SELECT 
+                        COUNT(*) AS total_sections
+                    FROM 
+                        Sections s
+                    LEFT JOIN 
+                        Modules m ON m.module_id = s.module_id
+                    LEFT JOIN 
+                        Courses c ON c.course_id = m.course_id
+                    WHERE 
+                        c.classroom_id = " . $id 
+            ];
+            $section_count = $db->find($sectionsQuery)[0]["total_sections"];
+
+
             $result = $db->find($query);
             $data = [
                 "template" => "classrooms/show.php",
                 "classroom" =>   $result[0],
                 "students" =>   $result,
                 "grades" =>   $db->find($gradesQuery),
-                "bulletins" =>   $db->find($bulletinsQuery)
+                "progress" => $db->find($progressQuery),
+                "bulletins" =>   $db->find($bulletinsQuery),
+                "section_count" =>    $section_count
             ];
             $res->render("teachers/index", $data);
             $res->status(200);
