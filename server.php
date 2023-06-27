@@ -32,6 +32,8 @@ if ($_SESSION["type"] === "teacher") {
     Routes\Teachers\CoursesRoutes::register($app, new Controllers\Teachers\CoursesController());
     Routes\Teachers\ModulesRoutes::register($app, new Controllers\Teachers\ModulesController());
     Routes\Teachers\SectionsRoutes::register($app, new Controllers\Teachers\SectionsController());
+    Routes\Teachers\ClassroomsRoutes::register($app, new Controllers\Teachers\ClassroomsController());
+    Routes\Teachers\GradesRoutes::register($app, new Controllers\Teachers\GradesController());
 
     $app->get("/teachers", function ($req, $res) {
         $data = [
@@ -41,97 +43,14 @@ if ($_SESSION["type"] === "teacher") {
         $res->status(200);
     });
 
-    $app->get("/teachers/classrooms", function ($req, $res) use ($db) {
-
-        $teacherQuery = [
-            "sql" => "SELECT teacher_id FROM teachers WHERE user_id = " . $_SESSION["user_id"]
-        ];
-
-        $teacher = $db->find($teacherQuery)[0];
-
-        $query = [
-            "sql" => "SELECT * FROM courses
-            INNER JOIN classrooms ON courses.classroom_id = classrooms.classroom_id
-            WHERE courses.teacher_id = " . $teacher["teacher_id"]
-        ];
-
-        $data = [
-            "template" => "classrooms.php",
-            "classrooms" => $db->find($query)
-        ];
-        $res->render("teachers/index", $data);
-        $res->status(200);
-    });
-
-    $app->get("/teachers/grades/:id/show", function ($req, $res) use ($db) {
-        $id = $req->params()["id"];
-        $gradesQuery = [
-            "sql" => "SELECT * FROM grades
-                      INNER JOIN students ON grades.student_id = students.student_id
-                      INNER JOIN users ON students.user_id = users.user_id
-                      INNER JOIN sections ON grades.section_id = sections.section_id
-
-                      WHERE grades.grade_id = " .  $id ." LIMIT 1"
-        ];
-
-        $data = [
-            "template" => "grades/show.php",
-            "grade" => $db->find($gradesQuery)[0]
-        ];
-        $res->render("teachers/index", $data);
-        $res->status(200);
-    });
-
-
-    $app->put("/grades/:id",$app->form->sanitize, function ($req, $res) use ($db) {
-        $id = $req->params()["id"];
-        $query = $db->conn()->prepare("UPDATE grades SET 
-        score = :score
-        WHERE grade_id = :grade_id");
-
-        $query->bindParam(':score', $req->sanitized['score']);
-        $query->bindParam(':grade_id', $id);
-    
-        if ($query->execute()) {
-            $res->status(301);
-            $res->redirect("/teachers/classrooms/" . $req->sanitized["classroom_id"]);
-        } else {
-            echo "Error updating record.";
-        }
-    
-        $db->close();
-    });
-    $app->get("/teachers/classrooms/:id", function ($req, $res) use ($db) {
-        $id = $req->params()["id"];
-        $query = [
-            "sql" => "SELECT * FROM enrollments
-            INNER JOIN classrooms ON enrollments.classroom_id = classrooms.classroom_id
-            INNER JOIN students ON enrollments.student_id = students.student_id
-            INNER JOIN users ON students.user_id = users.user_id
-            WHERE classrooms.classroom_id = " .  $id
-        ];
-
-        $gradesQuery = [
-            "sql" => "SELECT * FROM grades
-                      INNER JOIN students ON grades.student_id = students.student_id
-                      INNER JOIN users ON students.user_id = users.user_id
-                      INNER JOIN sections ON grades.section_id = sections.section_id
-
-                      WHERE grades.classroom_id = " .  $id . " AND grades.grade_status = 'Pending'"
-        ];
-        $result = $db->find($query);
-        $data = [
-            "template" => "classrooms/show.php",
-            "classroom" =>   $result[0],
-            "students" =>   $result,
-            "grades" =>   $db->find($gradesQuery)
-        ];
-        $res->render("teachers/index", $data);
-        $res->status(200);
-    });
 }
 
 if ($_SESSION["type"] === "student") {
+
+    Routes\Students\ClassroomsRoutes::register($app, new Controllers\Students\ClassroomsController());
+    Routes\Students\ModulesRoutes::register($app, new Controllers\Students\ModulesController());
+    Routes\Students\CoursesRoutes::register($app, new Controllers\Students\CoursesController());
+
     //STUDENT ROUTES 
     $app->get("/students", function ($req, $res) {
         $data = [
@@ -141,67 +60,6 @@ if ($_SESSION["type"] === "student") {
         $res->status(200);
     });
 
-    $app->get("/students/courses", function ($req, $res) use ($db) {
-        $query = [
-            "sql" => "SELECT * FROM courses"
-        ];
-        $data = [
-            "template" => "courses.php",
-            "courses" => $db->find($query)
-        ];
-        $res->render("students/index", $data);
-        $res->status(200);
-    });
-
-    $app->get("/students/courses/:id", function ($req, $res) use ($db) {
-        $id = $req->params()["id"];
-        $query = [
-            "sql" => "SELECT * FROM courses WHERE course_id = " . $id
-        ];
-        $modulesQuery = [
-            "sql" => "SELECT * FROM modules WHERE course_id = " . $id
-        ];
-        $data = [
-            "template" => "courses/show.php",
-            "course" => $db->find($query)[0],
-            "modules" => $db->find($modulesQuery)
-        ];
-        $res->render("students/index", $data);
-        $res->status(200);
-    });
-
-    $app->get("/students/classrooms/:id", function ($req, $res) use ($db) {
-        $id = $req->params()["id"];
-        $query = [
-            "sql" => "SELECT * FROM enrollments
-                      INNER JOIN classrooms ON enrollments.classroom_id = classrooms.classroom_id
-                      INNER JOIN courses ON classrooms.course_id = courses.course_id
-                      INNER JOIN teachers ON teachers.teacher_id = teachers.teacher_id
-                      INNER JOIN users ON users.user_id = teachers.user_id
-
-                      WHERE classrooms.classroom_id = " . $id
-        ];
-
-        $studentsQuery = [
-            "sql" => "SELECT users.first_name, students.student_id, users.user_id FROM enrollments
-            INNER JOIN students ON enrollments.student_id = students.student_id
-            INNER JOIN users ON users.user_id = students.user_id
-            WHERE enrollments.classroom_id = " . $id
-        ];
-
-        $classroom = $db->find($query)[0];
-        $modulesQuery = [
-            "sql" => "SELECT * FROM modules WHERE course_id = " .  $classroom["course_id"]
-        ];
-        $data = [
-            "template" => "classrooms/show.php",
-            "classroom" => $classroom,
-            "modules" => $db->find($modulesQuery),
-            "students" => $db->find($studentsQuery)
-        ];
-        $res->render("students/index", $data);
-        $res->status(200);
-    });
 
     $app->post("/enrollments", $app->form->sanitize, function ($req, $res) use ($db) {
 
@@ -248,48 +106,6 @@ if ($_SESSION["type"] === "student") {
         $stmt->execute();
 
         $res->redirect("/students/classrooms");
-    });
-
-
-    $app->get("/students/classrooms", function ($req, $res) use ($db) {
-        $studentQuery = [
-            "sql" => "SELECT student_id FROM students WHERE user_id = " . $_SESSION["user_id"]
-        ];
-
-        $student = $db->find($studentQuery)[0];
-        $query = [
-            "sql" => "SELECT * FROM enrollments
-                      INNER JOIN classrooms ON enrollments.classroom_id = classrooms.classroom_id
-                      WHERE student_id = " . $student["student_id"]
-        ];
-        $data = [
-            "template" => "classrooms.php",
-            "classrooms" => $db->find($query)
-        ];
-        $res->render("students/index", $data);
-        $res->status(200);
-    });
-
-
-    $app->get("/students/modules/:id", function ($req, $res) use ($db) {
-        $id = $req->params()["id"];
-        $query = [
-            "sql" => "SELECT * FROM modules WHERE module_id = " . $id . " LIMIT 1"
-        ];
-        $sections = [
-            "sql" => "SELECT *, sections.section_id FROM sections 
-                      LEFT JOIN grades ON sections.section_id = grades.section_id
-                      WHERE module_id = " . $id
-        ];
-        
-
-        $data = [
-            "template" => "modules/show.php",
-            "module" => $db->find($query)[0],
-            "sections" => $db->find($sections)
-        ];
-        $res->render("students/index", $data);
-        $res->status(200);
     });
 
     $app->get("/students/sections/:id", function ($req, $res) use ($db) {
