@@ -40,7 +40,7 @@ class ClassroomsController
         $this->show = function ($req, $res) use ($db) {
             $id = $req->params()["id"];
             $query = [
-                "sql" => "SELECT * FROM enrollments
+                "sql" => "SELECT * , enrollments.classroom_id FROM enrollments
                 INNER JOIN classrooms ON enrollments.classroom_id = classrooms.classroom_id
                 INNER JOIN students ON enrollments.student_id = students.student_id
                 INNER JOIN users ON students.user_id = users.user_id
@@ -55,12 +55,18 @@ class ClassroomsController
     
                           WHERE grades.classroom_id = " .  $id . " AND grades.grade_status = 'Pending'"
             ];
+
+            $bulletinsQuery = [
+                "sql" => "SELECT * FROM bulletins
+                          WHERE bulletins.classroom_id = " .  $id
+            ];
             $result = $db->find($query);
             $data = [
                 "template" => "classrooms/show.php",
                 "classroom" =>   $result[0],
                 "students" =>   $result,
-                "grades" =>   $db->find($gradesQuery)
+                "grades" =>   $db->find($gradesQuery),
+                "bulletins" =>   $db->find($bulletinsQuery)
             ];
             $res->render("teachers/index", $data);
             $res->status(200);

@@ -51,14 +51,20 @@
     </div>
     <div class="col">
         <div class="card m-3">
-            <div class="card-header">Message board</div>
+            <div class="card-header">Bulletin board</div>
             <div class="card-body">
-                <ul class="list-group">
-                    <?php foreach ($modules as $module) : ?>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <?= $module["module_id"] ?>: <?= $module["module_name"] ?>
-                            <a href="/students/modules/<?= $module["module_id"] ?>" class="btn btn-primary">Go to Module</a>
+            <ul class="list-group">
+                    <?php foreach ($bulletins as $bulletin) : ?>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold"> <?= $bulletin["title"] ?></div>
+                                <?= $bulletin["message"] ?>
+
+                            </div>
+                            <span class="badge bg-<?= $bulletin["type"] ?> rounded-pill"><i class="fa fa-<?= $bulletin["type"] ?>" ></i></span>
                         </li>
+
+
                     <?php endforeach; ?>
                 </ul>
             </div>

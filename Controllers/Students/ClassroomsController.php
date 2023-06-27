@@ -45,6 +45,11 @@ class ClassroomsController
     
                           WHERE classrooms.classroom_id = " . $id
             ];
+
+            $bulletinsQuery = [
+                "sql" => "SELECT * FROM bulletins
+                          WHERE bulletins.classroom_id = " .  $id
+            ];
     
             $studentsQuery = [
                 "sql" => "SELECT users.first_name, students.student_id, users.user_id FROM enrollments
@@ -61,7 +66,8 @@ class ClassroomsController
                 "template" => "classrooms/show.php",
                 "classroom" => $classroom,
                 "modules" => $db->find($modulesQuery),
-                "students" => $db->find($studentsQuery)
+                "students" => $db->find($studentsQuery),
+                "bulletins" => $db->find($bulletinsQuery)
             ];
             $res->render("students/index", $data);
             $res->status(200);

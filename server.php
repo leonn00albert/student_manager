@@ -16,9 +16,9 @@ $app->use("form", new Forms());
 //routes
 //AUTH ROUTES
 $db = DB::new(DB_TYPE, DB_NAME, DB_PASSWORD, DB_DRIVER, DB_HOST, DB_USER);
-if (isset($_SESSION["type"])) {
+
     Routes\Auth\UsersRoutes::register($app, new Controllers\Auth\UsersController());
-    if ($_SESSION["type"] === "admin") {
+    if (isset($_SESSION["type"]) && $_SESSION["type"] === "admin") {
         //ADMIN ROUTES --TODO add auth for admin only
         Routes\Admin\UsersRoutes::register($app, new Controllers\Admin\UsersController());
         Routes\Admin\ClassroomsRoutes::register($app, new Controllers\Admin\ClassroomsController());
@@ -27,7 +27,7 @@ if (isset($_SESSION["type"])) {
         Routes\Admin\StudentsRoutes::register($app, new Controllers\Admin\StudentsController());
     }
 
-    if ($_SESSION["type"] === "teacher") {
+    if (isset($_SESSION["type"]) && $_SESSION["type"] === "teacher") {
         //TEACHER ROUTES
         Routes\Teachers\CoursesRoutes::register($app, new Controllers\Teachers\CoursesController());
         Routes\Teachers\ModulesRoutes::register($app, new Controllers\Teachers\ModulesController());
@@ -42,10 +42,29 @@ if (isset($_SESSION["type"])) {
             $res->render("teachers/index", $data);
             $res->status(200);
         });
+
+        $app->post("/bulletins",$app->form->sanitize, function ($req, $res) use ($db) {
+            $query = "INSERT INTO bulletins (title, type,message, classroom_id)
+            VALUES (?, ?, ?,?)";
+
+            $statement = $db->conn()->prepare($query);
+
+            $data = [
+                $req->sanitized["title"],
+                $req->sanitized["type"],
+                $req->sanitized["message"],
+                $req->sanitized["classroom_id"],
+            ];
+            $statement->execute($data);
+            $statement->closeCursor();
+            $db->close();
+            $res->status(301);
+            $res->redirect("/teachers/classrooms/" . $req->sanitized["classroom_id"],);
+    
+        });
     }
 
-    if ($_SESSION["type"] === "student") {
-
+    if (isset($_SESSION["type"]) && $_SESSION["type"] === "student") {
         Routes\Students\ClassroomsRoutes::register($app, new Controllers\Students\ClassroomsController());
         Routes\Students\ModulesRoutes::register($app, new Controllers\Students\ModulesController());
         Routes\Students\CoursesRoutes::register($app, new Controllers\Students\CoursesController());
@@ -146,7 +165,6 @@ if (isset($_SESSION["type"])) {
             $res->redirect("/students/classrooms");
         });
     }
-}
 
 
 
@@ -154,10 +172,11 @@ $db = DB::new(DB_TYPE, DB_NAME, DB_PASSWORD, DB_DRIVER, DB_HOST, DB_USER);
 // un auth 
 $app->get("/", function ($req, $res) use ($db) {
     $query = [
-        "sql" => "SELECT * FROM homepage_cms WHERE ID = 1",
+        "sql" => "SELECT * FROM homepage_cms 
+                  INNER JOIN courses ON courses.course_id = homepage_cms.featured_course
+                  WHERE homepage_cms.id = 1",
     ];
     $data = array_map(fn ($e) => $e, $db->find($query)[0]);
-
     $res->render("home/index", $data);
     $res->status(200);
 });
