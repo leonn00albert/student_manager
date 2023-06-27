@@ -14,8 +14,6 @@
             </div>
         </div>
     </div>
-
-    
     <div class="col">
         <div class="card m-3">
             <div class="card-header">Grades</div>

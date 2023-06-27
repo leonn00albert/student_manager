@@ -1,16 +1,44 @@
-<div class="row">
+<div class="row row-cols-2">
     <div class="col">
         <div class="card m-3">
             <div class="card-header">Module: <?= $module["module_name"] ?></div>
             <div class="card-body">
 
+                Sections:
+                <br>
+                <hr>
+                <ul class="list-group">
+                    <?php $section_id_unqiue = null; ?>
+                    <?php foreach ($sections as $section) : ?>
+                        <?php
+                        if ($section_id_unqiue != $section["section_id"]) {
+                            if ($section["grade_status"] === "Graded") { ?>
+                                <a href="/students/sections/<?= $section["section_id"] ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    <span>
+                                        <i class="fa fa-solid fa-check-square-o "></i>
+                                      <?= $section["section_name"] ?>
+                                    </span>
+                                </a>
+                            <?php  } else { ?>
+                                <a href="/students/sections/<?= $section["section_id"] ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                 <?= $section["section_name"] ?>
+
+                                </a>
+                        <?php  }
+                        } ?>
+
+                    <?php
+                        $section_id_unqiue = $section["section_id"];
+                    endforeach; ?>
+                </ul>
             </div>
         </div>
     </div>
 
+
     <div class="col">
         <div class="card m-3">
-            <div class="card-header">Topics</div>
+            <div class="card-header">Assignments Submitted</div>
             <div class="card-body">
                 <ul class="list-group">
                     <?php foreach ($sections as $section) : ?>
@@ -18,22 +46,17 @@
                         <?php if ($section["grade_status"] === "Graded") { ?>
                             <li class="list-group-item  d-flex justify-content-between align-items-center">
                                 <span>
-                                <i class="fa fa-solid fa-check-square-o "></i>
-                                <?= $section["section_id"] ?>: <?= $section["section_name"] ?>
+                                    <i class="fa fa-solid fa-check-square-o "></i>
+                                    <?= $section["section_name"] ?> - <?= $section["score"] ?> - <?= $section["grade_status"] ?>
                                 </span>
-                                <a href="/students/sections/<?= $section["section_id"] ?>" class="btn btn-primary">Go to Section</a>
-
-
-
-
-
-
+                                <a href="/students/grades/<?= $section["grade_id"] ?>" class="btn btn-primary"><i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                </a>
                             <?php  } else { ?>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
 
-                                <?= $section["section_id"] ?>: <?= $section["section_name"] ?>
-                                <a href="/students/sections/<?= $section["section_id"] ?>" class="btn btn-primary">Go to Section</a>
-
+                                <?= $section["section_name"] ?> - <?= $section["grade_status"] ?>
+                                <a href="/students/grades/<?= $section["grade_id"] ?>" class="btn btn-primary"><i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                </a>
                             </li>
                         <?php  } ?>
 
