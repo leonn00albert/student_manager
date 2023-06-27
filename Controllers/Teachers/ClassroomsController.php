@@ -52,8 +52,7 @@ class ClassroomsController
                           INNER JOIN students ON grades.student_id = students.student_id
                           INNER JOIN users ON students.user_id = users.user_id
                           INNER JOIN sections ON grades.section_id = sections.section_id
-    
-                          WHERE grades.classroom_id = " .  $id . " AND grades.grade_status = 'Pending'"
+                          WHERE grades.classroom_id = " .  $id 
             ];
 
             $bulletinsQuery = [

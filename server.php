@@ -15,6 +15,9 @@ $app->set("view_engine", new TemplateEngine(__DIR__ . "/views"));
 $app->use("form", new Forms());
 //routes
 //AUTH ROUTES
+
+
+/// TODO CREATE CONSTANTS FOR STASTUSCODES AND VARIABLES
 $db = DB::new(DB_TYPE, DB_NAME, DB_PASSWORD, DB_DRIVER, DB_HOST, DB_USER);
 
     Routes\Auth\UsersRoutes::register($app, new Controllers\Auth\UsersController());
@@ -42,7 +45,12 @@ $db = DB::new(DB_TYPE, DB_NAME, DB_PASSWORD, DB_DRIVER, DB_HOST, DB_USER);
             $res->render("teachers/index", $data);
             $res->status(200);
         });
-
+        $app->get("/bulletins/:id/delete", function ($req, $res) use ($db) {
+                $db->selectTable("bulletins");
+                $db->deleteById($req->params()["id"]);
+                $res->redirect($_SERVER['HTTP_REFERER']);
+        });
+        
         $app->post("/bulletins",$app->form->sanitize, function ($req, $res) use ($db) {
             $query = "INSERT INTO bulletins (title, type,message, classroom_id)
             VALUES (?, ?, ?,?)";
@@ -108,16 +116,9 @@ $db = DB::new(DB_TYPE, DB_NAME, DB_PASSWORD, DB_DRIVER, DB_HOST, DB_USER);
                 $stmt->execute();
             }
 
-
-            $studentQuery = [
-                "sql" => "SELECT student_id FROM students WHERE user_id = " . $_SESSION["user_id"]
-            ];
-
-            $student = $db->find($studentQuery)[0];
-
             $insertQuery = "INSERT INTO enrollments (student_id, course_id, enrollment_date, classroom_id) VALUES (:student_id, :course_id, :enrollment_date, :classroom_id)";
             $stmt = $db->conn()->prepare($insertQuery);
-            $stmt->bindParam(':student_id', $student["student_id"]);
+            $stmt->bindParam(':student_id', $_SESSION["student"]["student_id"]);
             $stmt->bindParam(':course_id', $req->sanitized["course_id"]);
             $stmt->bindParam(':enrollment_date', $enrollment_date);
             $stmt->bindParam(':classroom_id', $classroom_id);

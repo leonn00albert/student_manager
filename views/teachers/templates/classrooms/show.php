@@ -3,6 +3,8 @@
         <div class="card m-3">
             <div class="card-header">classroom: <?= $classroom["classroom_name"] ?></div>
             <div class="card-body">
+                <h4>Students</h4>
+                <hr>
                 <ul class="list-group">
                     <?php foreach ($students as $student) : ?>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -16,14 +18,16 @@
     </div>
     <div class="col">
         <div class="card m-3">
-            <div class="card-header">Grades</div>
+            <div class="card-header">Grades: Submitted and Pending for Review </div>
             <div class="card-body">
                 <ul class="list-group">
                     <?php foreach ($grades as $grade) : ?>
+                        <?php if ($grade["grade_status"] === "Pending") {?>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <?= $grade["section_name"] ?>: <?= $grade["first_name"] ?> <?= $grade["last_name"] ?>
                             <a href="/teachers/grades/<?= $grade["grade_id"] ?>" class="btn btn-primary">Grade</a>
                         </li>
+                        <?php } ?>
                     <?php endforeach; ?>
                 </ul>
             </div>
@@ -42,7 +46,9 @@
                                 <?= $bulletin["message"] ?>
 
                             </div>
-                            <span class="badge bg-<?= $bulletin["type"] ?> rounded-pill"><i class="fa fa-<?= $bulletin["type"] ?>" ></i></span>
+                            <a href="/bulletins/<?= $bulletin["id"] ?>/delete" class="badge m-1 bg-danger rounded-pill"><i class="fa fa-trash" ></i></a>
+
+                            <span class="badge m-1  bg-<?= $bulletin["type"] ?> rounded-pill"><i class="fa fa-<?= $bulletin["type"] ?>" ></i></span>
                         </li>
 
 
@@ -74,4 +80,24 @@
             </div>
         </div>
     </div>
+
+    <div class="col">
+        <div class="card m-3">
+            <div class="card-header">Grades: Submitted and Graded</div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <?php foreach ($grades as $grade) : ?>
+                        <?php if ($grade["grade_status"] === "Graded") {?>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <?= $grade["section_name"] ?>: <?= $grade["first_name"] ?> <?= $grade["last_name"] ?>
+                            <a href="/teachers/grades/<?= $grade["grade_id"] ?>" class="btn btn-primary">Grade</a>
+                        </li>
+                        <?php } ?>
+
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+    </div>
+
 </div>

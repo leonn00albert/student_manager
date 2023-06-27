@@ -8,12 +8,19 @@
                     <?= $classroom["start_date"] ?>
                 </p>
                 <hr>
+                Progress:
+                <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow=<?= $graded_count ?> aria-valuemin="0" aria-valuemax=<?= $section_count?>>
+                    <div class="progress-bar" style="width: <?= (int) $percentage ?>%"><?= (int) $percentage ?>%</div>
+                </div>
+                <hr>
+
+
                 <p>Class Teacher: </p>
 
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                             <?= $classroom["first_name"] ?>    <?= $classroom["last_name"] ?>
-                            <a href="/students/messages" class="badge bg-primary rounded-pill"><i class='fa fa-comment'></i></a>
-                        </li>
+                    <?= $classroom["first_name"] ?> <?= $classroom["last_name"] ?>
+                    <a href="/students/messages" class="badge bg-primary rounded-pill"><i class='fa fa-comment'></i></a>
+                </li>
             </div>
         </div>
     </div>
@@ -38,13 +45,13 @@
             <div class="card-header">Your Classmates:</div>
             <div class="card-body">
                 <ul class="list-group">
-                <?php foreach ($students as $student) : ?>
+                    <?php foreach ($students as $student) : ?>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                             <?= $student["first_name"] ?>
+                            <?= $student["first_name"] ?>
                             <a href="/students/messages" class="badge bg-primary rounded-pill"><i class='fa fa-comment'></i></a>
                         </li>
                     <?php endforeach; ?>
-    
+
                 </ul>
             </div>
         </div>
@@ -53,7 +60,7 @@
         <div class="card m-3">
             <div class="card-header">Bulletin board</div>
             <div class="card-body">
-            <ul class="list-group">
+                <ul class="list-group">
                     <?php foreach ($bulletins as $bulletin) : ?>
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             <div class="ms-2 me-auto">
@@ -61,10 +68,8 @@
                                 <?= $bulletin["message"] ?>
 
                             </div>
-                            <span class="badge bg-<?= $bulletin["type"] ?> rounded-pill"><i class="fa fa-<?= $bulletin["type"] ?>" ></i></span>
+                            <span class="badge bg-<?= $bulletin["type"] ?> rounded-pill"><i class="fa fa-<?= $bulletin["type"] ?>"></i></span>
                         </li>
-
-
                     <?php endforeach; ?>
                 </ul>
             </div>
