@@ -17,12 +17,15 @@
             display: none;
         }
 
-
+        a.item {
+            color: #4a4a4a;
+        }
         .pusher .ui.segment.hero-segment {
             background-image: url(<?= $hero_image ?>);
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
+            color: #4a4a4a;
         }
 
         .masthead.segment {
@@ -43,6 +46,7 @@
             margin-bottom: 0em;
             font-size: 4em;
             font-weight: normal;
+            color: #4a4a4a;
         }
 
         .masthead h2 {
@@ -168,7 +172,7 @@
     </div>
 
     <!-- Sidebar Menu -->
-    <div class="ui vertical inverted sidebar menu">
+    <div class="ui vertical  sidebar menu">
         <a class="active item">Home</a>
         <a class="item">Work</a>
         <a class="item">Company</a>
@@ -180,10 +184,10 @@
 
     <!-- Page Contents -->
     <div class="pusher">
-        <div class="ui inverted vertical masthead center aligned segment hero-segment">
+        <div class="ui  vertical masthead center aligned segment hero-segment">
 
             <div class="ui container">
-                <div class="ui large secondary inverted pointing menu">
+                <div class="ui large secondary   pointing menu">
                     <a class="toc item">
                         <i class="sidebar icon"></i>
                     </a>
@@ -192,14 +196,14 @@
                     <a class="item">Company</a>
                     <a class="item">Careers</a>
                     <div class="right item">
-                        <a href="/login" class="ui inverted button">Log in</a>
-                        <a href="/register" class="ui inverted button">Sign Up</a>
+                        <a href="/login" class="ui  button">Log in</a>
+                        <a href="/register" class="ui  button">Sign Up</a>
                     </div>
                 </div>
             </div>
 
             <div class="ui text container">
-                <h1 class="ui inverted header">
+                <h1 class="ui  header">
                     <?= $hero_title ?>
                 </h1>
                 <h2> <?= $hero_text ?></h2>
