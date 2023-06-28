@@ -130,7 +130,12 @@ $db = DB::new(DB_TYPE, DB_NAME, DB_PASSWORD, DB_DRIVER, DB_HOST, DB_USER);
         $app->get("/students/sections/:id", function ($req, $res) use ($db) {
             $id = $req->params()["id"];
             $sections = [
-                "sql" => "SELECT * FROM sections WHERE section_id = " . $id . " LIMIT 1"
+                "sql" => "SELECT * FROM sections
+                INNER JOIN grades on grades.section_id = sections.section_id
+                 WHERE sections.section_id = " . $id . "
+                 AND
+                 grades.student_id = ". $_SESSION["student"]["student_id"]
+                 . " LIMIT 1"
             ];
 
             $data = [
@@ -147,17 +152,18 @@ $db = DB::new(DB_TYPE, DB_NAME, DB_PASSWORD, DB_DRIVER, DB_HOST, DB_USER);
             $submit_date = date("Y-m-d");
 
             $studentQuery = [
-                "sql" => "SELECT students.student_id ,enrollments.classroom_id FROM students 
+                "sql" => "SELECT students.student_id ,enrollments.classroom_id, enrollments.course_id FROM students 
         INNER JOIN enrollments ON students.student_id = enrollments.student_id 
         WHERE students.user_id = " . $_SESSION["user_id"] . " LIMIT 1"
             ];
 
             $student = $db->find($studentQuery)[0];
 
-            $insertQuery = "INSERT INTO grades (student_id, section_id, classroom_id, submit_date, assignment, grade_answer) VALUES (:student_id, :section_id, :classroom_id,:submit_date, :assignment, :grade_answer)";
+            $insertQuery = "INSERT INTO grades (student_id, section_id, classroom_id, submit_date, assignment, grade_answer,course_id) VALUES (:student_id, :section_id, :classroom_id,:submit_date, :assignment, :grade_answer, :course_id)";
             $stmt = $db->conn()->prepare($insertQuery);
             $stmt->bindParam(':student_id', $student["student_id"]);
             $stmt->bindParam(':section_id', $req->sanitized["section_id"]);
+            $stmt->bindParam(':course_id', $student["course_id"]);
             $stmt->bindParam(':classroom_id',  $student["classroom_id"]);
             $stmt->bindParam(':submit_date', $submit_date);
             $stmt->bindParam(':assignment', $req->sanitized["assignment"]);

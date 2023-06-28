@@ -56,20 +56,16 @@ class ClassroomsController
             // TODO ADD CACHING 
 
 
-            $gradedQuery = [
+            $progress = [
                 "sql" => "
                     SELECT 
-                        COUNT(g.grade_id) AS graded_sections
+                       *
                     FROM 
-                        Sections s
-                    LEFT JOIN 
-                        Grades g ON s.section_id = g.section_id
+                        progress
                     WHERE 
-                        g.grade_status = 'Graded'
+                        student_id = " . $_SESSION["student"]['student_id'] . "
                     AND
-                        g.student_id = " . $_SESSION["student"]['student_id'] . "
-                    AND
-                        g.classroom_id = " . $id 
+                        classroom_id = " . $id 
             ];
 
             $sectionsQuery = [
@@ -98,13 +94,9 @@ class ClassroomsController
             $modulesQuery = [
                 "sql" => "SELECT * FROM modules WHERE course_id = " .  $classroom["course_id"]
             ];
-            $section_count = $db->find($sectionsQuery)[0]["total_sections"];
-            $graded_count = $db->find($gradedQuery)[0]["graded_sections"];
-            $percentage = 0;  
-
-            if ($graded_count != 0) {
-                $percentage = (int)(($section_count / $graded_count) * 100); 
-            }
+        
+            $progress = $db->find($progress)[0];
+  
             
 
             $data = [
@@ -113,9 +105,7 @@ class ClassroomsController
                 "modules" => $db->find($modulesQuery),
                 "students" => $db->find($studentsQuery),
                 "bulletins" => $db->find($bulletinsQuery),
-                "section_count" => $section_count,
-                "graded_count" => $graded_count,
-                "percentage" => $percentage
+                "progress" => $progress
 
             ];
             $res->render("students/index", $data);

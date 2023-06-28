@@ -11,7 +11,11 @@
             <div class="card-body">
                 <?= $section["assignment"] ?>
                 <hr>
-                <form method="POST" action="/grades">
+                <?php if(isset($section["grade_status"])){ ?>
+                    <p>You have already submmited this assignment.  </p>
+                
+                <?php } else{  ?>
+                    <form method="POST" action="/grades">
                     <div class="form-group">
                         <label for="grade_answer">Answer</label>
                         <textarea  class="form-control" id="grade_answer" name="grade_answer"> </textarea>
@@ -27,6 +31,9 @@
             
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
+
+                    <?php } ?>
+    
 
             </div>
         </div>

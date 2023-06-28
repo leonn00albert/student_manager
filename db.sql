@@ -185,3 +185,15 @@ CREATE TABLE Users (
 ALTER TABLE Teachers
 ADD COLUMN user_id INT,
 ADD FOREIGN KEY (user_id) REFERENCES Users(user_id);
+
+
+CREATE TABLE IF NOT EXISTS progress (
+  progress_id INT PRIMARY KEY AUTO_INCREMENT,
+  student_id INT NOT NULL,
+  classroom_id INT NOT NULL,
+  graded INT NOT NULL,
+  sections INT NOT NULL,
+  percentage  INT NOT NULL,
+  student_name VARCHAR(255) NOT NULL,
+  UNIQUE KEY unique_progress (student_id, classroom_id)
+);

@@ -81,21 +81,17 @@ class ClassroomsController
                 "
             ];
 
-            $sectionsQuery = [
+     
+            $progressQuery = [
                 "sql" => "
                     SELECT 
-                        COUNT(*) AS total_sections
+                        *
                     FROM 
-                        Sections s
-                    LEFT JOIN 
-                        Modules m ON m.module_id = s.module_id
-                    LEFT JOIN 
-                        Courses c ON c.course_id = m.course_id
-                    WHERE 
-                        c.classroom_id = " . $id 
+                        progress
+                    WHERE
+                        classroom_id = " . $id 
+                
             ];
-            $section_count = $db->find($sectionsQuery)[0]["total_sections"];
-
 
             $result = $db->find($query);
             $data = [
@@ -105,7 +101,6 @@ class ClassroomsController
                 "grades" =>   $db->find($gradesQuery),
                 "progress" => $db->find($progressQuery),
                 "bulletins" =>   $db->find($bulletinsQuery),
-                "section_count" =>    $section_count
             ];
             $res->render("teachers/index", $data);
             $res->status(200);

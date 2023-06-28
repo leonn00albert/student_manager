@@ -44,17 +44,13 @@
               
                 <ul class="list-group">
                     <?php foreach ($progress as $student) : ?>
-                        <?php $percentage = 0;
-                        if (isset($student["graded_sections"]) &&  $student["graded_sections"]!= 0) {
-                            $percentage =  $student["graded_sections"] / $section_count * 100  ;
-                        }
-                        ?>
+               
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <?= $student["student_id"] ?>: <?= $student["first_name"] ?> <?= $student["last_name"] ?>
+                            <?= $student["student_name"] ?> 
                    
                         </li>
-                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow=<?= $student["graded_sections"] ?> aria-valuemin="0" aria-valuemax=<?= $section_count?>>
-                    <div class="progress-bar" style="width: <?= (int) $percentage ?>%"><?= (int) $percentage ?>%</div>
+                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow=<?= $student["graded"] ?> aria-valuemin="0" aria-valuemax=<?= $student["sections"] ?>>
+                    <div class="progress-bar" style="width: <?= (int) $student["percentage"]  ?>%"><?= (int) $student["percentage"] ?>%</div>
                 </div>
                     <?php endforeach; ?>
                 </ul>
