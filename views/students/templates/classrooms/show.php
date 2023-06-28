@@ -2,7 +2,7 @@
     <div class="col">
         <div class="card m-3">
             <img src="<?= $classroom["course_image"] ?>" class="card-img-top" alt="...">
-            <div class="card-header">classroom: <?= $classroom["classroom_name"] ?></div>
+            <div class="card-header"><i class="fa fa-sitemap" aria-hidden="true"></i> classroom: <?= $classroom["classroom_name"] ?></div>
             <div class="card-body">
                 <p>
                     <?= $classroom["start_date"] ?>
@@ -10,7 +10,7 @@
                 <hr>
                 Progress:
                 <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow=<?= $progress["graded"]?> aria-valuemin="0" aria-valuemax=<?= $progress["sections"]?>>
-                    <div class="progress-bar" style="width: <?= (int) $progress["percentage"] ?>%"><?= (int) $progress["percentage"] ?>%</div>
+                    <div class="progress-bar" style="width: <?= (int) $progress["percentage"] ?>%"><?= (int) $percentage ?>%</div>
                 </div>
                 <hr>
 
@@ -27,13 +27,13 @@
 
     <div class="col">
         <div class="card m-3">
-            <div class="card-header">Topics</div>
+            <div class="card-header"><i class="fa fa-book" aria-hidden="true"></i> Topics</div>
             <div class="card-body">
                 <ul class="list-group">
                     <?php foreach ($modules as $module) : ?>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <?= $module["module_id"] ?>: <?= $module["module_name"] ?>
-                            <a href="/students/modules/<?= $module["module_id"] ?>" class="btn btn-primary">Go to Module</a>
+                            <a href="/students/modules/<?= $module["module_id"] ?>" class="btn btn-primary"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
                         </li>
                     <?php endforeach; ?>
                 </ul>
@@ -42,7 +42,7 @@
     </div>
     <div class="col">
         <div class="card m-3">
-            <div class="card-header">Your Classmates:</div>
+            <div class="card-header"><i class="fa fa-graduation-cap" aria-hidden="true"></i> Classmates:</div>
             <div class="card-body">
                 <ul class="list-group">
                     <?php foreach ($students as $student) : ?>
@@ -58,7 +58,7 @@
     </div>
     <div class="col">
         <div class="card m-3">
-            <div class="card-header">Bulletin board</div>
+            <div class="card-header"><i class="fa fa-bullhorn" aria-hidden="true"></i> Bulletin board</div>
             <div class="card-body">
                 <ul class="list-group">
                     <?php foreach ($bulletins as $bulletin) : ?>

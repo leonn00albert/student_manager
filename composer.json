@@ -4,7 +4,8 @@
         "psr-4": {
             "Leon\\StudentManager\\": "src/",
             "Controllers\\": "Controllers/",
-            "Routes\\": "Routes/"
+            "Routes\\": "Routes/",
+            "Utils\\": "Utils/"
         }
     },
     "authors": [

@@ -1,3 +1,4 @@
+
 <div class="row">
     <div class="col">
         <div class="card m-3">
@@ -8,14 +9,20 @@
                 <p>
                     <?= $course["start_date"] ?>
                 </p>
+                <?php if (isset($course["student_id"])) { ?>
+                    <div class="m-2">
 
-                <form method="POST" action="/enrollments">
-                    <input type="hidden" name="teacher_id" value=<?= $course["teacher_id"] ?> />
-                    <input type="hidden" name="course_id" value=<?= $course["course_id"] ?> />
-                    <input type="hidden" name="classroom_name" value="New Classroom">
-                    <button class="btn btn-primary" type="submit">Enroll</button>
-                </form>
+                        <button class="btn btn-primary disabled" type="submit">Already Enrolled</button>
+                    </div>
 
+                <?php } else { ?>
+                    <form method="POST" action="/enrollments">
+                        <input type="hidden" name="teacher_id" value=<?= $course["teacher_id"] ?> />
+                        <input type="hidden" name="course_id" value=<?= $course["course_id"] ?> />
+                        <input type="hidden" name="classroom_name" value="New Classroom">
+                        <button class="btn btn-primary" type="submit">Enroll</button>
+                    </form>
+                <?php } ?>
             </div>
         </div>
     </div>

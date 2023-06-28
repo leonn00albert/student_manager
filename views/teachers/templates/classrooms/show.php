@@ -1,7 +1,8 @@
 <div class="row row-cols-2">
     <div class="col">
         <div class="card m-3">
-            <div class="card-header">classroom: <?= $classroom["classroom_name"] ?></div>
+            <div class="card-header"><i class="fa fa-bullhorn" aria-hidden="true"></i>
+classroom: <?= $classroom["classroom_name"] ?></div>
             <div class="card-body">
                 <h4>Students</h4>
                 <hr>

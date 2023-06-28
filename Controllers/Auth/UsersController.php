@@ -87,8 +87,18 @@ class UsersController
                     "sql" => "SELECT " . $type . "_id FROM " . $type  . "s WHERE user_id = " . $_SESSION["user_id"]
                 ];
 
-                print_r($query);
+             
+          
                 $_SESSION[$type] = $db->find($query)[0];
+
+                $notificationsQuery = [
+                    "sql" => "SELECT * FROM notifications WHERE user_id = " . $_SESSION[$type][$type . "_id"] . " AND is_read = 0 AND is_archived = 0 LIMIT 20"
+                ];
+                
+
+                $_SESSION[$type] = $db->find($query)[0];
+                $_SESSION["notifications"] = $db->find($notificationsQuery);
+                
                 $db->close();
 
                 // Redirect the user based on their type

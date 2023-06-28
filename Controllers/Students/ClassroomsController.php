@@ -68,19 +68,7 @@ class ClassroomsController
                         classroom_id = " . $id 
             ];
 
-            $sectionsQuery = [
-                "sql" => "
-                    SELECT 
-                        COUNT(*) AS total_sections
-                    FROM 
-                        Sections s
-                    LEFT JOIN 
-                        Modules m ON m.module_id = s.module_id
-                    LEFT JOIN 
-                        Courses c ON c.course_id = m.course_id
-                    WHERE 
-                        c.classroom_id = " . $id 
-            ];
+  
 
 
             $studentsQuery = [
