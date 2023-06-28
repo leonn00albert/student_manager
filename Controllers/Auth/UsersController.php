@@ -1,5 +1,7 @@
 <?php
+
 namespace Controllers\Auth;
+
 require_once __DIR__ . "/../../config/db.config.php";
 
 use Artemis\Core\DataBases\DB;
@@ -18,7 +20,10 @@ class UsersController
         $this->register = function ($req, $res) use ($db) {
             $query = "INSERT INTO Users (first_name, last_name, contact_email, contact_phone, address, city, country, password, type, last_login_ip)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+         /** 
+             * 
+             * @var $db DB
+            */
             $statement = $db->conn()->prepare($query);
             $type = "student";
             $data = [
@@ -54,6 +59,8 @@ class UsersController
                 $statement->bindValue(":user_id", $user["user_id"]);
                 $statement->execute();
             }
+
+      
             $db->close();
             $res->status(301);
             $res->redirect("/admin");
@@ -65,14 +72,35 @@ class UsersController
             $statement->bindParam(':email', $email);
             $statement->execute();
             $user = $statement->fetch($db->conn()::FETCH_ASSOC); // Fetch the user from the database
-            
+
             if ($user && password_verify($req->sanitized["password"], $user["password"])) {
-                $_SESSION["user"] = $user["contact_email"];
+                $_SESSION["user"] = $user["contact_email"];   //add user as whole array or object 
                 $_SESSION["user_id"] = $user["user_id"];
                 $_SESSION["first_name"] = $user["first_name"];
                 $_SESSION["last_login"] = $user["last_login"];
                 $_SESSION["type"] = $user["type"];
+
+                $type = $user["type"];
+
+
+                $query = [
+                    "sql" => "SELECT " . $type . "_id FROM " . $type  . "s WHERE user_id = " . $_SESSION["user_id"]
+                ];
+
+             
+          
+                $_SESSION[$type] = $db->find($query)[0];
+
+                $notificationsQuery = [
+                    "sql" => "SELECT * FROM notifications WHERE user_id = " . $_SESSION[$type][$type . "_id"] . " AND is_read = 0 AND is_archived = 0 LIMIT 20"
+                ];
                 
+
+                $_SESSION[$type] = $db->find($query)[0];
+                $_SESSION["notifications"] = $db->find($notificationsQuery);
+                
+                $db->close();
+
                 // Redirect the user based on their type
                 switch ($user["type"]) {
                     case "admin":
@@ -89,7 +117,7 @@ class UsersController
             } else {
                 echo "Error: Incorrect username or password.";
             }
-            
+
             $db->close();
         };
 

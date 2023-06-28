@@ -28,6 +28,17 @@
             <label for="cta_url">CTA URL:</label>
             <input type="text" class="form-control" id="cta_url" name="cta_url" value="<?= $data["cta_url"] ?>">
         </div>
+
+        <div class="form-group">
+                <label for="courseID">Featured Course</label>
+                <select class="form-control" id="courseID" name="course_id" required>
+                       <?php foreach ($courses as $course) : ?>
+                        <option value=<?=$course["course_id"] ?>>
+                        <?=$course["course_name"] ?> 
+                        </option>
+                    <?php endforeach;?>
+                </select>
+            </div>
         <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
