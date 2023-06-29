@@ -5,7 +5,7 @@
         <h4 class="card-title"><span class="badge bg-primary m-1" id="courseCount"></span></h4>
         <p class="card-text">
         <div class="table-responsive-md">
-            <table class="table table-hover table-striped">
+            <table class="table ">
                 <thead>
                     <tr>
                         <th scope="col">Registration number</th>
@@ -23,7 +23,7 @@
                     <?php foreach ($courses as $course) : ?>
                         <tr>
                             <td>
-                                <?= $course["course_id"] ?>
+                               <b class="ms-3"><?= $course["course_id"] ?></b>
                             </td>
                             <td>
                                 <?= $course["course_name"] ?>
@@ -45,7 +45,7 @@
                                 <?= $course["end_date"] ?>
                             </td>
                             <td>
-                              <a class="btn btn-info" href="/teachers/courses/<?=$course["course_id"]?>/edit">Edit</a>
+                              <a class="btn btn-primary" href="/teachers/courses/<?=$course["course_id"]?>/edit"><i class="fas fa-edit"></i> Edit</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
