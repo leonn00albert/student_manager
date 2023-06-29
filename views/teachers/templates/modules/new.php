@@ -7,7 +7,7 @@
                 <input type="text" class="form-control" id="moduleName" name="module_name" required>
             </div>
             <input type="hidden" name="course_id" value=<?= $course_id ?>> 
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Submit</button>
         </form>
     </div>
 </div>

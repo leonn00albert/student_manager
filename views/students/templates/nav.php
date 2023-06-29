@@ -25,9 +25,9 @@
 			<?php if (strpos($_SERVER['REQUEST_URI'], "/students/messages") !== false) : ?>
 					<a href="/students/students" class="nav-link active " aria-current="page">
 					<?php else : ?>
-						<a href="/students/students" class="nav-link " aria-current="page">
+						<a href="/messages/<?=$_SESSION["user_id"]?>" class="nav-link " aria-current="page">
 						<?php endif; ?>
-					<i class="fa fa-bar-chart" aria-hidden="true"></i>
+						<i class="far fa-comments"></i>
 					Messages 
 				</a>
 			</li>
@@ -38,7 +38,7 @@
 					<?php else : ?>
 						<a href="/students/classrooms" class="nav-link " aria-current="page">
 						<?php endif; ?>
-					<i class="fa  fa-map-marker" aria-hidden="true"></i>
+						<i class="fas fa-chalkboard"></i>
 					Classrooms
 				</a>
 			</li>
@@ -50,7 +50,7 @@
 					<?php else : ?>
 						<a href="/students/courses" class="nav-link" aria-current="page">
 						<?php endif; ?>
-					<i class="fa fa-bars" aria-hidden="true"></i>
+						<i class="fas fa-layer-group"></i>
 
 					Courses
 				</a>

@@ -1,8 +1,10 @@
 <?php
 
 namespace Controllers\Teachers;
+require_once __DIR__ . "/../../Utils/utils.php";
 
 use Artemis\Core\DataBases\DB;
+use Exception;
 
 class ModulesController
 {
@@ -38,7 +40,7 @@ class ModulesController
             $res->status(200);
         };
 
-        $this->showNew = function ($req, $res) use ($db) {
+        $this->showNew = function ($req, $res) {
             $data = [
                 "template" => "modules/new.php",
                 "course_id" => $req->query()["course_id"]
@@ -47,20 +49,29 @@ class ModulesController
             $res->status(200);
         };
         $this->create = function ($req, $res) use ($db) {
-            $query = "INSERT INTO modules (module_name, course_id)
-            VALUES (?, ?)";
-
-            $statement = $db->conn()->prepare($query);
-
-            $courseData = [
-                $req->sanitized["module_name"],
-                $req->sanitized["course_id"],
-            ];
-            $statement->execute($courseData);
-            $statement->closeCursor();
-            $db->close();
-            $res->status(301);
-            $res->redirect("/teachers/courses/" . $req->sanitized["course_id"] . "/edit");
+            try {
+                $query = "INSERT INTO modules (module_name, course_id)
+                VALUES (?, ?)";
+    
+                $statement = $db->conn()->prepare($query);
+    
+                $courseData = [
+                    $req->sanitized["module_name"],
+                    $req->sanitized["course_id"],
+                ];
+                $statement->execute($courseData);
+                $statement->closeCursor();
+                $db->close();
+                setAlert("success", "Created a new module");
+                $res->status(301);
+                $res->redirect("/teachers/courses/" . $req->sanitized["course_id"] . "/edit");
+            }
+            catch(Exception $e) {
+                setAlert("danger", "Something went wrong: " . $e->getMessage());
+                $res->status(301);
+                $res->redirect("/teachers/courses/" . $req->sanitized["course_id"] . "/edit");
+            }
+        
         };
     }
 }

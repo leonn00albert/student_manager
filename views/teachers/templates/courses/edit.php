@@ -5,12 +5,11 @@
         <h4 class="card-title"><span class="badge bg-primary m-1" id="courseCount"></span></h4>
         <p class="card-text">
         <div class="table-responsive-md">
-            <table class="table table-hover table-striped">
+            <table class="table ">
                 <thead>
                     <tr>
                         <th scope="col">Registration number</th>
                         <th scope="col">Name<i onclick="handleSort('country')" class="fa fa-sort"></i></th>
-
                         <th scope="col">Image<i onclick="handleSort('name')" class="fa fa-sort"></i></th>
                         <th scope="col">Teacher<i onclick="handleSort('grade')" class="fa fa-sort"></i></th>
                         <th scope="col">Status <i onclick="handleSort('class')" class="fa fa-sort"></i></th>
@@ -23,7 +22,7 @@
 
                     <tr>
                         <td>
-                            <?= $course["course_id"] ?>
+                            <b class="ms-3"><?= $course["course_id"] ?></b>
                         </td>
                         <td>
                             <?= $course["course_name"] ?>
@@ -45,7 +44,7 @@
                             <?= $course["end_date"] ?>
                         </td>
                         <td>
-                            <a class="btn btn-info" href="/teachers/courses/<?= $course["course_id"] ?>/edit">Edit</a>
+                            <a class="btn btn-primary" href="/teachers/courses/<?= $course["course_id"] ?>/edit"><i class="fas fa-edit"></i> Edit</a>
                         </td>
                     </tr>
 
@@ -62,7 +61,7 @@
         <h4 class="card-title"><span class="badge bg-primary m-1" id="courseCount"></span></h4>
         <p class="card-text">
         <div class="table-responsive-md">
-            <table class="table table-hover table-striped">
+            <table class="table">
                 <thead>
                     <tr>
                         <th scope="col">Registration number</th>
@@ -71,15 +70,18 @@
                     </tr>
                 </thead>
                 <tbody id="coursesTable">
+           
                     <?php foreach ($modules as $module) : ?>
-                        <td><?= $module["module_id"] ?></td>
+                        <tr>
+                        <td><b class="ms-3"><?= $module["module_id"] ?></b></td>
                         <td><?= $module["module_name"] ?></td>
-                        <td><a href="/teachers/modules/<?= $module["module_id"] ?>/edit" class="btn btn-primary">Edit Module</a></td>
+                        <td><a href="/teachers/modules/<?= $module["module_id"] ?>/edit" class="btn btn-primary"><i class="fas fa-edit"></i> Edit Module</a></td>
+                        </tr>
                     <?php endforeach ?>
 
                 </tbody>
             </table>
         </div>
-        <a href="/teachers/modules/new?course_id=<?= $course["course_id"] ?>" class="btn btn-primary">Add Module</a>
+        <a href="/teachers/modules/new?course_id=<?= $course["course_id"] ?>" class="btn btn-primary"><i class="fas fa-plus-square"></i> Add Module</a>
     </div>
 </div>

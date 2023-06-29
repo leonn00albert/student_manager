@@ -68,9 +68,6 @@ class ClassroomsController
                         classroom_id = " . $id 
             ];
 
-  
-
-
             $studentsQuery = [
                 "sql" => "SELECT users.first_name, students.student_id, users.user_id FROM enrollments
                 INNER JOIN students ON enrollments.student_id = students.student_id
@@ -82,8 +79,8 @@ class ClassroomsController
             $modulesQuery = [
                 "sql" => "SELECT * FROM modules WHERE course_id = " .  $classroom["course_id"]
             ];
-        
-            $progress = $db->find($progress)[0];
+            
+            $progress = $db->find($progress)[0] ?? [];
   
             
 

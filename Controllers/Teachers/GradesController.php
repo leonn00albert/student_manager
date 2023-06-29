@@ -1,9 +1,9 @@
 <?php
 
 namespace Controllers\Teachers;
-
+require_once __DIR__ . "/../../Utils/utils.php";
 use Artemis\Core\DataBases\DB;
-
+use Exception;
 use Utils\Notifications\Notification;
 
 class GradesController
@@ -43,7 +43,8 @@ class GradesController
 
         };
         $this->update = function ($req, $res) use ($db) {
-             $notification = new Notification($db);
+            try {
+                $notification = new Notification($db);
                 $id = $req->params()["id"];
                 $score =  $req->sanitized['score'];
                 $query = $db->conn()->prepare("UPDATE grades SET 
@@ -67,6 +68,8 @@ class GradesController
                 }
 
                 if ($query->execute()) {
+                    setAlert("success","Succusefully graded assignment");
+
                     $res->status(301);
                     $res->redirect("/teachers/classrooms/" . $req->sanitized["classroom_id"]);
                 } else {
@@ -74,6 +77,10 @@ class GradesController
                 }
             
                 $db->close();
+
+            }catch(Exception $e) {
+                setAlert("danger","Something went wrong: " .  $e->getMessage());
+            }
         
         };
     }

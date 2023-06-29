@@ -3,6 +3,8 @@
 namespace Controllers\Teachers;
 
 use Artemis\Core\DataBases\DB;
+use Exception;
+
 
 class SectionsController
 {
@@ -68,24 +70,33 @@ class SectionsController
         };
 
         $this->create = function ($req, $res) use ($db) {
-            $query = $db->conn()->prepare("INSERT INTO sections (section_name, section_content, section_resources, module_id, assignment) 
-            VALUES (:section_name, :section_content, :section_resources, :module_id, :assignment)");
-            $query->bindParam(':section_name', $req->sanitized['section_name']);
-            $query->bindParam(':section_content', $req->sanitized['section_content']);
-            $query->bindParam(':section_resources', $req->sanitized['section_resources']);
-            $query->bindParam(':module_id', $req->sanitized['module_id']);
-            $query->bindParam(':assignment', $req->sanitized['assignment']);
-
-
-            if ($query->execute()) {
-                $res->status(301);
-                $res->redirect("/teachers/modules/" . $req->sanitized["module_id"] . "/edit");
-            } else {
-                echo "Error inserting record.";
+   
+            try {
+                $query = $db->conn()->prepare("INSERT INTO sections (section_name, section_content, section_resources, module_id, assignment) 
+                VALUES (:section_name, :section_content, :section_resources, :module_id, :assignment)");
+                $query->bindParam(':section_name', $req->sanitized['section_name']);
+                $query->bindParam(':section_content', $req->sanitized['section_content']);
+                $query->bindParam(':section_resources', $req->sanitized['section_resources']);
+                $query->bindParam(':module_id', $req->sanitized['module_id']);
+                $query->bindParam(':assignment', $req->sanitized['assignment']);
+    
+    
+                if ($query->execute()) {
+                    setAlert("success", "Created a new section");
+                    $res->status(301);
+                    $res->redirect("/teachers/modules/" . $req->sanitized["module_id"] . "/edit");
+                } else {
+                    setAlert("danger", "Error inserting record");
+                    $res->status(301);
+                    $res->redirect("/teachers/modules/" . $req->sanitized["module_id"] . "/edit");
+                }
+                $db->close();
             }
-
-
-            $db->close();
+            catch(Exception $e) {
+                setAlert("danger", "Something went wrong: " . $e->getMessage());
+                $res->status(301);
+                $res->redirect("/teachers/courses/" . $req->sanitized["course_id"] . "/edit");
+            }
         };
     }
 }

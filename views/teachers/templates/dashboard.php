@@ -38,7 +38,7 @@
 <div class="card m-5 card-shadow">
     <div class="card-body">
     <?php foreach ($_SESSION["notifications"] as $notification) : ?>
-    <?php if(!$notification["is_read"]) { ?>
+    <?php if($notification["is_read"] === 0) { ?>
         <div class="alert alert-light alert-dismissible fade show" role="alert">
         <?= $notification["message"] ?>
         <a href=<?= $notification["link"] ?> class="btn btn-dark"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
