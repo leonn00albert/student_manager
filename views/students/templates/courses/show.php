@@ -3,7 +3,7 @@
     <div class="col">
         <div class="card m-3">
             <img src="<?= $course["course_image"] ?>" class="card-img-top" alt="...">
-            <div class="card-header">Course: <?= $course["course_name"] ?></div>
+            <div class="card-header"><i class="fas fa-layer-group"></i></i></i> Course: <?= $course["course_name"] ?></div>
             <div class="card-body">
                 <?= $course["course_description"] ?>
                 <p>
@@ -29,7 +29,7 @@
 
     <div class="col">
         <div class="card m-3">
-            <div class="card-header">Topics</div>
+        <div class="card-header"><i class="fa fa-book" aria-hidden="true"></i> Topics</div>
             <div class="card-body">
                 <ul class="list-group">
                     <?php foreach ($modules as $module) : ?>

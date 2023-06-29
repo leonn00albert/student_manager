@@ -29,7 +29,7 @@ class CoursesController
         $this->show = function ($req, $res) use ($db) {
             $id = $req->params()["id"];
             $query = [
-                "sql" => "SELECT * FROM courses c
+                "sql" => "SELECT *  , c.course_id FROM courses c
                           LEFT JOIN Enrollments e ON e.course_id = c.course_id
                           WHERE c.course_id = " . $id . "
                           AND (e.student_id = " . $_SESSION["student"]["student_id"] . " OR e.student_id IS NULL)"

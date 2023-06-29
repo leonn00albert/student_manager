@@ -71,10 +71,13 @@
                     </tr>
                 </thead>
                 <tbody id="coursesTable">
+           
                     <?php foreach ($modules as $module) : ?>
+                        <tr>
                         <td><?= $module["module_id"] ?></td>
                         <td><?= $module["module_name"] ?></td>
                         <td><a href="/teachers/modules/<?= $module["module_id"] ?>/edit" class="btn btn-primary">Edit Module</a></td>
+                        </tr>
                     <?php endforeach ?>
 
                 </tbody>
