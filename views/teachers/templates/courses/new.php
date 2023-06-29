@@ -38,7 +38,7 @@
                     <option value="On-hold">On-hold</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Create Course</button>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Create Course    </button>
         </form>
     </div>
 </div>

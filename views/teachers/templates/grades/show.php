@@ -46,8 +46,6 @@
 document.getElementById("myForm").addEventListener("submit", function(event) {
   event.preventDefault();
   var formData = new FormData(event.target);
-
-
   var jsonData = {};
   for (var entry of formData.entries()) {
     jsonData[entry[0]] = entry[1];
@@ -61,10 +59,7 @@ document.getElementById("myForm").addEventListener("submit", function(event) {
       },
       body: jsonPayload
     })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-    })
+    .then(response =>  window.history.back())
     .catch(error => {
       console.error(error);
     });

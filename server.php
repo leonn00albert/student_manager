@@ -4,6 +4,9 @@ require_once __DIR__ . "/vendor/autoload.php";
 require_once __DIR__ . "/config/db.config.php";
 require_once __DIR__ . "/src/util/create-pdf.php";
 require_once __DIR__ . "/src/util/util.php";
+require_once __DIR__ ."/Utils/utils.php";
+
+
 use Utils\Notifications\Notification;
 use Artemis\Core\DataBases\DB;
 use Artemis\Core\Router\Router;
@@ -55,22 +58,30 @@ $app->use("notification", new Notification($db));
         });
         
         $app->post("/bulletins",$app->form->sanitize, function ($req, $res) use ($db) {
-            $query = "INSERT INTO bulletins (title, type,message, classroom_id)
-            VALUES (?, ?, ?,?)";
+            try {
+                $query = "INSERT INTO bulletins (title, type,message, classroom_id)
+                VALUES (?, ?, ?,?)";
+    
+                $statement = $db->conn()->prepare($query);
+    
+                $data = [
+                    $req->sanitized["title"],
+                    $req->sanitized["type"],
+                    $req->sanitized["message"],
+                    $req->sanitized["classroom_id"],
+                ];
+                $statement->execute($data);
+                $statement->closeCursor();
+                $db->close();
+                setAlert("success", "Created a new notification");
+                $res->status(301);
+                $res->redirect("/teachers/classrooms/" . $req->sanitized["classroom_id"],);
+            }
+            catch(Exception $e){
+                setAlert("danger", "Something went wrong! : " . $e->getMessage());
 
-            $statement = $db->conn()->prepare($query);
+            }
 
-            $data = [
-                $req->sanitized["title"],
-                $req->sanitized["type"],
-                $req->sanitized["message"],
-                $req->sanitized["classroom_id"],
-            ];
-            $statement->execute($data);
-            $statement->closeCursor();
-            $db->close();
-            $res->status(301);
-            $res->redirect("/teachers/classrooms/" . $req->sanitized["classroom_id"],);
     
         });
     }
