@@ -70,7 +70,7 @@ class ClassroomsController
             ];
 
             $studentsQuery = [
-                "sql" => "SELECT users.first_name, students.student_id, users.user_id FROM enrollments
+                "sql" => "SELECT users.first_name, students.student_id, users.user_id, users.avatar FROM enrollments
                 INNER JOIN students ON enrollments.student_id = students.student_id
                 INNER JOIN users ON users.user_id = students.user_id
                 WHERE enrollments.classroom_id = " . $id

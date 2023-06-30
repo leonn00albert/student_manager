@@ -5,21 +5,25 @@
             <div class="card-header"><i class="fas fa-chalkboard"></i> Classroom: <?= $classroom["classroom_name"] ?></div>
             <div class="card-body">
                 <p>
-                <i class="fa fa-calendar" aria-hidden="true"></i>   Starting date <?= $classroom["start_date"] ?> 
+                    <i class="fa fa-calendar" aria-hidden="true"></i> Starting date <?= $classroom["start_date"] ?>
                 </p>
                 <hr>
-                <?php if(isset($progress["graded"])) {?>
-                Progress:
-                <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow=<?= $progress["graded"]?> aria-valuemin="0" aria-valuemax=<?= $progress["sections"]?>>
-                    <div class="progress-bar" style="width: <?= (int) $progress["percentage"] ?>%"><?= (int) $percentage ?>%</div>
-                </div>
-                <hr>
-                <?php }?>
+                <?php if (isset($progress["graded"])) { ?>
+                    Progress:
+                    <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow=<?= $progress["graded"] ?> aria-valuemin="0" aria-valuemax=<?= $progress["sections"] ?>>
+                        <div class="progress-bar" style="width: <?= (int) $progress["percentage"] ?>%"><?= (int) $percentage ?>%</div>
+                    </div>
+                    <hr>
+                <?php } ?>
                 <p><i class="fas fa-chalkboard-teacher"></i> Class Teacher: </p>
 
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <?= $classroom["first_name"] ?> <?= $classroom["last_name"] ?>
+                    <span>
+                        <img src="<?= $classroom["avatar"] ?>.svg" alt="hugenerd" width="30" height="30" class="rounded-circle">
+                        <?= $classroom["first_name"] ?> <?= $classroom["last_name"] ?>
+                    </span>
                     <a href="/students/messages" class="badge bg-primary rounded-pill"><i class='fa fa-comment'></i></a>
+
                 </li>
             </div>
         </div>
@@ -47,7 +51,11 @@
                 <ul class="list-group">
                     <?php foreach ($students as $student) : ?>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <?= $student["first_name"] ?>
+                            <span>
+                                <img src="<?= $student["avatar"] ?>.svg" alt="hugenerd" width="30" height="30" class="me-1 rounded-circle">
+                                <?= $student["first_name"] ?>
+                            </span>
+
                             <a href="/students/messages" class="badge bg-primary rounded-pill"><i class='fa fa-comment'></i></a>
                         </li>
                     <?php endforeach; ?>
