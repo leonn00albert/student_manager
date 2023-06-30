@@ -52,7 +52,7 @@
                             <td><b class="ms-3"><?= $section["section_id"] ?></b></td>
                             <td><?= $section["section_name"] ?></td>
                             <td>
-                            <a href="/teachers/sections/<?= $section["section_id"] ?>/edit" class="btn btn-danger"><i class="fas fa-trash"></i> </a>
+                            <a onclick='archiveSection("<?= $section["section_id"] ?>")' class="btn btn-warning"><i class="fas fa-archive"></i> Archive</a>
                             <a href="/teachers/sections/<?= $section["section_id"] ?>/edit" class="btn btn-primary"><i class="fas fa-edit"></i> Edit Section</a>
                                 </td>
 
@@ -65,3 +65,18 @@
         <a href="/teachers/sections/new?module_id=<?= $module["module_id"] ?>" class="btn btn-primary"><i class="fas fa-plus-square"></i> Add Section</a>
     </div>
 </div>
+<script>
+
+function archiveSection(id) {
+        fetch(`/sections/${id}`, {
+                method: 'DELETE',
+            })
+            .then(response => {
+                location.reload();
+            })
+            .catch(error => {
+                console.error('An error occurred:', error);
+            });
+    }
+
+</script>

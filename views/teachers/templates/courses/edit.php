@@ -44,6 +44,8 @@
                             <?= $course["end_date"] ?>
                         </td>
                         <td>
+                            <a onclick='archiveCourse("<?= $course["course_id"] ?>")' class="btn btn-warning"><i class="fas fa-archive"></i> Archive</a>
+
                             <a class="btn btn-primary" href="/teachers/courses/<?= $course["course_id"] ?>/edit"><i class="fas fa-edit"></i> Edit</a>
                         </td>
                     </tr>
@@ -70,14 +72,14 @@
                     </tr>
                 </thead>
                 <tbody id="coursesTable">
-           
+
                     <?php foreach ($modules as $module) : ?>
                         <tr>
                             <td><b class="ms-3"><?= $module["module_id"] ?></b></td>
                             <td><?= $module["module_name"] ?></td>
                             <td>
-                            <a href="/teachers/modules/<?= $module["module_id"] ?>/edit" class="btn btn-danger"><i class="fas fa-trash"></i> </a>
-                            <a href="/teachers/modules/<?= $module["module_id"] ?>/edit" class="btn btn-primary"><i class="fas fa-edit"></i> Edit Module</a>
+                                <a onclick='archiveModule("<?= $module["module_id"] ?>")' class="btn btn-warning"><i class="fas fa-archive"></i> Archive</a>
+                                <a href="/teachers/modules/<?= $module["module_id"] ?>/edit" class="btn btn-primary"><i class="fas fa-edit"></i> Edit Module</a>
                             </td>
                         </tr>
                     <?php endforeach ?>
@@ -88,3 +90,30 @@
         <a href="/teachers/modules/new?course_id=<?= $course["course_id"] ?>" class="btn btn-primary"><i class="fas fa-plus-square"></i> Add Module</a>
     </div>
 </div>
+
+
+<script>
+    function archiveModule(moduleId) {
+        fetch(`/modules/${moduleId}`, {
+                method: 'DELETE',
+            })
+            .then(response => {
+                location.reload();
+            })
+            .catch(error => {
+                console.error('An error occurred:', error);
+            });
+    }
+
+    function archiveCourse(id) {
+        fetch(`/courses/${id}`, {
+                method: 'DELETE',
+            })
+            .then(response => {
+                location.reload();
+            })
+            .catch(error => {
+                console.error('An error occurred:', error);
+            });
+    }
+</script>

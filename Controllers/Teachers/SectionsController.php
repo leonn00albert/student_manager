@@ -43,6 +43,30 @@ class SectionsController
             $res->status(200);
         };
 
+        $this->delete = function ($req, $res) use ($db) {
+            try {
+                $id = $req->params()["id"];
+                $query = $db->conn()->prepare("UPDATE sections SET 
+                is_archived = :is_archived
+                WHERE section_id = :section_id");
+                $isArchived = 1; // Set is_archived to 1 (archived)
+                $query->bindParam(':is_archived', $isArchived);
+                $query->bindParam(':section_id', $id);
+        
+                if ($query->execute()) {
+                    setAlert("success", "Successfully archived module");
+        
+                } else {
+                    setAlert("danger", "Something went wrong: could not archive section ");
+
+                }
+        
+                $db->close();
+            } catch (Exception $e) {
+                setAlert("danger", "Something went wrong: " . $e->getMessage());
+            }
+        };
+
         $this->update = function ($req, $res) use ($db) {
             $id = $req->params()["id"];
             $query = $db->conn()->prepare("UPDATE sections SET 

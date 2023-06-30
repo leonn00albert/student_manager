@@ -53,7 +53,7 @@ class ClassroomsController
                           INNER JOIN users ON students.user_id = users.user_id
                           INNER JOIN sections ON grades.section_id = sections.section_id
                           WHERE grades.classroom_id = " .  $id . " 
-                          AND is_archived = 0"
+                          AND grades.is_archived = 0"
             ];
 
             $bulletinsQuery = [

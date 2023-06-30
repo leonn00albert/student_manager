@@ -13,6 +13,7 @@ class ModulesController
     public $showEdit;
     public $showNew;
     public $create;
+    public $delete;
 
     public function __construct()
     {
@@ -23,7 +24,10 @@ class ModulesController
             $id = $req->params()["id"];
             $query = [
                 "sql" => "SELECT * FROM sections
-                          WHERE sections.module_id = " . $id
+                          WHERE 
+                          is_archived = 0
+                          AND
+                          sections.module_id = " . $id
             ];
             $moduleQuery =
                 [
@@ -47,6 +51,30 @@ class ModulesController
             ];
             $res->render("teachers/index", $data);
             $res->status(200);
+        };
+
+        $this->delete = function ($req, $res) use ($db) {
+            try {
+                $id = $req->params()["id"];
+                $query = $db->conn()->prepare("UPDATE modules SET 
+                is_archived = :is_archived
+                WHERE module_id = :module_id");
+                $isArchived = 1; // Set is_archived to 1 (archived)
+                $query->bindParam(':is_archived', $isArchived);
+                $query->bindParam(':module_id', $id);
+        
+                if ($query->execute()) {
+                    setAlert("success", "Successfully archived module");
+        
+                } else {
+                    setAlert("danger", "Something went wrong: " . $e->getMessage());
+
+                }
+        
+                $db->close();
+            } catch (Exception $e) {
+                setAlert("danger", "Something went wrong: " . $e->getMessage());
+            }
         };
         $this->create = function ($req, $res) use ($db) {
             try {
