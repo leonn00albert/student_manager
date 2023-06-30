@@ -113,7 +113,15 @@ $app->use("notification", new Notification($db));
             
             try {
                 $enrollment_date =  date("Y-m-d");
+                $courseQuery =[
+                    "sql" => "SELECT * FROM courses WHERE course_id = :courseid LIMIT 1",
+                    "params" => [
+                        "courseid" => $req->sanitized['course_id']
+                    ]
+                ] ;
 
+                $course = $db->find($courseQuery)[0];
+       
                 $sql = "SELECT classroom_id FROM enrollments WHERE course_id = :courseid";
                 $stmt = $db->conn()->prepare($sql);
                 $stmt->bindValue(':courseid', $req->sanitized['course_id']);
@@ -123,7 +131,7 @@ $app->use("notification", new Notification($db));
                     $row = $stmt->fetch(PDO::FETCH_ASSOC);
                     $classroom_id = $row["classroom_id"];
                 } else {
-                    $classroom_name = "New Classroom for course_id: " . $req->sanitized["course_id"];
+                    $classroom_name = $course["course_name"] . " " . chr(rand(65, 90)) . rand(0,100);
                     $insertQuery = "INSERT INTO classrooms (classroom_name, teacher_id, course_id) VALUES (:classroom_name, :teacher_id, :course_id)";
                     $stmt = $db->conn()->prepare($insertQuery);
                     $stmt->bindParam(':classroom_name', $classroom_name);
