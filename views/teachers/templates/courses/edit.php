@@ -73,9 +73,12 @@
            
                     <?php foreach ($modules as $module) : ?>
                         <tr>
-                        <td><b class="ms-3"><?= $module["module_id"] ?></b></td>
-                        <td><?= $module["module_name"] ?></td>
-                        <td><a href="/teachers/modules/<?= $module["module_id"] ?>/edit" class="btn btn-primary"><i class="fas fa-edit"></i> Edit Module</a></td>
+                            <td><b class="ms-3"><?= $module["module_id"] ?></b></td>
+                            <td><?= $module["module_name"] ?></td>
+                            <td>
+                            <a href="/teachers/modules/<?= $module["module_id"] ?>/edit" class="btn btn-danger"><i class="fas fa-trash"></i> </a>
+                            <a href="/teachers/modules/<?= $module["module_id"] ?>/edit" class="btn btn-primary"><i class="fas fa-edit"></i> Edit Module</a>
+                            </td>
                         </tr>
                     <?php endforeach ?>
 

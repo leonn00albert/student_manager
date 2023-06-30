@@ -13,7 +13,7 @@ class GradesController
     public $showEdit;
     public $update;
     public $show;
-
+    public $delete;
     public function __construct()
     {
         $db = DB::new(DB_TYPE, DB_NAME, DB_PASSWORD, DB_DRIVER, DB_HOST, DB_USER);
@@ -42,6 +42,30 @@ class GradesController
         $this->showEdit = function ($req, $res) use ($db) {
 
         };
+
+        $this->delete = function ($req, $res) use ($db) {
+            try {
+                $id = $req->params()["id"];
+                $query = $db->conn()->prepare("UPDATE grades SET 
+                is_archived = :is_archived
+                WHERE grade_id = :grade_id");
+                $isArchived = 1; // Set is_archived to 1 (archived)
+                $query->bindParam(':is_archived', $isArchived);
+                $query->bindParam(':grade_id', $id);
+        
+                if ($query->execute()) {
+                    setAlert("success", "Successfully archived grade");
+        
+                    $res->redirect("/teachers/classrooms/" . $req->sanitized["classroom_id"], 301);
+                } else {
+                    echo "Error updating record.";
+                }
+        
+                $db->close();
+            } catch (Exception $e) {
+                setAlert("danger", "Something went wrong: " . $e->getMessage());
+            }
+        };
         $this->update = function ($req, $res) use ($db) {
             try {
                 $notification = new Notification($db);
@@ -68,7 +92,7 @@ class GradesController
                 }
 
                 if ($query->execute()) {
-                    setAlert("success","Succusefully graded assignment");
+                    setAlert("success","Succesfully graded assignment");
 
                     $res->status(301);
                     $res->redirect("/teachers/classrooms/" . $req->sanitized["classroom_id"]);

@@ -51,7 +51,10 @@
                         <tr>
                             <td><b class="ms-3"><?= $section["section_id"] ?></b></td>
                             <td><?= $section["section_name"] ?></td>
-                            <td><a href="/teachers/sections/<?= $section["section_id"] ?>/edit" class="btn btn-primary"><i class="fas fa-edit"></i> Edit Section</a></td>
+                            <td>
+                            <a href="/teachers/sections/<?= $section["section_id"] ?>/edit" class="btn btn-danger"><i class="fas fa-trash"></i> </a>
+                            <a href="/teachers/sections/<?= $section["section_id"] ?>/edit" class="btn btn-primary"><i class="fas fa-edit"></i> Edit Section</a>
+                                </td>
 
                         </tr>
                     <?php endforeach ?>
