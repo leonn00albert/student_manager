@@ -9,6 +9,7 @@ class ClassroomsController
 
     public $showIndex;
     public $showEdit;
+    public $showReport;
     public $create;
     public $show;
 
@@ -77,7 +78,10 @@ class ClassroomsController
 
             $classroom = $db->find($query)[0];
             $modulesQuery = [
-                "sql" => "SELECT * FROM modules WHERE course_id = " .  $classroom["course_id"]
+                "sql" => "SELECT * FROM modules WHERE 
+                is_archived = 0
+                AND
+                course_id = " .  $classroom["course_id"]
             ];
             
             $progress = $db->find($progress)[0] ?? [];
@@ -96,6 +100,8 @@ class ClassroomsController
             $res->render("students/index", $data);
             $res->status(200);
         };
+
+        
         $this->showEdit = function ($req, $res) use ($db) {
         };
         $this->create = function ($req, $res) use ($db) {

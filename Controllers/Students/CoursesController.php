@@ -30,9 +30,15 @@ class CoursesController
             $id = $req->params()["id"];
             $query = [
                 "sql" => "SELECT *  , c.course_id FROM courses c
-                          LEFT JOIN Enrollments e ON e.course_id = c.course_id
-                          WHERE c.course_id = " . $id . "
-                          AND (e.student_id = " . $_SESSION["student"]["student_id"] . " OR e.student_id IS NULL)"
+                          WHERE c.course_id = " . $id 
+                    
+            ];
+
+            $enrollQuery = [
+                "sql" => "SELECT *  , c.course_id FROM courses c
+                LEFT JOIN Enrollments e ON e.course_id = c.course_id
+                WHERE c.course_id = " . $id . "
+                AND (e.student_id = " . $_SESSION["student"]["student_id"] . " OR e.student_id IS NULL)"
             ];
             $modulesQuery = [
                 "sql" => "SELECT * FROM modules WHERE course_id = " . $id
@@ -40,7 +46,8 @@ class CoursesController
             $data = [
                 "template" => "courses/show.php",
                 "course" => $db->find($query)[0],
-                "modules" => $db->find($modulesQuery)
+                "modules" => $db->find($modulesQuery),
+                "enrollment" => $db->find($enrollQuery)[0] ?? []
             ];
             $res->render("students/index", $data);
             $res->status(200);
