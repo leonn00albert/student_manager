@@ -25,7 +25,7 @@
 			<?php if (strpos($_SERVER['REQUEST_URI'], "/students/messages") !== false) : ?>
 					<a href="/students/students" class="nav-link active " aria-current="page">
 					<?php else : ?>
-						<a href="/messages/<?=$_SESSION["user_id"]?>" class="nav-link " aria-current="page">
+						<a href="/students/messages" class="nav-link " aria-current="page">
 						<?php endif; ?>
 						<i class="far fa-comments"></i>
 					Messages 
