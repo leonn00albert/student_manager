@@ -64,7 +64,7 @@ if (isset($_SESSION[USER_TYPE]) && $_SESSION[USER_TYPE] === TYPE_TEACHER) {
     $app->get("/bulletins/:id/delete", function ($req, $res) use ($db) {
         $db->selectTable("bulletins");
         $db->deleteById($req->params()["id"]);
-        $res->redirect(BACK);
+        $res->redirect("back");
     });
 
     $app->post("/bulletins", $app->form->sanitize, function ($req, $res) use ($db) {

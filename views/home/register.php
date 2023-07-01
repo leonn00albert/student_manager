@@ -68,7 +68,6 @@
     <div class="ui middle aligned center aligned grid">
         <div class="column">
             <h2 class="ui teal image header">
-                <img src="assets/images/logo.png" class="image">
                 <div class="content">
                     Register your account
                 </div>
@@ -132,7 +131,7 @@
 
 
 
-                    <button class="ui fluid large button primary" type="submit">Submit</button>
+                    <button class="ui fluid large button teal" type="submit">Submit</button>
                 </div>
             </form>
 
