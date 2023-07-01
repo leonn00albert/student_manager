@@ -2,6 +2,8 @@
 session_start();
 require_once __DIR__ . "/vendor/autoload.php";
 require_once __DIR__ . "/config/db.config.php";
+require_once __DIR__ . "/config/const.config.php";
+require_once __DIR__ . "/config/http_status.config.php";
 require_once __DIR__ . "/src/util/create-pdf.php";
 require_once __DIR__ . "/src/util/util.php";
 require_once __DIR__ . "/Utils/utils.php";
@@ -18,17 +20,16 @@ $db = DB::new(DB_TYPE, DB_NAME, DB_PASSWORD, DB_DRIVER, DB_HOST, DB_USER);
 $app = Router::getInstance();
 $app->set("view_engine", new TemplateEngine(__DIR__ . "/views"));
 $app->use("form", new Forms());
-
 $app->use("notification", new Notification($db));
+
 //routes
 //AUTH ROUTES
 
 
 /// TODO CREATE CONSTANTS FOR STASTUSCODES AND VARIABLES
 
-
 Routes\Auth\UsersRoutes::register($app, new Controllers\Auth\UsersController());
-if (isset($_SESSION["type"]) && $_SESSION["type"] === "admin") {
+if (isset($_SESSION[USER_TYPE]) && $_SESSION[USER_TYPE] === TYPE_ADMIN) {
     //ADMIN ROUTES --TODO add auth for admin only
     Routes\Admin\UsersRoutes::register($app, new Controllers\Admin\UsersController());
     Routes\Admin\ClassroomsRoutes::register($app, new Controllers\Admin\ClassroomsController());
@@ -37,7 +38,7 @@ if (isset($_SESSION["type"]) && $_SESSION["type"] === "admin") {
     Routes\Admin\StudentsRoutes::register($app, new Controllers\Admin\StudentsController());
 }
 
-if (isset($_SESSION["type"]) && $_SESSION["type"] === "teacher") {
+if (isset($_SESSION[USER_TYPE]) && $_SESSION[USER_TYPE] === TYPE_TEACHER) {
     //TEACHER ROUTES
     Routes\Teachers\CoursesRoutes::register($app, new Controllers\Teachers\CoursesController());
     Routes\Teachers\ModulesRoutes::register($app, new Controllers\Teachers\ModulesController());
@@ -50,7 +51,7 @@ if (isset($_SESSION["type"]) && $_SESSION["type"] === "teacher") {
             "template" => "dashboard.php"
         ];
         $res->render("teachers/index", $data);
-        $res->status(200);
+        $res->status(HTTP_200_OK);
     });
 
     $app->get("/teachers/dashboard", function ($req, $res) {
@@ -58,12 +59,12 @@ if (isset($_SESSION["type"]) && $_SESSION["type"] === "teacher") {
             "template" => "dashboard.php"
         ];
         $res->render("teachers/index", $data);
-        $res->status(200);
+        $res->status(HTTP_200_OK);
     });
     $app->get("/bulletins/:id/delete", function ($req, $res) use ($db) {
         $db->selectTable("bulletins");
         $db->deleteById($req->params()["id"]);
-        $res->redirect($_SERVER['HTTP_REFERER']);
+        $res->redirect(BACK);
     });
 
     $app->post("/bulletins", $app->form->sanitize, function ($req, $res) use ($db) {
@@ -83,7 +84,8 @@ if (isset($_SESSION["type"]) && $_SESSION["type"] === "teacher") {
             $statement->closeCursor();
             $db->close();
             setAlert("success", "Created a new notification");
-            $res->status(301);
+            $res->status(HTTP_201_CREATED);
+            $res->status(HTTP_301_MOVED_PERMANENTLY);
             $res->redirect("/teachers/classrooms/" . $req->sanitized["classroom_id"],);
         } catch (Exception $e) {
             setAlert("danger", "Something went wrong! : " . $e->getMessage());
@@ -97,7 +99,7 @@ if (isset($_SESSION["type"]) && $_SESSION["type"] === "teacher") {
         ];
 
         $messages = [];
-        if (isset($req->query()["from"])  && $req->query()["from"] == $_SESSION["user_id"]) {
+        if (isset($req->query()["from"])  && $req->query()["from"] == $_SESSION[USER_ID]) {
             $messages = [
                 "sql" => "SELECT * FROM messages WHERE (sender_id = :sender_id AND recipient_id = :recipient_id) OR (sender_id = :recipient_id AND recipient_id = :sender_id)",
                 "params" => [
@@ -114,11 +116,11 @@ if (isset($_SESSION["type"]) && $_SESSION["type"] === "teacher") {
             "messages" => $messages,
         ];
         $res->render("teachers/index", $data);
-        $res->status(200);
+        $res->status(HTTP_200_OK);
     });
 }
 
-if (isset($_SESSION["type"]) && $_SESSION["type"] === "student") {
+if (isset($_SESSION[USER_TYPE]) && $_SESSION[USER_TYPE] === TYPE_STUDENT) {
     Routes\Students\ClassroomsRoutes::register($app, new Controllers\Students\ClassroomsController());
     Routes\Students\ModulesRoutes::register($app, new Controllers\Students\ModulesController());
     Routes\Students\CoursesRoutes::register($app, new Controllers\Students\CoursesController());
@@ -129,14 +131,14 @@ if (isset($_SESSION["type"]) && $_SESSION["type"] === "student") {
             "template" => "dashboard.php"
         ];
         $res->render("students/index", $data);
-        $res->status(200);
+        $res->status(HTTP_200_OK);
     });
     $app->get("/students/dashboard", function ($req, $res) {
         $data = [
             "template" => "dashboard.php"
         ];
         $res->render("students/index", $data);
-        $res->status(200);
+        $res->status(HTTP_200_OK);
     });
     $app->get("/students/messages", function ($req, $res) use ($db) {
         $query = [
@@ -145,7 +147,7 @@ if (isset($_SESSION["type"]) && $_SESSION["type"] === "student") {
         ];
 
         $messages = [];
-        if (isset($req->query()["from"])  && $req->query()["from"] == $_SESSION["user_id"]) {
+        if (isset($req->query()["from"])  && $req->query()["from"] == $_SESSION[USER_ID]) {
             $messages = [
                 "sql" => "SELECT * FROM messages WHERE (sender_id = :sender_id AND recipient_id = :recipient_id) OR (sender_id = :recipient_id AND recipient_id = :sender_id)",
                 "params" => [
@@ -162,7 +164,7 @@ if (isset($_SESSION["type"]) && $_SESSION["type"] === "student") {
             "messages" => $messages,
         ];
         $res->render("students/index", $data);
-        $res->status(200);
+        $res->status(HTTP_200_OK);
     });
 
 
@@ -213,8 +215,6 @@ if (isset($_SESSION["type"]) && $_SESSION["type"] === "student") {
 
             $teacher = $db->find($teacherQuery)[0];
             $app->notification->create($teacher["teacher_id"], "A new student enrolled for your course", "/teachers/classrooms/" . $classroom_id);
-
-
             $insertQuery = "INSERT INTO enrollments (student_id, course_id, enrollment_date, classroom_id) VALUES (:student_id, :course_id, :enrollment_date, :classroom_id)";
             $stmt = $db->conn()->prepare($insertQuery);
             $stmt->bindParam(':student_id', $_SESSION["student"]["student_id"]);
@@ -224,7 +224,8 @@ if (isset($_SESSION["type"]) && $_SESSION["type"] === "student") {
             $stmt->execute();
             $_SESSION["alert"]["type"] = "success";
             $_SESSION["alert"]["message"] = "You have been enrolled for a new course!";
-
+            $res->status(HTTP_201_CREATED);
+            $res->status(HTTP_301_MOVED_PERMANENTLY);
             $res->redirect("/students/classrooms");
         } catch (Exception $e) {
 
@@ -257,7 +258,7 @@ if (isset($_SESSION["type"]) && $_SESSION["type"] === "student") {
 
 
             $res->render("students/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
         } catch (Exception $e) {
             $_SESSION["alert"]["type"] = "danger";
             $_SESSION["alert"]["message"] = "Something went wrong! : " . $e->getMessage();
@@ -275,7 +276,7 @@ if (isset($_SESSION["type"]) && $_SESSION["type"] === "student") {
             $studentQuery = [
                 "sql" => "SELECT students.student_id ,enrollments.classroom_id, enrollments.course_id FROM students 
             INNER JOIN enrollments ON students.student_id = enrollments.student_id 
-            WHERE students.user_id = " . $_SESSION["user_id"] . " LIMIT 1"
+            WHERE students.user_id = " . $_SESSION[USER_ID] . " LIMIT 1"
             ];
             $teacherQuery = [
                 "sql" => "SELECT teacher_id FROM classrooms 
@@ -322,7 +323,7 @@ $app->get("/", function ($req, $res) use ($db) {
     ];
     $data = array_map(fn ($e) => $e, $db->find($query)[0]);
     $res->render("home/index", $data);
-    $res->status(200);
+    $res->status(HTTP_200_OK);
 });
 
 $app->post("/messages", $app->form->sanitize, function ($req, $res) use ($db) {
@@ -336,6 +337,8 @@ $app->post("/messages", $app->form->sanitize, function ($req, $res) use ($db) {
             $stmt->execute();
             $_SESSION["alert"]["type"] = "success";
             $_SESSION["alert"]["message"] = "Sucessfully submitted message ";
+            $res->status(HTTP_201_CREATED);
+            $res->status(HTTP_301_MOVED_PERMANENTLY);
             $res->redirect("/students/messages?from=" . $req->sanitized["sender_id"] . "&to=" . $req->sanitized["recipient_id"]);
         } catch (Exception $e) {
             $_SESSION["alert"]["type"] = "danger";
@@ -365,22 +368,22 @@ $app->put("/notifications/:id", function ($req, $res) use ($db) {
     ];
 
     $_SESSION["notifications"] = $db->find($notificationsQuery);
-    $res->status(200);
+    $res->status(HTTP_200_OK);
 });
 $app->get("/login", function ($req, $res) {
     $res->render("home/login");
-    $res->status(200);
+    $res->status(HTTP_200_OK);
 });
 
 $app->get("/register", function ($req, $res) {
     $res->render("home/register");
-    $res->status(200);
+    $res->status(HTTP_200_OK);
 });
 
 // Students routes only for students and admin-root available
 $app->get("/login", function ($req, $res) {
     $res->render("home/login");
-    $res->status(200);
+    $res->status(HTTP_200_OK);
 });
 
 
@@ -394,14 +397,14 @@ $app->get("/admin", function ($req, $res) {
         "template" => "dashboard.php"
     ];
     $res->render("admin/index", $data);
-    $res->status(200);
+    $res->status(HTTP_200_OK);
 });
 $app->get("/admin/dashboard", function ($req, $res) {
     $data = [
         "template" => "dashboard.php"
     ];
     $res->render("admin/index", $data);
-    $res->status(200);
+    $res->status(HTTP_200_OK);
 });
 
 
@@ -415,7 +418,7 @@ $app->get("/admin/teachers", function ($req, $res) use ($db) {
         "teachers" => $db->find($query)
     ];
     $res->render("admin/index", $data);
-    $res->status(200);
+    $res->status(HTTP_200_OK);
 });
 
 
@@ -423,7 +426,7 @@ $app->get("/admin/teachers", function ($req, $res) use ($db) {
 
 $app->get("*", function ($req, $res) {
     $res->send("404");
-    $res->status(404);
+    $res->status(HTTP_404_NOT_FOUND);
 });
 
 $app->listen("/", function () {

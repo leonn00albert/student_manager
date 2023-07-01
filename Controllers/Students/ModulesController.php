@@ -36,7 +36,7 @@ class ModulesController
                 "sections" => $db->find($sections)
             ];
             $res->render("students/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
         };
         $this->create = function ($req, $res) use ($db) {
    

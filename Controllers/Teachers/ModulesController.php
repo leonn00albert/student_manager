@@ -41,7 +41,7 @@ class ModulesController
             ];
 
             $res->render("teachers/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
         };
 
         $this->showNew = function ($req, $res) {
@@ -50,7 +50,7 @@ class ModulesController
                 "course_id" => $req->query()["course_id"]
             ];
             $res->render("teachers/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
         };
 
         $this->delete = function ($req, $res) use ($db) {
@@ -91,12 +91,12 @@ class ModulesController
                 $statement->closeCursor();
                 $db->close();
                 setAlert("success", "Created a new module");
-                $res->status(301);
+                $res->status(HTTP_301_MOVED_PERMANENTLY);
                 $res->redirect("/teachers/courses/" . $req->sanitized["course_id"] . "/edit");
             }
             catch(Exception $e) {
                 setAlert("danger", "Something went wrong: " . $e->getMessage());
-                $res->status(301);
+                $res->status(HTTP_301_MOVED_PERMANENTLY);
                 $res->redirect("/teachers/courses/" . $req->sanitized["course_id"] . "/edit");
             }
         

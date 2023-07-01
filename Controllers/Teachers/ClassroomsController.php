@@ -36,7 +36,7 @@ class ClassroomsController
                 "classrooms" => $db->find($query)
             ];
             $res->render("teachers/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
         };
 
         $this->show = function ($req, $res) use ($db) {
@@ -106,7 +106,7 @@ class ClassroomsController
                 "bulletins" =>   $db->find($bulletinsQuery),
             ];
             $res->render("teachers/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
         };
         $this->showEdit = function ($req, $res) use ($db) {
            // --TODO MAKE ADMIN ONLY 
@@ -134,7 +134,7 @@ class ClassroomsController
            ];
 
            $res->render("teachers/index", $data);
-           $res->status(200);
+           $res->status(HTTP_200_OK);
         };
         $this->showReport = function ($req, $res) use ($db) {
             $id = $req->params()["id"];
@@ -194,7 +194,7 @@ class ClassroomsController
                 
             ];
             $res->render("teachers/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
         };
         $this->showEdit = function ($req, $res) use ($db) {
            // --TODO MAKE ADMIN ONLY 
@@ -222,7 +222,7 @@ class ClassroomsController
            ];
 
            $res->render("teachers/index", $data);
-           $res->status(200);
+           $res->status(HTTP_200_OK);
         };
         $this->create = function ($req, $res) use ($db) {
         };
@@ -260,7 +260,8 @@ class ClassroomsController
                 } else {
                     setAlert("danger", "Something went wrong: Could not update classroom");
                      $res->redirect("/teachers/classrooms");
-                    $res->status(301);
+                     $res->status(HTTP_200_OK);
+                     $res->status(HTTP_301_MOVED_PERMANENTLY);
                 }
     
                 $db->close();

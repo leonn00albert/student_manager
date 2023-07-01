@@ -37,7 +37,7 @@ class GradesController
                 "grade" => $db->find($gradesQuery)[0]
             ];
             $res->render("teachers/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
         };
         $this->showEdit = function ($req, $res) use ($db) {
 

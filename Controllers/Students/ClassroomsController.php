@@ -34,7 +34,7 @@ class ClassroomsController
 
             $db->close();
             $res->render("students/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
         };
 
         $this->show = function ($req, $res) use ($db) {
@@ -98,7 +98,7 @@ class ClassroomsController
 
             ];
             $res->render("students/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
         };
 
         

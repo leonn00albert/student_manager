@@ -24,7 +24,7 @@ class CoursesController
                 "courses" => $db->find($query)
             ];
             $res->render("students/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
         };
         $this->show = function ($req, $res) use ($db) {
             $id = $req->params()["id"];
@@ -50,7 +50,7 @@ class CoursesController
                 "enrollment" => $db->find($enrollQuery)[0] ?? []
             ];
             $res->render("students/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
         };
         $this->create = function ($req, $res) use ($db) {
    

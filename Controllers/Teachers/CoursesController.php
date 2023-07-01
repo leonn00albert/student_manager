@@ -29,7 +29,7 @@ class CoursesController
                 "courses" => $db->find($query)
             ];
             $res->render("teachers/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
         };
         $this->showEdit = function ($req, $res) use ($db) {
             $id = $req->params()["id"];
@@ -50,7 +50,7 @@ class CoursesController
             ];
     
             $res->render("teachers/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
         };
         $this->create = function ($req, $res) use ($db) {
    
