@@ -52,6 +52,14 @@ if (isset($_SESSION["type"]) && $_SESSION["type"] === "teacher") {
         $res->render("teachers/index", $data);
         $res->status(200);
     });
+
+    $app->get("/teachers/dashboard", function ($req, $res) {
+        $data = [
+            "template" => "dashboard.php"
+        ];
+        $res->render("teachers/index", $data);
+        $res->status(200);
+    });
     $app->get("/bulletins/:id/delete", function ($req, $res) use ($db) {
         $db->selectTable("bulletins");
         $db->deleteById($req->params()["id"]);
@@ -80,6 +88,33 @@ if (isset($_SESSION["type"]) && $_SESSION["type"] === "teacher") {
         } catch (Exception $e) {
             setAlert("danger", "Something went wrong! : " . $e->getMessage());
         }
+    });
+
+    $app->get("/teachers/messages", function ($req, $res) use ($db) {
+        $query = [
+            "sql" => "SELECT * FROM students INNER JOIN users ON students.user_id = users.user_id",
+            "params" => []
+        ];
+
+        $messages = [];
+        if (isset($req->query()["from"])  && $req->query()["from"] == $_SESSION["user_id"]) {
+            $messages = [
+                "sql" => "SELECT * FROM messages WHERE (sender_id = :sender_id AND recipient_id = :recipient_id) OR (sender_id = :recipient_id AND recipient_id = :sender_id)",
+                "params" => [
+                    "recipient_id" => $req->query()["to"],
+                    "sender_id" => $req->query()["from"]
+                ]
+            ];
+            $messages = $db->find($messages);
+        }
+
+        $data = [
+            "template" => "messages.php",
+            "students" => $db->find($query),
+            "messages" => $messages,
+        ];
+        $res->render("teachers/index", $data);
+        $res->status(200);
     });
 }
 

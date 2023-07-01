@@ -22,7 +22,7 @@
                         <img src="<?= $classroom["avatar"] ?>.svg" alt="hugenerd" width="30" height="30" class="rounded-circle">
                         <?= $classroom["first_name"] ?> <?= $classroom["last_name"] ?>
                     </span>
-                    <a href="/students/messages" class="badge bg-primary rounded-pill"><i class='fa fa-comment'></i></a>
+                    <a href="/students/messages?from=<?= $_SESSION["user_id"]?>&to=<?= $classroom["user_id"]?>" class="badge bg-primary rounded-pill"><i class='fa fa-comment'></i></a>
 
                 </li>
             </div>
@@ -56,7 +56,7 @@
                                 <?= $student["first_name"] ?>
                             </span>
 
-                            <a href="/students/messages" class="badge bg-primary rounded-pill"><i class='fa fa-comment'></i></a>
+                            <a href="/students/messages?from=<?= $_SESSION["user_id"]?>&to=<?= $student["user_id"]?>" class="badge bg-primary rounded-pill"><i class='fa fa-comment'></i></a>
                         </li>
                     <?php endforeach; ?>
 

@@ -22,12 +22,12 @@
 			</li>
 
 			<li class="nav-item">
-			<?php if (strpos($_SERVER['REQUEST_URI'], "/students") !== false) : ?>
-					<a href="/teachers/students" class="nav-link active " aria-current="page">
+			<?php if (strpos($_SERVER['REQUEST_URI'], "/messages") !== false) : ?>
+					<a href="/teachers/messages" class="nav-link active " aria-current="page">
 					<?php else : ?>
-						<a href="/teachers/students" class="nav-link " aria-current="page">
+						<a href="/teachers/messages" class="nav-link " aria-current="page">
 						<?php endif; ?>
-					<i class="fa fa-bar-chart" aria-hidden="true"></i>
+						<i class="far fa-comments"></i>
 					Messages 
 				</a>
 			</li>
@@ -38,7 +38,7 @@
 					<?php else : ?>
 						<a href="/teachers/classrooms" class="nav-link " aria-current="page">
 						<?php endif; ?>
-					<i class="fa  fa-map-marker" aria-hidden="true"></i>
+						<i class="fas fa-chalkboard"></i>
 					Classrooms
 				</a>
 			</li>
@@ -50,7 +50,7 @@
 					<?php else : ?>
 						<a href="/teachers/courses" class="nav-link" aria-current="page">
 						<?php endif; ?>
-					<i class="fa fa-bars" aria-hidden="true"></i>
+						<i class="fas fa-layer-group"></i>
 
 					Courses
 				</a>
@@ -66,7 +66,7 @@
 		<hr>
 		<div class="dropdown pb-4">
 			<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-				<img src="<?= $_SESSION["user"]["avatar"] ?> alt="hugenerd" width="30" height="30" class="rounded-circle">
+			<img src="<?= $_SESSION["user"]["avatar"] ?>.svg" alt="hugenerd" width="30" height="30" class="rounded-circle">
 				<span class="d-none d-sm-inline mx-1"><?= $_SESSION["first_name"] ?></span>
 			</a>
 			<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
@@ -74,7 +74,7 @@
 				<li>
 					<hr class="dropdown-divider">
 				</li>
-				<li><a class="dropdown-item" href="/views/signout.php">Sign out</a></li>
+				<li><a class="dropdown-item" href="/signout">Sign out</a></li>
 			</ul>
 		</div>
 	</div>

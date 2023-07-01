@@ -40,8 +40,8 @@
     <?php foreach ($_SESSION["notifications"] as $notification) : ?>
     <?php if(!$notification["is_read"]) { ?>
         <div class="alert alert-light alert-dismissible fade show" role="alert">
-        <?= $notification["message"] ?>
-        <a href=<?= $notification["link"] ?> class="btn btn-dark"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+        
+        <a href=<?= $notification["link"] ?> ><i class="fa fa-bell" aria-hidden="true"></i>   <?= $notification["message"] ?></a>
         <button type="button" class="btn-close" aria-label="Close" onclick="updateNotification(<?= $notification['notification_id'] ?>)"></button>
     </div>
     <?php } ?>

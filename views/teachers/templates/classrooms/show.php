@@ -9,7 +9,7 @@
                 <?php foreach ($students as $student) : ?>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <?= $student["first_name"]?>  <?= $student["last_name"] ?>
-                            <a href="/students/messages" class="badge bg-primary rounded-pill"><i class='fa fa-comment'></i></a>
+                            <a href="/teachers/messages" class="badge bg-primary rounded-pill"><i class='fa fa-comment'></i></a>
                         </li>
                     <?php endforeach; ?>
 
