@@ -88,26 +88,16 @@
 				</a>
 			</li>
 			<li>
-			<?php if (strpos($_SERVER['REQUEST_URI'], "/admin/grades") !== false) : ?>
-				<a href="/admin/grades" class="nav-link active" aria-current="page">
+			<?php if (strpos($_SERVER['REQUEST_URI'], "/admin/library") !== false) : ?>
+				<a href="/admin/library" class="nav-link active" aria-current="page">
 					<?php else : ?>
-						<a href="/admin/grades" class="nav-link" aria-current="page">
+						<a href="/admin/library" class="nav-link" aria-current="page">
 						<?php endif; ?>
-					<i class="fa fa-award" aria-hidden="true"></i>
-					Grades
+					<i class="fa fa-book" aria-hidden="true"></i>
+					Library Items
 				</a>
 			</li>
 
-			<li>
-			<?php if (strpos($_SERVER['REQUEST_URI'], "/admin/reports") !== false) : ?>
-				<a href="/admin/reports" class="nav-link active" aria-current="page">
-					<?php else : ?>
-						<a href="/admin/reports" class="nav-link" aria-current="page">
-						<?php endif; ?>
-					<i class="fa fa-bar-chart" aria-hidden="true"></i>
-					Reports
-				</a>
-			</li>
 			<li>
 				<a href="/signout" class="nav-link" aria-current="page">
 					<i class="fa fa-sign-out" aria-hidden="true"></i>

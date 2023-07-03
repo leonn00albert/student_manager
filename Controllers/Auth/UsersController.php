@@ -5,6 +5,7 @@ namespace Controllers\Auth;
 require_once __DIR__ . "/../../config/db.config.php";
 
 use Artemis\Core\DataBases\DB;
+use Artemis\Core\Forms\Forms;
 
 class UsersController
 {
@@ -16,6 +17,7 @@ class UsersController
 
     public function __construct()
     {
+        $validate = new Forms;
         $db = DB::new(DB_TYPE, DB_NAME, DB_PASSWORD, DB_DRIVER, DB_HOST, DB_USER);
         $this->register = function ($req, $res) use ($db) {
             $query = "INSERT INTO Users (first_name, last_name, contact_email, contact_phone, avatar , address, city, country, password, type, last_login_ip)
@@ -42,7 +44,7 @@ class UsersController
 
             foreach ($data as $index => $value) {
                 $statement->bindValue($index + 1, $value);
-            }
+            } 
 
             $statement->execute();
             $statement->closeCursor();
