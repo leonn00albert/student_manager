@@ -416,8 +416,22 @@ $app->get("/admin/dashboard", function ($req, $res) {
 $app->get("/admin/teachers", function ($req, $res) use ($db) {
     $query = [
         "sql" => "SELECT * FROM teachers
-        INNER JOIN users ON teachers.user_id = users.user_id"
+        INNER JOIN users ON teachers.user_id = users.user_id
+        WHERE is_archived = 0"
     ];
+
+    if (isset($req->query()["sort"])) {
+        $sortColumn = $req->query()["sort"];
+        $sortDirection = strtoupper($req->query()["direction"]) === "ASC" ? "ASC" : "DESC";
+        $query = [
+            "sql" => "SELECT * FROM teachers
+             INNER JOIN users ON teachers.user_id = users.user_id
+             WHERE is_archived = 0
+             ORDER BY $sortColumn $sortDirection 
+            "
+        ];
+    }
+
     $data = [
         "template" => "teachers.php",
         "teachers" => $db->find($query)
