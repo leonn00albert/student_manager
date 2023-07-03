@@ -4,7 +4,7 @@
         <form id="updateClassroomForm">
             <div class="form-group">
                 <label for="classroomName">Classroom Name</label>
-                <input type="text" class="form-control" id="classroomName" name="classroom_name" value=<?= $classroom["classroom_name"] ?> required>
+                <input type="text" class="form-control" id="classroomName" name="classroom_name" value="<?= $classroom["classroom_name"] ?>" required>
             </div>
             <div class="form-group">
                 <label for="teacherID">Teacher</label>
@@ -51,11 +51,7 @@
             body: JSON.stringify(Object.fromEntries(formData))
         })
         .then(response => {
-            if (response.ok) {
-                console.log('Classroom updated successfully');
-                } else {
-                console.error('Classroom update failed');
-            }
+            window.history.back();
         })
         .catch(error => {
             console.error('An error occurred:', error);

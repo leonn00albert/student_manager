@@ -13,7 +13,9 @@ class CMSController
         $db = DB::new(DB_TYPE, DB_NAME, DB_PASSWORD, DB_DRIVER, DB_HOST, DB_USER);
         $this->showIndex = function ($req, $res) use ($db) {
             $query = [
-                "sql" => "SELECT * FROM homepage_cms WHERE ID = 1",
+                "sql" => "SELECT * FROM homepage_cms 
+                INNER JOIN courses ON homepage_cms.featured_course = courses.course_id
+                WHERE ID = 1",
             ];
 
             $coursesQuery = [

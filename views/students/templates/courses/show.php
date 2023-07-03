@@ -9,7 +9,7 @@
                 <p>
                     <?= $course["start_date"] ?>
                 </p>
-                <?php if (isset($course["student_id"])) { ?>
+                <?php if (isset($enrollment["student_id"])) { ?>
                     <div class="m-2">
 
                         <button class="btn btn-primary disabled" type="submit">Already Enrolled</button>

@@ -6,6 +6,6 @@ class CoursesRoutes
     {
         $app->get("/teachers/courses", $controller->showIndex);
         $app->get("/teachers/courses/:id/edit", $controller->showEdit);
-    
+        $app->delete("/courses/:id", $controller->delete);
     }
 }

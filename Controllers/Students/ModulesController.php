@@ -25,17 +25,18 @@ class ModulesController
             $sections = [
                 "sql" => "SELECT *, sections.section_id FROM sections
                           LEFT JOIN grades ON sections.section_id = grades.section_id AND grades.student_id = " . $_SESSION["student"]["student_id"] . "
-                          WHERE module_id = " . $id
+                          WHERE 
+                          sections.is_archived = 0
+                          AND
+                          module_id = " . $id
             ];
-            
-    
             $data = [
                 "template" => "modules/show.php",
                 "module" => $db->find($query)[0],
                 "sections" => $db->find($sections)
             ];
             $res->render("students/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
         };
         $this->create = function ($req, $res) use ($db) {
    

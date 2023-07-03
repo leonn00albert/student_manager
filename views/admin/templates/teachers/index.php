@@ -8,13 +8,59 @@
             <table class="table table-hover table-striped">
                 <thead>
                     <tr>
-                        <th scope="col">Registration number</th>
-                        <th scope="col">Country<i onclick="handleSort('country')" class="fa fa-sort"></i></th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Phone<i onclick="handleSort('name')" class="fa fa-sort"></i></th>
-                        <th scope="col">Name<i onclick="handleSort('grade')" class="fa fa-sort"></i></th>
-                        <th scope="col">type <i onclick="handleSort('class')" class="fa fa-sort"></i></th>
-                        <th scope="col"> </th>
+                    <th scope="col">Registration number
+                            <?php
+                            $sortDirection = isset($_GET["direction"]) && strtoupper($_GET["direction"]) === "ASC" ? "DESC" : "ASC";
+                            ?>
+                            <a href="/admin/teachers?sort=teacher_id&direction=<?php echo $sortDirection; ?>">
+                                <i class="fa fa-sort"></i>
+                            </a>
+                        </th>
+                        <th scope="col">
+                            Country
+                            <?php
+                            $sortDirection = isset($_GET["direction"]) && strtoupper($_GET["direction"]) === "ASC" ? "DESC" : "ASC";
+                            ?>
+                            <a href="/admin/teachers?sort=country&direction=<?php echo $sortDirection; ?>">
+                                <i class="fa fa-sort"></i>
+                            </a>
+                        </th>
+                        <th scope="col">
+                            Email
+                            <?php
+                            $sortDirection = isset($_GET["direction"]) && strtoupper($_GET["direction"]) === "ASC" ? "DESC" : "ASC";
+                            ?>
+                            <a href="/admin/teachers?sort=contact_email&direction=<?php echo $sortDirection; ?>">
+                                <i class="fa fa-sort"></i>
+                            </a>
+                        </th>
+                        <th scope="col">
+                            Phone
+                            <?php
+                            $sortDirection = isset($_GET["direction"]) && strtoupper($_GET["direction"]) === "ASC" ? "DESC" : "ASC";
+                            ?>
+                            <a href="/admin/teachers?sort=contact_phone&direction=<?php echo $sortDirection; ?>">
+                                <i class="fa fa-sort"></i>
+                            </a>
+                        </th>
+                        <th scope="col">
+                            Name
+                            <?php
+                            $sortDirection = isset($_GET["direction"]) && strtoupper($_GET["direction"]) === "ASC" ? "DESC" : "ASC";
+                            ?>
+                            <a href="/admin/teachers?sort=users.first_name&direction=<?php echo $sortDirection; ?>">
+                                <i class="fa fa-sort"></i>
+                            </a>
+                        </th>
+                        <th scope="col">
+                            type
+                            <?php
+                            $sortDirection = isset($_GET["direction"]) && strtoupper($_GET["direction"]) === "ASC" ? "DESC" : "ASC";
+                            ?>
+                            <a href="/admin/teachers?sort=type&direction=<?php echo $sortDirection; ?>">
+                                <i class="fa fa-sort"></i>
+                            </a>
+                        </th>   
                     </tr>
                 </thead>
                 <tbody id="teachersTable">

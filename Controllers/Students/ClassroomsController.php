@@ -9,6 +9,7 @@ class ClassroomsController
 
     public $showIndex;
     public $showEdit;
+    public $showReport;
     public $create;
     public $show;
 
@@ -33,7 +34,7 @@ class ClassroomsController
 
             $db->close();
             $res->render("students/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
         };
 
         $this->show = function ($req, $res) use ($db) {
@@ -69,7 +70,7 @@ class ClassroomsController
             ];
 
             $studentsQuery = [
-                "sql" => "SELECT users.first_name, students.student_id, users.user_id FROM enrollments
+                "sql" => "SELECT users.first_name, students.student_id, users.user_id, users.avatar FROM enrollments
                 INNER JOIN students ON enrollments.student_id = students.student_id
                 INNER JOIN users ON users.user_id = students.user_id
                 WHERE enrollments.classroom_id = " . $id
@@ -77,7 +78,10 @@ class ClassroomsController
 
             $classroom = $db->find($query)[0];
             $modulesQuery = [
-                "sql" => "SELECT * FROM modules WHERE course_id = " .  $classroom["course_id"]
+                "sql" => "SELECT * FROM modules WHERE 
+                is_archived = 0
+                AND
+                course_id = " .  $classroom["course_id"]
             ];
             
             $progress = $db->find($progress)[0] ?? [];
@@ -94,8 +98,10 @@ class ClassroomsController
 
             ];
             $res->render("students/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
         };
+
+        
         $this->showEdit = function ($req, $res) use ($db) {
         };
         $this->create = function ($req, $res) use ($db) {

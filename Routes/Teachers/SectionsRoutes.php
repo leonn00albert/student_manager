@@ -8,6 +8,6 @@ class SectionsRoutes
         $app->get("/teachers/sections/:id/edit", $controller->showEdit);
         $app->post("/sections", $app->form->sanitize,$controller->create);
         $app->put("/sections/:id", $app->form->sanitize,$controller->update);
-
+        $app->delete("/sections/:id",$controller->delete);
     }
 }

@@ -13,6 +13,7 @@ class ModulesController
     public $showEdit;
     public $showNew;
     public $create;
+    public $delete;
 
     public function __construct()
     {
@@ -23,7 +24,10 @@ class ModulesController
             $id = $req->params()["id"];
             $query = [
                 "sql" => "SELECT * FROM sections
-                          WHERE sections.module_id = " . $id
+                          WHERE 
+                          is_archived = 0
+                          AND
+                          sections.module_id = " . $id
             ];
             $moduleQuery =
                 [
@@ -37,7 +41,7 @@ class ModulesController
             ];
 
             $res->render("teachers/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
         };
 
         $this->showNew = function ($req, $res) {
@@ -46,7 +50,31 @@ class ModulesController
                 "course_id" => $req->query()["course_id"]
             ];
             $res->render("teachers/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
+        };
+
+        $this->delete = function ($req, $res) use ($db) {
+            try {
+                $id = $req->params()["id"];
+                $query = $db->conn()->prepare("UPDATE modules SET 
+                is_archived = :is_archived
+                WHERE module_id = :module_id");
+                $isArchived = 1; // Set is_archived to 1 (archived)
+                $query->bindParam(':is_archived', $isArchived);
+                $query->bindParam(':module_id', $id);
+        
+                if ($query->execute()) {
+                    setAlert("success", "Successfully archived module");
+        
+                } else {
+                    setAlert("danger", "Something went wrong: " . $e->getMessage());
+
+                }
+        
+                $db->close();
+            } catch (Exception $e) {
+                setAlert("danger", "Something went wrong: " . $e->getMessage());
+            }
         };
         $this->create = function ($req, $res) use ($db) {
             try {
@@ -63,12 +91,12 @@ class ModulesController
                 $statement->closeCursor();
                 $db->close();
                 setAlert("success", "Created a new module");
-                $res->status(301);
+                $res->status(HTTP_301_MOVED_PERMANENTLY);
                 $res->redirect("/teachers/courses/" . $req->sanitized["course_id"] . "/edit");
             }
             catch(Exception $e) {
                 setAlert("danger", "Something went wrong: " . $e->getMessage());
-                $res->status(301);
+                $res->status(HTTP_301_MOVED_PERMANENTLY);
                 $res->redirect("/teachers/courses/" . $req->sanitized["course_id"] . "/edit");
             }
         

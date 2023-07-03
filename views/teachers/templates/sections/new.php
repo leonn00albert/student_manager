@@ -20,7 +20,7 @@
             </div>
             <div class="form-group">
                 <label for="assignment">Assignment:</label>
-                <textarea class="form-control" id="editor3"  name="assignment" rows="4" required ><?= $section["assignment"] ?></textarea>
+                <textarea class="form-control" id="editor3"  name="assignment" rows="4" required ></textarea>
             </div>
             <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i>  Submit</button>
         </form>

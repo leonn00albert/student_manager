@@ -9,7 +9,7 @@
                 <?php foreach ($students as $student) : ?>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <?= $student["first_name"]?>  <?= $student["last_name"] ?>
-                            <a href="/students/messages" class="badge bg-primary rounded-pill"><i class='fa fa-comment'></i></a>
+                            <a href="/teachers/messages" class="badge bg-primary rounded-pill"><i class='fa fa-comment'></i></a>
                         </li>
                     <?php endforeach; ?>
 
@@ -65,7 +65,7 @@
                         <?php if ($grade["grade_status"] === "Graded") {?>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <?= $grade["section_name"] ?>: <?= $grade["first_name"] ?> <?= $grade["last_name"] ?>
-                            <a href="/teachers/grades/<?= $grade["grade_id"] ?>" class="btn btn-warning"><i class="fas fa-archive"></i> Archive</a>
+                            <a onclick='archiveGrade("<?= $grade["grade_id"] ?>")' class="btn btn-warning"><i class="fas fa-archive"></i> Archive</a>
                         </li>
                         <?php } ?>
 
@@ -121,3 +121,18 @@
         </div>
     </div>
 </div>
+
+<script>
+    function archiveGrade(gradeId){
+        fetch(`/grades/${gradeId}`, {
+  method: 'DELETE',
+})
+  .then(response => {
+    location.reload();
+  })
+  .catch(error => {
+    console.error('An error occurred:', error);
+  });
+    }
+
+</script>

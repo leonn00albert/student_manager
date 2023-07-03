@@ -1,6 +1,9 @@
 <?php
+
 namespace Controllers\Admin;
+
 use Artemis\Core\DataBases\DB;
+use Exception;
 
 class UsersController
 {
@@ -8,19 +11,36 @@ class UsersController
     public $showIndex;
     public $showEdit;
     public $update;
-
+    public $delete;
     public function __construct()
     {
         $db = DB::new(DB_TYPE, DB_NAME, DB_PASSWORD, DB_DRIVER, DB_HOST, DB_USER);
         $this->showIndex = function ($req, $res) use ($db) {
+            $countSql = "SELECT COUNT(*) as total FROM users";
+            $countResult = $db->find(["sql" =>  $countSql])[0];
+            $totalItems = $countResult["total"];
+            
+            $pagination = pagination($totalItems, 5);
+
+
             $query = [
-                "sql" => "SELECT * FROM users;"
+                "sql" => "SELECT * FROM users WHERE is_archived = 0 LIMIT {$pagination["offset"]}, {$pagination["limit"]}; "
             ];
+            
+
+            if (isset($req->query()["sort"])) {
+                $sortColumn = $req->query()["sort"];
+                $sortDirection = strtoupper($req->query()["direction"]) === "ASC" ? "ASC" : "DESC";
+                $query = [
+                    "sql" => "SELECT * FROM users WHERE is_archived = 0  ORDER BY $sortColumn $sortDirection LIMIT {$pagination["offset"]}, {$pagination["limit"]};",
+                ];
+            }
 
             $data = [
                 "template" => "users.php",
-                "users" => $db->find($query)
-            ];
+                "users" => $db->find($query),
+                "pagination" => $pagination["html"]
+             ];
             $res->render("admin/index", $data);
             $res->status(200);
         };
@@ -37,6 +57,23 @@ class UsersController
             $res->render("admin/index", $data);
             $res->status(200);
         };
+        $this->delete = function ($req, $res) use ($db) {
+            try {
+                $id = $req->params()["id"];
+                $sql = "UPDATE users SET is_archived = 1 WHERE user_id = :id";
+                $stmt = $db->conn()->prepare($sql);
+                $stmt->bindParam(':id', $id);
+                $stmt->execute();
+                setAlert("success", "Archived user");
+                $res->status(HTTP_301_MOVED_PERMANENTLY);
+                $res->redirect("back");
+            } catch (Exception $e) {
+                setAlert("danger", $e->getMessage());
+                $res->status(HTTP_301_MOVED_PERMANENTLY);
+                $res->redirect("back");
+            }
+        };
+        
         $this->update = function ($req, $res) use ($db) {
             $id = $req->params()["id"];
 

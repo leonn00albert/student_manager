@@ -25,7 +25,7 @@
 			<?php if (strpos($_SERVER['REQUEST_URI'], "/students/messages") !== false) : ?>
 					<a href="/students/students" class="nav-link active " aria-current="page">
 					<?php else : ?>
-						<a href="/messages/<?=$_SESSION["user_id"]?>" class="nav-link " aria-current="page">
+						<a href="/students/messages" class="nav-link " aria-current="page">
 						<?php endif; ?>
 						<i class="far fa-comments"></i>
 					Messages 
@@ -66,7 +66,7 @@
 		<hr>
 		<div class="dropdown pb-4">
 			<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-				<img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
+			<img src="<?= $_SESSION["user"]["avatar"] ?>.svg" alt="hugenerd" width="30" height="30" class="rounded-circle">
 				<span class="d-none d-sm-inline mx-1"><?= $_SESSION["first_name"] ?></span>
 			</a>
 			<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
@@ -74,7 +74,7 @@
 				<li>
 					<hr class="dropdown-divider">
 				</li>
-				<li><a class="dropdown-item" href="/views/signout.php">Sign out</a></li>
+				<li><a class="dropdown-item" href="/signout">Sign out</a></li>
 			</ul>
 		</div>
 	</div>

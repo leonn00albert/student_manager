@@ -31,7 +31,7 @@ class SectionsController
             ];
         
             $res->render("teachers/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
         };
 
         $this->showNew = function ($req, $res) use ($db) {
@@ -40,7 +40,31 @@ class SectionsController
                 "module_id" => $req->query()["module_id"]
             ];
             $res->render("teachers/index", $data);
-            $res->status(200);
+            $res->status(HTTP_200_OK);
+        };
+
+        $this->delete = function ($req, $res) use ($db) {
+            try {
+                $id = $req->params()["id"];
+                $query = $db->conn()->prepare("UPDATE sections SET 
+                is_archived = :is_archived
+                WHERE section_id = :section_id");
+                $isArchived = 1; // Set is_archived to 1 (archived)
+                $query->bindParam(':is_archived', $isArchived);
+                $query->bindParam(':section_id', $id);
+        
+                if ($query->execute()) {
+                    setAlert("success", "Successfully archived module");
+        
+                } else {
+                    setAlert("danger", "Something went wrong: could not archive section ");
+
+                }
+        
+                $db->close();
+            } catch (Exception $e) {
+                setAlert("danger", "Something went wrong: " . $e->getMessage());
+            }
         };
 
         $this->update = function ($req, $res) use ($db) {
@@ -60,7 +84,7 @@ class SectionsController
             $query->bindParam(':section_id', $id);
         
             if ($query->execute()) {
-                $res->status(301);
+                $res->status(HTTP_301_MOVED_PERMANENTLY);
                 $res->redirect("/teachers/modules/" . $req->sanitized["module_id"] . "/edit");
             } else {
                 echo "Error updating record.";
@@ -83,18 +107,18 @@ class SectionsController
     
                 if ($query->execute()) {
                     setAlert("success", "Created a new section");
-                    $res->status(301);
+                    $res->status(HTTP_301_MOVED_PERMANENTLY);
                     $res->redirect("/teachers/modules/" . $req->sanitized["module_id"] . "/edit");
                 } else {
                     setAlert("danger", "Error inserting record");
-                    $res->status(301);
+                    $res->status(HTTP_301_MOVED_PERMANENTLY);
                     $res->redirect("/teachers/modules/" . $req->sanitized["module_id"] . "/edit");
                 }
                 $db->close();
             }
             catch(Exception $e) {
                 setAlert("danger", "Something went wrong: " . $e->getMessage());
-                $res->status(301);
+                $res->status(HTTP_301_MOVED_PERMANENTLY);
                 $res->redirect("/teachers/courses/" . $req->sanitized["course_id"] . "/edit");
             }
         };

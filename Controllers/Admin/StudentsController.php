@@ -13,6 +13,18 @@ class StudentsController
                 "sql" => "SELECT * FROM students
                 INNER JOIN users ON students.user_id = users.user_id"
             ];
+
+            if (isset($req->query()["sort"])) {
+                $sortColumn = $req->query()["sort"];
+                $sortDirection = strtoupper($req->query()["direction"]) === "ASC" ? "ASC" : "DESC";
+                $query = [
+                    "sql" => "SELECT * FROM students
+                     INNER JOIN users ON students.user_id = users.user_id
+                     WHERE is_archived = 0
+                     ORDER BY $sortColumn $sortDirection 
+                    "
+                ];
+            }
             $data = [
                 "template" => "students.php",
                 "students" => $db->find($query)

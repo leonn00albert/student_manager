@@ -14,23 +14,6 @@ function sortByKey(array $arr, string $key, bool $desc = false): array
 }
 
 
-function pagination(array $data, string $current, int $perPage = 10): array
-{
-    if($current === 'all') {
-        $current = 1;
-        $perPage = 100000000000000;
-    }
- 
-    $totalRecords = count($data);
-    $totalPages = ceil($totalRecords / $perPage);
-    if (isset($current) && is_numeric($current)) {
-        $currentPage = $current;
-    } else {
-        $currentPage = 1;
-    }
-    $startIndex = ($currentPage - 1) * $perPage;
-    return [array_slice($data, $startIndex, $perPage), $totalPages, $currentPage, $totalRecords];
-}
 function getLocation():string
 {
     if(isset($_SERVER['HTTP_REFERER'])) {
