@@ -127,15 +127,22 @@ if (isset($_SESSION[USER_TYPE]) && $_SESSION[USER_TYPE] === TYPE_STUDENT) {
 
     //STUDENT ROUTES 
     $app->get("/students", function ($req, $res) {
-        $data = [
-            "template" => "dashboard.php"
-        ];
-        $res->render("students/index", $data);
-        $res->status(HTTP_200_OK);
+        $res->status(HTTP_301_MOVED_PERMANENTLY);
+        $res->redirect("/students/dashboard");
     });
-    $app->get("/students/dashboard", function ($req, $res) {
+    $app->get("/students/dashboard", function ($req, $res) use ($db){
+        $query = [
+            "sql" => "SELECT * FROM progress
+            INNER JOIN courses on progress.course_id = courses.course_id
+            WHERE student_id = :student_id" ,
+            "params" => ["student_id" => $_SESSION[TYPE_STUDENT]["student_id"]]
+        ];
+
+        $progress = $db->find($query);
+
         $data = [
-            "template" => "dashboard.php"
+            "template" => "dashboard.php",
+            "progress" => $progress
         ];
         $res->render("students/index", $data);
         $res->status(HTTP_200_OK);
@@ -393,13 +400,11 @@ $app->get("/login", function ($req, $res) {
 
 //only admin *
 $app->get("/admin", function ($req, $res) {
-    $data = [
-        "template" => "dashboard.php"
-    ];
-    $res->render("admin/index", $data);
-    $res->status(HTTP_200_OK);
+    $res->status(HTTP_301_MOVED_PERMANENTLY);
+    $res->redirect("/admin/dashboard");
 });
 $app->get("/admin/dashboard", function ($req, $res) {
+    
     $data = [
         "template" => "dashboard.php"
     ];

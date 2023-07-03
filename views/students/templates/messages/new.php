@@ -1,4 +1,5 @@
 <div class="card">
+<i class="far fa-comments"></i> Chat</div>
     <div class="card-body">
         <?php if (isset($_GET["from"]) && isset($_GET["to"])) { ?>
             <div id="chat-window" class="mb-3">

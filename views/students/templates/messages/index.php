@@ -1,4 +1,6 @@
 <div class="card">
+<div class="card-header"><i class="fa fa-address-book" aria-hidden="true"></i>
+    Contacts</div>
     <div class="card-body">
         <div class="list-group">
             <?php foreach ($students as $student) : ?>
