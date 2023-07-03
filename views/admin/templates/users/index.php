@@ -13,7 +13,7 @@
                             $sortDirection = isset($_GET["direction"]) && strtoupper($_GET["direction"]) === "ASC" ? "DESC" : "ASC";
                             ?>
                             <a href="/admin/users?sort=user_id&direction=<?php echo $sortDirection; ?>">
-                            <i class="fa fa-sort"></i>
+                                <i class="fa fa-sort"></i>
                             </a>
                         </th>
                         <th scope="col">
@@ -22,43 +22,43 @@
                             $sortDirection = isset($_GET["direction"]) && strtoupper($_GET["direction"]) === "ASC" ? "DESC" : "ASC";
                             ?>
                             <a href="/admin/users?sort=country&direction=<?php echo $sortDirection; ?>">
-                            <i class="fa fa-sort"></i>
+                                <i class="fa fa-sort"></i>
                             </a>
                         </th>
                         <th scope="col">
-                        Email
+                            Email
                             <?php
                             $sortDirection = isset($_GET["direction"]) && strtoupper($_GET["direction"]) === "ASC" ? "DESC" : "ASC";
                             ?>
                             <a href="/admin/users?sort=contact_email&direction=<?php echo $sortDirection; ?>">
-                            <i class="fa fa-sort"></i>
+                                <i class="fa fa-sort"></i>
                             </a>
                         </th>
                         <th scope="col">
-                        Phone
+                            Phone
                             <?php
                             $sortDirection = isset($_GET["direction"]) && strtoupper($_GET["direction"]) === "ASC" ? "DESC" : "ASC";
                             ?>
                             <a href="/admin/users?sort=contact_phone&direction=<?php echo $sortDirection; ?>">
-                            <i class="fa fa-sort"></i>
+                                <i class="fa fa-sort"></i>
                             </a>
                         </th>
                         <th scope="col">
-                        Name
+                            Name
                             <?php
                             $sortDirection = isset($_GET["direction"]) && strtoupper($_GET["direction"]) === "ASC" ? "DESC" : "ASC";
                             ?>
                             <a href="/admin/users?sort=first_name&direction=<?php echo $sortDirection; ?>">
-                            <i class="fa fa-sort"></i>
+                                <i class="fa fa-sort"></i>
                             </a>
                         </th>
                         <th scope="col">
-                        type
+                            type
                             <?php
                             $sortDirection = isset($_GET["direction"]) && strtoupper($_GET["direction"]) === "ASC" ? "DESC" : "ASC";
                             ?>
                             <a href="/admin/users?sort=type&direction=<?php echo $sortDirection; ?>">
-                            <i class="fa fa-sort"></i>
+                                <i class="fa fa-sort"></i>
                             </a>
                         </th>
                         <th scope="col"> </th>
@@ -92,6 +92,9 @@
                     <?php endforeach; ?>
                 </tbody>
             </table>
+            <nav  style="display: flex;">
+                        <?= $pagination ?>
+            </nav>
         </div>
 
     </div>

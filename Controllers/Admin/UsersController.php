@@ -1,5 +1,7 @@
 <?php
+
 namespace Controllers\Admin;
+
 use Artemis\Core\DataBases\DB;
 
 class UsersController
@@ -13,22 +15,31 @@ class UsersController
     {
         $db = DB::new(DB_TYPE, DB_NAME, DB_PASSWORD, DB_DRIVER, DB_HOST, DB_USER);
         $this->showIndex = function ($req, $res) use ($db) {
+            $countSql = "SELECT COUNT(*) as total FROM users";
+            $countResult = $db->find(["sql" =>  $countSql])[0];
+            $totalItems = $countResult["total"];
+            
+            $pagination = pagination($totalItems, 5);
+
+
             $query = [
-                "sql" => "SELECT * FROM users;"
+                "sql" => "SELECT * FROM users LIMIT {$pagination["offset"]}, {$pagination["limit"]};"
             ];
             
+
             if (isset($req->query()["sort"])) {
                 $sortColumn = $req->query()["sort"];
                 $sortDirection = strtoupper($req->query()["direction"]) === "ASC" ? "ASC" : "DESC";
                 $query = [
-                    "sql" => "SELECT * FROM users ORDER BY $sortColumn $sortDirection",
+                    "sql" => "SELECT * FROM users ORDER BY $sortColumn $sortDirection LIMIT {$pagination["offset"]}, {$pagination["limit"]};",
                 ];
             }
-            
+
             $data = [
                 "template" => "users.php",
-                "users" => $db->find($query)
-            ];
+                "users" => $db->find($query),
+                "pagination" => $pagination["html"]
+             ];
             $res->render("admin/index", $data);
             $res->status(200);
         };
