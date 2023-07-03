@@ -87,6 +87,8 @@
                             </td>
                             <td>
                                 <a href="/admin/users/<?= $user["user_id"] ?>/edit" class="btn btn-info text-white">Update</a>
+                                <a href="/admin/users/<?= $user["user_id"] ?>/delete" class="btn btn-warning text-white" onclick="return confirm('Are you sure you want to delete this user?')">Archive</a>
+
                             </td>
                         </tr>
                     <?php endforeach; ?>
