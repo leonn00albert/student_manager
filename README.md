@@ -1,16 +1,10 @@
-## Module 1 Project
+## Module 2 Project
+Update the module 1 project to use the MySQL database instead of the filesystem.
 
-Create a web application to manage students. Each student should have the following: a registration number, name, grade, and classroom (it can be static classrooms).
-The user should be able to:
-Add a new student;
-List the students;
-Update a student;
-Delete a student.
-Restrictions:
-The grade should be a number from 0 to 10;
-Duplicate registration numbers are NOT allowed.
-DEADLINE: 01.06.2023
+Create a new page to manage (add, read, update, and delete) the classrooms. The classrooms should be listed on the page form to insert/update students (the table of students should contain the classroom ID - one-to-many).
 
+    Add a report that shows the students by classroom.
+    Add a login page
 
 ---
 Backend: 
@@ -24,6 +18,7 @@ I used a special bootstrap theme found one https://bootswatch.com/
 
 ## Install
 
+Import the sql from the database.sql file into your mysql / mariadb app
 
 ```bash 
 git clone https://github.com/leonn00albert/student_manager.git
@@ -33,18 +28,33 @@ php -S localhost:8000 .\server.php
 
 ```
 
-## Usage
+Test accounts
 
-Features 
+student@test.com 
+teacher@test.com 
+admin@test.com 
 
-Create 
- - Student -> create new student entry 
- - Classroom -> create a new classroom entry 
-Tools 
- - Create PDF -> get a pdf file with student data
- - Logs -> go logs of activity 
- - Seed data -> create data 0 - 10 entries
- - clear data -> clear all student and class room data
+PW:
+
+
+
+## Features
+**Students**
+ Can enroll for courses
+ Message classmates
+ download books from the library
+ submit assignments to progress
+
+**Teachers:**
+ Can grade student assignments
+ Edit courses add modules and sections
+ Manage classrooms and post notifications on the classroom bulletin board
+ see classroom reports
+
+**Admins**
+ Manage users
+ Add library items
+ Add new courses
 
 
 
