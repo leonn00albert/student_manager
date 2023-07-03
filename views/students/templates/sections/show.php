@@ -28,7 +28,7 @@
                         </div>
                         <div class="form-group d-none">
                             <input type="hidden" class="form-control" name="assignment" value=<?= $section["assignment"] ?>>
-                            <input type="hidden" class="form-control" name="module_id" value=<?= $section["module_id"] ?>>
+                            <input type="hidden" class="form-control" name="module_id" value=<?= $section["module_id"] ?>>  
                         </div>
 
                         <button type="submit" class="btn btn-primary">Submit</button>
