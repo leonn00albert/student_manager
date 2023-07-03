@@ -16,7 +16,15 @@ class UsersController
             $query = [
                 "sql" => "SELECT * FROM users;"
             ];
-
+            
+            if (isset($req->query()["sort"])) {
+                $sortColumn = $req->query()["sort"];
+                $sortDirection = strtoupper($req->query()["direction"]) === "ASC" ? "ASC" : "DESC";
+                $query = [
+                    "sql" => "SELECT * FROM users ORDER BY $sortColumn $sortDirection",
+                ];
+            }
+            
             $data = [
                 "template" => "users.php",
                 "users" => $db->find($query)

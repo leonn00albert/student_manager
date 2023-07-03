@@ -27,7 +27,8 @@
 					<?php else : ?>
 						<a href="/admin/students" class="nav-link " aria-current="page">
 						<?php endif; ?>
-					<i class="fa fa-bar-chart" aria-hidden="true"></i>
+						<i class="fa fa-graduation-cap" aria-hidden="true"></i>
+
 					Students
 				</a>
 			</li>
@@ -38,41 +39,29 @@
 					<?php else : ?>
 						<a href="/admin/classrooms" class="nav-link " aria-current="page">
 						<?php endif; ?>
-					<i class="fa  fa-map-marker" aria-hidden="true"></i>
-					Classrooms
+						<i class="fas fa-chalkboard"></i>
+											Classrooms
 				</a>
 			</li>
-			<li>
+		
 			<li>
 				<?php if (strpos($_SERVER['REQUEST_URI'], "/admin/teachers") !== false) : ?>
 					<a href="/admin/teachers" class="nav-link active " aria-current="page">
 					<?php else : ?>
 						<a href="/admin/teachers" class="nav-link " aria-current="page">
 						<?php endif; ?>
-					<i class="fa fa-car" aria-hidden="true"></i>
+						<i class="fas fa-chalkboard-teacher"></i>
 					Teachers
 				</a>
 			</li>
-			
-			</li>
-			<li>
-				<?php if (strpos($_SERVER['REQUEST_URI'], "booking.php") !== false) : ?>
-					<a href="/views/admin/booking.php" class="nav-link active" aria-current="page">
-					<?php else : ?>
-						<a href="/views/admin/booking.php" class="nav-link" aria-current="page">
-						<?php endif; ?>
-						<i class="fa fa-calendar" aria-hidden="true"></i>
-						Settings
-						</a>
-			</li>
-			<li>
+
 			<li>
 				<?php if (strpos($_SERVER['REQUEST_URI'], "/admin/cms") !== false) : ?>
 					<a href="/admin/cms" class="nav-link active" aria-current="page">
 					<?php else : ?>
 						<a href="/admin/cms" class="nav-link" aria-current="page">
 						<?php endif; ?>
-						<i class="fa fa-star" aria-hidden="true"></i>
+						<i class="fa fa-wrench" aria-hidden="true"></i>
 						CMS
 						</a>
 			</li>
@@ -82,7 +71,7 @@
 					<?php else : ?>
 						<a href="/admin/courses" class="nav-link" aria-current="page">
 						<?php endif; ?>
-					<i class="fa fa-bars" aria-hidden="true"></i>
+						<i class="fas fa-layer-group"></i>
 
 					Courses
 				</a>
@@ -96,6 +85,27 @@
 					<i class="fa fa-user" aria-hidden="true"></i>
 
 					Users
+				</a>
+			</li>
+			<li>
+			<?php if (strpos($_SERVER['REQUEST_URI'], "/admin/grades") !== false) : ?>
+				<a href="/admin/grades" class="nav-link active" aria-current="page">
+					<?php else : ?>
+						<a href="/admin/grades" class="nav-link" aria-current="page">
+						<?php endif; ?>
+					<i class="fa fa-award" aria-hidden="true"></i>
+					Grades
+				</a>
+			</li>
+
+			<li>
+			<?php if (strpos($_SERVER['REQUEST_URI'], "/admin/reports") !== false) : ?>
+				<a href="/admin/reports" class="nav-link active" aria-current="page">
+					<?php else : ?>
+						<a href="/admin/reports" class="nav-link" aria-current="page">
+						<?php endif; ?>
+					<i class="fa fa-bar-chart" aria-hidden="true"></i>
+					Reports
 				</a>
 			</li>
 			<li>
