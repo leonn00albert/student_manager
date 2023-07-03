@@ -31,6 +31,15 @@
 					Messages 
 				</a>
 			</li>
+			<?php if (strpos($_SERVER['REQUEST_URI'], "/reports") !== false) : ?>
+					<a href="/teachers/reports" class="nav-link active " aria-current="page">
+					<?php else : ?>
+						<a href="/teachers/reports" class="nav-link " aria-current="page">
+						<?php endif; ?>
+						<i class="far fa-bar-chart"></i>
+					Reports 
+				</a>
+			</li>
 
 			<li class="nav-item">
 			<?php if (strpos($_SERVER['REQUEST_URI'], "classrooms") !== false) : ?>

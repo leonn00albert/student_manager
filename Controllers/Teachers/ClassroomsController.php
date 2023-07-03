@@ -159,23 +159,7 @@ class ClassroomsController
 
             ];
 
-            function calculateGrade($totalPoints, $studentScore) {
-                $percentage = ($studentScore / $totalPoints) * 100;
-                
-                if ($percentage >= 90) {
-                    return 'A';
-                } elseif ($percentage >= 80) {
-                    return 'B';
-                } elseif ($percentage >= 70) {
-                    return 'C';
-                } elseif ($percentage >= 60) {
-                    return 'D';
-                } elseif ($percentage >= 50) {
-                    return 'E';
-                } else {
-                    return 'F';
-                }
-            }
+        
 
             $progress = array_map(function ($elm) {
                 $total_points = (int) $elm["sections"] * 10;

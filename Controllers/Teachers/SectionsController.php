@@ -13,7 +13,8 @@ class SectionsController
     public $showEdit;
     public $showNew;
     public $create;
-
+    public $update;
+    public $delete;
     public function __construct()
     {
         $db = DB::new(DB_TYPE, DB_NAME, DB_PASSWORD, DB_DRIVER, DB_HOST, DB_USER);
@@ -77,7 +78,7 @@ class SectionsController
             assignment = :assignment
             WHERE section_id = :section_id");
             $query->bindParam(':section_name', $req->sanitized['section_name']);
-            $query->bindParam(':section_content', $req->sanitized['section_content']);
+            $query->bindParam(':section_content', $req->body()['section_content']);
             $query->bindParam(':section_resources', $req->sanitized['section_resources']);
             $query->bindParam(':module_id', $req->sanitized['module_id']);
             $query->bindParam(':assignment', $req->sanitized['assignment']);

@@ -3,13 +3,14 @@
         <div class="card m-3">
             <div class="card-header">Module: <?= $section["section_name"] ?></div>
             <div class="card-body">
-                <?= $section["section_content"] ?>
+            <?php echo  $section["section_content"] ?>
+       
             </div>
         </div>
         <div class="card m-3">
             <div class="card-header">Assignment</div>
             <div class="card-body">
-                <?= $section["assignment"] ?>
+                <?php echo  $section["assignment"] ?>
                 <hr>
                 <?php if (isset($grades["grade_status"])) { ?>
                     <p>You have already submmited this assignment. </p>
@@ -28,7 +29,6 @@
                         <div class="form-group d-none">
                             <input type="hidden" class="form-control" name="assignment" value=<?= $section["assignment"] ?>>
                             <input type="hidden" class="form-control" name="module_id" value=<?= $section["module_id"] ?>>
-
                         </div>
 
                         <button type="submit" class="btn btn-primary">Submit</button>
@@ -41,3 +41,4 @@
         </div>
     </div>
 </div>
+
