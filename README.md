@@ -55,6 +55,7 @@ PW:
  - Manage users
  - Add library items
  - Add new courses
+ - Manage homepage CMS
 
 
 
