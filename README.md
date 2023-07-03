@@ -40,21 +40,21 @@ PW:
 
 ## Features
 **Students**
- Can enroll for courses
- Message classmates
- download books from the library
- submit assignments to progress
-
+ - Can enroll for courses
+ - Message classmates
+ - download books from the library
+ - submit assignments to progress
+ - 
 **Teachers:**
- Can grade student assignments
- Edit courses add modules and sections
- Manage classrooms and post notifications on the classroom bulletin board
- see classroom reports
+ - Can grade student assignments
+ - Edit courses add modules and sections
+ - Manage classrooms and post notifications on the classroom bulletin board
+ - see classroom reports
 
 **Admins**
- Manage users
- Add library items
- Add new courses
+ - Manage users
+ - Add library items
+ - Add new courses
 
 
 
