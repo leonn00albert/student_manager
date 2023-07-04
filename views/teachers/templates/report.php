@@ -26,11 +26,44 @@ foreach ($classrooms as $classroom) : ?>
                 <thead>
                     <tr>
                         <th scope="col"></th>
-                        <th scope="col">Name<i onclick="handleSort('country')" class="fa fa-sort"></i></th>
-                        <th scope="col">Assignments submitted</th>
-                        <th scope="col">Total score</th>
+                        <th scope="col">
+                            Name
+                            <?php
+                            $sortDirection = isset($_GET["direction"]) && strtoupper($_GET["direction"]) === "ASC" ? "DESC" : "ASC";
+                            ?>
+                            <a href="/teachers/reports?sort=student_name&direction=<?php echo $sortDirection; ?>">
+                                <i class="fa fa-sort"></i>
+                            </a>
+                        </th>
+                        <th scope="col">
+
+                        Assignments submitted
+                            <?php
+                            $sortDirection = isset($_GET["direction"]) && strtoupper($_GET["direction"]) === "ASC" ? "DESC" : "ASC";
+                            ?>
+                            <a href="/teachers/reports?sort=graded&direction=<?php echo $sortDirection; ?>">
+                                <i class="fa fa-sort"></i>
+                            </a>
+                        </th>
+                        <th scope="col">
+
+                        Total score
+                            <?php
+                            $sortDirection = isset($_GET["direction"]) && strtoupper($_GET["direction"]) === "ASC" ? "DESC" : "ASC";
+                            ?>
+                            <a href="/teachers/reports?sort=total_score&direction=<?php echo $sortDirection; ?>">
+                                <i class="fa fa-sort"></i>
+                            </a>
+                        </th>
                         <th scope="col">Max Score</th>
-                        <th scope="col">Progress</th>
+                        <th scope="col">            
+                            Progress
+                            <?php
+                            $sortDirection = isset($_GET["direction"]) && strtoupper($_GET["direction"]) === "ASC" ? "DESC" : "ASC";
+                            ?>
+                            <a href="/teachers/reports?sort=percentage&direction=<?php echo $sortDirection; ?>">
+                                <i class="fa fa-sort"></i>
+                            </a></th>
                         <th scope="col">Grade</th>
                     </tr>
                 </thead>
@@ -38,8 +71,6 @@ foreach ($classrooms as $classroom) : ?>
                 <tbody id="coursesTable">
                     <?php foreach ($progress as $student) : ?>
                         <?php if ($student["classroom_name"] == $classroom) { ?>
-
-
                             <tr>
                                 <td><b class="ms-3"><?= $student["progress_id"] ?></b></td>
                                 <td><?= $student["student_name"] ?></td>

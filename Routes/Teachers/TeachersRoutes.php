@@ -81,6 +81,7 @@ class TeachersRoutes
         });
 
         $app->get("/teachers/reports", function ($req, $res) use ($db) {
+
             $progressQuery = [
                 "sql" => "SELECT * FROM progress
                 INNER JOIN classrooms ON progress.classroom_id = classrooms.classroom_id
@@ -89,6 +90,21 @@ class TeachersRoutes
                     "id" => $_SESSION[TYPE_TEACHER]["teacher_id"]
                 ]
             ];
+            
+            if (isset($req->query()["sort"])) {
+                $sortColumn = $req->query()["sort"];
+                $sortDirection = strtoupper($req->query()["direction"]) === "ASC" ? "ASC" : "DESC";
+                $progressQuery = [
+                    "sql" => "SELECT * FROM progress
+                    INNER JOIN classrooms ON progress.classroom_id = classrooms.classroom_id
+                    WHERE classrooms.teacher_id = :id
+                    ORDER BY $sortColumn $sortDirection ",
+                    "params" => [
+                        "id" => $_SESSION[TYPE_TEACHER]["teacher_id"]
+                    ]
+                ];
+            }
+
 
             $progress = array_map(function ($elm) {
                 $total_points = (int) $elm["sections"] * 10;

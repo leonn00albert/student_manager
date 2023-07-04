@@ -11,7 +11,7 @@
                 <?php if (isset($progress["graded"])) { ?>
                     Progress:
                     <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow=<?= $progress["graded"] ?> aria-valuemin="0" aria-valuemax=<?= $progress["sections"] ?>>
-                        <div class="progress-bar" style="width: <?= (int) $progress["percentage"] ?>%"><?= (int) $percentage ?>%</div>
+                        <div class="progress-bar" style="width: <?= (int) $progress["percentage"] ?>%"><?= (int) $progress["percentage"] ?>%</div>
                     </div>
                     <hr>
                 <?php } ?>
