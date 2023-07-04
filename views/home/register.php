@@ -72,6 +72,18 @@
                     Register your account
                 </div>
             </h2>
+            <?php if (isset($_SESSION["alert"]["message"])) { ?>
+    <div class="ui negative message">
+      <i class="close icon"></i>
+      <div class="header">
+        <?= $_SESSION["alert"]["message"] ?>
+      </div>
+
+      </p>
+    </div>
+
+  <?php } ?>
+  <?php unset($_SESSION["alert"]) ?>
 
             <form class="ui large form" method="post" action="/users">
                 <div class="ui stacked segment">

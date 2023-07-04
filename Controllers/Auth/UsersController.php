@@ -5,6 +5,8 @@ namespace Controllers\Auth;
 require_once __DIR__ . "/../../config/db.config.php";
 
 use Artemis\Core\DataBases\DB;
+use Artemis\Core\Forms\Forms;
+use Exception;
 
 class UsersController
 {
@@ -16,8 +18,10 @@ class UsersController
 
     public function __construct()
     {
+  
         $db = DB::new(DB_TYPE, DB_NAME, DB_PASSWORD, DB_DRIVER, DB_HOST, DB_USER);
         $this->register = function ($req, $res) use ($db) {
+            $validate = new Forms;
             $query = "INSERT INTO Users (first_name, last_name, contact_email, contact_phone, avatar , address, city, country, password, type, last_login_ip)
             VALUES (?, ?, ?,?,?, ?, ?, ?, ?, ?, ?)";
          /** 
@@ -40,9 +44,46 @@ class UsersController
                 $req->ip()["ip"]
             ];
 
+            //validate password
+            if($validate->validatePassword($req->sanitized["password"]) === false) {
+                setAlert("danger","Minimum length of 8 characters and must contain at least one uppercase letter, one lowercase letter, one digit, and one special character ");
+                $db->close();
+                $res->status(301);
+                $res->redirect("/register");
+                exit();
+            }
+             //validate email and check if unique
+            if(!$validate->isEmail($req->sanitized["contact_email"])) {
+                setAlert("danger","Invalid email");
+                $db->close();
+                $res->status(301);
+                $res->redirect("/register");
+                exit();
+            }
+    
+                $emailCheck = $db->find([
+                    "sql" => "SELECT contact_email FROM users WHERE contact_email = :email",
+                    "params" => [
+                        "email" => $req->sanitized["contact_email"]
+                    ]
+                    ]);
+                    
+                if (count($emailCheck) > 0) {
+                    setAlert("danger","Email already taken");
+                    $db->close();
+                    $res->status(301);
+                    $res->redirect("/register");
+                    $db->close();
+                    exit();
+                } 
+                
+     
+            
+
+
             foreach ($data as $index => $value) {
                 $statement->bindValue($index + 1, $value);
-            }
+            } 
 
             $statement->execute();
             $statement->closeCursor();
@@ -100,9 +141,6 @@ class UsersController
                     
                 }
             
-          
-
-        
                 
                 $db->close();
 
@@ -120,7 +158,8 @@ class UsersController
                 }
                 exit();
             } else {
-                echo "Error: Incorrect username or password.";
+                $res->redirect("back");
+                setAlert("danger","Incorrect username or password.");
             }
 
             $db->close();

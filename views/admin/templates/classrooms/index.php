@@ -4,13 +4,14 @@
 
         <h4 class="card-title"><span class="badge bg-primary m-1" id="classroomCount"></span></h4>
         <div class="table-responsive-md">
-            <table class="table table-hover table-striped">
+            <table class="table">
                 <thead>
                     <tr>
                         <th scope="col">Registration number</th>
                         <th scope="col">Name<i onclick="handleSort('country')" class="fa fa-sort"></i></th>
                         <th scope="col">Teacher</th>
                         <th scope="col">Course</th>
+                        <th scope="col"> </th>
                         <th scope="col"> </th>
                     </tr>
                 </thead>
@@ -57,6 +58,10 @@
                             </td>
                             <td>
                                 <a href="/admin/classrooms/<?= $classroom["classroom_id"] ?>/edit" class="btn btn-info text-white">Update</a>
+
+                            </td>
+                            <td>
+                            <a href="/admin/classrooms/<?= $classroom["classroom_id"] ?>/delete" class="btn btn-warning text-white" onclick="return confirm('Are you sure you want to archive this classroom?')">Archive</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

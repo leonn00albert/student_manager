@@ -1,5 +1,5 @@
 <div class="card">
-<i class="far fa-comments"></i> Chat</div>
+<div class="card-header"><i class="far fa-comments"></i> Chat</div>
     <div class="card-body">
         <?php if (isset($_GET["from"]) && isset($_GET["to"])) { ?>
             <div id="chat-window" class="mb-3">
@@ -15,7 +15,7 @@
                     <?php } else { ?>
                         <div class="chat-bubble chat-bubble-recipient">
                             <?= $message["message"] ?>
-                        </div>
+                        </div>  
                     <?php } ?>
                     </p>
             <?php endforeach;

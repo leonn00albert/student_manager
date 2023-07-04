@@ -3,13 +3,14 @@
 namespace Controllers\Admin;
 
 use Artemis\Core\DataBases\DB;
-
+use Exception;
 class ClassroomsController
 {
 
     public $showIndex;
     public $showEdit;
     public $update;
+    public $delete;
     public $create;
     public function __construct()
     {
@@ -24,7 +25,7 @@ class ClassroomsController
             ];
 
             $classroomsQuery = [
-                "sql" => "SELECT * FROM classrooms" // inner join later   
+                "sql" => "SELECT * FROM classrooms WHERE is_archived = 0" // inner join later   
             ];
             $data = [
                 "template" => "classrooms.php",
@@ -108,6 +109,23 @@ class ClassroomsController
             }
 
             $db->close();
+        };
+
+        $this->delete = function ($req, $res) use ($db) {
+            try {
+                $id = $req->params()["id"];
+                $sql = "UPDATE classrooms SET is_archived = 1 WHERE classroom_id = :id";
+                $stmt = $db->conn()->prepare($sql);
+                $stmt->bindParam(':id', $id);
+                $stmt->execute();
+                setAlert("success", "Archived classroom");
+                $res->status(HTTP_301_MOVED_PERMANENTLY);
+                $res->redirect("back");
+            } catch (Exception $e) {
+                setAlert("danger", $e->getMessage());
+                $res->status(HTTP_301_MOVED_PERMANENTLY);
+                $res->redirect("back");
+            }
         };
     }
 }

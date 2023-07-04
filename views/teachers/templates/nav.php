@@ -5,12 +5,6 @@
 		</a>
 		<ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
 			<li class="nav-item">
-				<a href="/" class="nav-link" aria-current="page">
-					<i class="fa fa-home" aria-hidden="true"></i>
-					Home
-				</a>
-			</li>
-			<li class="nav-item">
 			<?php if (strpos($_SERVER['REQUEST_URI'], "/dashboard") !== false) : ?>
 					<a href="/teachers/dashboard" class="nav-link active " aria-current="page">
 					<?php else : ?>
@@ -29,6 +23,15 @@
 						<?php endif; ?>
 						<i class="far fa-comments"></i>
 					Messages 
+				</a>
+			</li>
+			<?php if (strpos($_SERVER['REQUEST_URI'], "/reports") !== false) : ?>
+					<a href="/teachers/reports" class="nav-link active " aria-current="page">
+					<?php else : ?>
+						<a href="/teachers/reports" class="nav-link " aria-current="page">
+						<?php endif; ?>
+						<i class="far fa-bar-chart"></i>
+					Reports 
 				</a>
 			</li>
 

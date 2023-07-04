@@ -61,5 +61,20 @@ PW:
 
 result : <br>
 
+Students classroom and progress
 
-![screenshot](https://github.com/leonn00albert/student_manager/blob/main/m1project.PNG)
+[![m2-student-manager-1.jpg](https://i.postimg.cc/bwK8BCrj/m2-student-manager-1.jpg)](https://postimg.cc/k2FkVyWj)
+
+Students Chat
+
+[![m2-student-manager-2.jpg](https://i.postimg.cc/WtL6KcBk/m2-student-manager-2.jpg)](https://postimg.cc/q6w3hSMJ)
+
+Teacher reports
+[![m2-student-manager-4.jpg](https://i.postimg.cc/02K9015C/m2-student-manager-4.jpg)](https://postimg.cc/N5YhQVHy)
+
+Teacher classroom management
+[![m2-student-manager-5.jpg](https://i.postimg.cc/vm2QvYn3/m2-student-manager-5.jpg)](https://postimg.cc/wtJ8qd0m)
+
+Admin CMS for homepage
+[![m2-student-manager-6.jpg](https://i.postimg.cc/tRxXhH4N/m2-student-manager-6.jpg)](https://postimg.cc/kD73mz82)
+
