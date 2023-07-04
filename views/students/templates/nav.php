@@ -31,7 +31,16 @@
 					Messages 
 				</a>
 			</li>
-
+			<li>
+			<?php if (strpos($_SERVER['REQUEST_URI'], "/admin/library") !== false) : ?>
+				<a href="/admin/library" class="nav-link active" aria-current="page">
+					<?php else : ?>
+						<a href="/students/library" class="nav-link" aria-current="page">
+						<?php endif; ?>
+					<i class="fa fa-book" aria-hidden="true"></i>
+					Library 
+				</a>
+			</li>
 			<li class="nav-item">
 			<?php if (strpos($_SERVER['REQUEST_URI'], "classrooms") !== false) : ?>
 					<a href="/students/classrooms" class="nav-link active " aria-current="page">

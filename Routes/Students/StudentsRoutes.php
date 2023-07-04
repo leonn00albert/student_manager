@@ -57,6 +57,18 @@ class StudentsRoutes
             $res->status(HTTP_200_OK);
         });
 
+        $app->get("/students/library", function ($req, $res) use ($db) {
+            $query = [
+                "sql" => "SELECT * FROM library"
+            ];
+            $data = [
+                "template" => "library.php",
+                "books" => $db->find($query)
+            ];
+            $res->render("students/index", $data);
+            $res->status(HTTP_200_OK);
+        });
+
 
 
         $app->post("/enrollments", $app->form->sanitize, function ($req, $res) use ($db, $app) {
