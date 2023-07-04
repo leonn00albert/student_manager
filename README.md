@@ -18,7 +18,7 @@ I used a special bootstrap theme found one https://bootswatch.com/
 
 ## Install
 
-Import the sql from the database.sql file into your mysql / mariadb app
+Import the sql from the seed.sql file into your mysql / mariadb app
 
 ```bash 
 git clone https://github.com/leonn00albert/student_manager.git
